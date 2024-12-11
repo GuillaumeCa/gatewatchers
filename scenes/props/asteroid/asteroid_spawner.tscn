@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://cfv6yls3xh05y"]
+
+[ext_resource type="Script" path="res://scenes/props/asteroid/asteroid_spawner.gd" id="1_dbi7l"]
+[ext_resource type="PackedScene" uid="uid://kps80sqc57h0" path="res://scenes/props/asteroid/asteroid.tscn" id="2_2sygf"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_guc6j"]
+radius = 100000.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ydei1"]
+no_depth_test = true
+shading_mode = 0
+
+[sub_resource type="SphereMesh" id="SphereMesh_c3wwg"]
+material = SubResource("StandardMaterial3D_ydei1")
+radius = 500.0
+height = 1000.0
+
+[node name="AsteroidSpawner" type="Node3D" groups=["space_objects"]]
+transform = Transform3D(-0.986433, 0, -0.164162, 0, 1, 0, 0.164162, 0, -0.986433, 0, 0, 0)
+script = ExtResource("1_dbi7l")
+gen_seed = 4
+asteroid_scene = ExtResource("2_2sygf")
+count = 500
+range = 5000
+
+[node name="ProximityDetect" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ProximityDetect"]
+shape = SubResource("SphereShape3D_guc6j")
+
+[node name="debug" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("SphereMesh_c3wwg")
+
+[connection signal="body_entered" from="ProximityDetect" to="." method="_on_proximity_detect_body_entered"]
+[connection signal="body_exited" from="ProximityDetect" to="." method="_on_proximity_detect_body_exited"]

@@ -1,0 +1,345 @@
+[gd_scene load_steps=34 format=3 uid="uid://d32700hsoxr8b"]
+
+[ext_resource type="Script" path="res://scenes/spaceships/Spaceship.gd" id="1_2eoki"]
+[ext_resource type="PackedScene" uid="uid://blk8lyl4qh0ip" path="res://assets/spaceships.glb" id="1_rdqkb"]
+[ext_resource type="Material" uid="uid://bdxbtqxqicjtk" path="res://assets/window.material" id="3_aoo6g"]
+[ext_resource type="Texture2D" uid="uid://csawli8abs1f3" path="res://assets/particle.png" id="3_sp25l"]
+[ext_resource type="AudioStream" uid="uid://c1ixu6k63r2wl" path="res://assets/sfx/smartsound_TRANSPORTATION_JET_MILITARY_Fighter_Turbine_Steady_03.mp3" id="4_1ssrc"]
+[ext_resource type="PackedScene" uid="uid://cixdyu6ia256b" path="res://scenes/spaceships/radar.tscn" id="4_m8du2"]
+[ext_resource type="AudioStream" uid="uid://2s0arig03ywc" path="res://assets/sfx/thruster.mp3" id="5_wv2il"]
+[ext_resource type="PackedScene" uid="uid://cef2d1ms5tqcu" path="res://scenes/player.tscn" id="6_xsedv"]
+[ext_resource type="PackedScene" uid="uid://c0s1k0g71mkdu" path="res://scenes/spaceships/weapons/laser_weapon.tscn" id="8_63itb"]
+[ext_resource type="Texture2D" uid="uid://dwfnosak3dnkv" path="res://assets/textures/crosshair026.png" id="8_guc0y"]
+[ext_resource type="PackedScene" uid="uid://brtfcqtwjbgnp" path="res://scenes/spaceships/spaceship_hud.tscn" id="9_tghbs"]
+[ext_resource type="Texture2D" uid="uid://c76xxrr3w4rb5" path="res://assets/textures/crosshair048.png" id="12_yiw4s"]
+[ext_resource type="Shader" path="res://scenes/vfx/warping.gdshader" id="13_l7jpe"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1ri7w"]
+size = Vector3(2.03705, 0.265809, 21.5013)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d82p0"]
+size = Vector3(1.75534, 1.42393, 3.76611)
+
+[sub_resource type="Animation" id="Animation_c8k6c"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("spaceships/bay_door:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.000721864, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_kn04f"]
+resource_name = "ramp_down"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("spaceships/bay_door:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.000721864, 0, 0), Vector3(1.86043, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_aihav"]
+resource_name = "ramp_up"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("spaceships/bay_door:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1.86043, 0, 0), Vector3(-0.000721864, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_raue2"]
+_data = {
+"RESET": SubResource("Animation_c8k6c"),
+"ramp_down": SubResource("Animation_kn04f"),
+"ramp_up": SubResource("Animation_aihav")
+}
+
+[sub_resource type="Curve" id="Curve_v22mg"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.172808, 0.957295), 0.0, 0.0, 0, 0, Vector2(0.288437, 0.274021), 0.0, 0.0, 0, 0, Vector2(0.400254, 0.615658), 0.0, 0.0, 0, 0, Vector2(0.613723, 0.188612), -0.800204, -0.800204, 0, 0, Vector2(1, 0), 0.299313, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="CurveTexture" id="CurveTexture_5ujfr"]
+curve = SubResource("Curve_v22mg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ticq1"]
+direction = Vector3(0, 0, 1)
+spread = 5.0
+initial_velocity_min = 11.5
+initial_velocity_max = 22.55
+gravity = Vector3(0, 0, 0)
+scale_min = 1.05
+scale_max = 2.4
+scale_curve = SubResource("CurveTexture_5ujfr")
+color = Color(0.513726, 1, 0.996078, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ejouf"]
+blend_mode = 1
+shading_mode = 0
+disable_ambient_light = true
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("3_sp25l")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_yoiyn"]
+material = SubResource("StandardMaterial3D_ejouf")
+
+[sub_resource type="QuadMesh" id="QuadMesh_sf07a"]
+size = Vector2(1, 0.5)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_3bhn7"]
+viewport_path = NodePath("HudMesh/HudViewPort")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8t7b3"]
+resource_local_to_scene = true
+transparency = 1
+albedo_texture = SubResource("ViewportTexture_3bhn7")
+roughness = 0.31
+emission_enabled = true
+emission_texture = SubResource("ViewportTexture_3bhn7")
+
+[sub_resource type="SphereMesh" id="SphereMesh_vr8fa"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uvuwp"]
+shading_mode = 0
+albedo_color = Color(0.639216, 0, 0.223529, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_uo8ex"]
+frequency = 0.0072
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bp3pi"]
+seamless = true
+noise = SubResource("FastNoiseLite_uo8ex")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jn61r"]
+render_priority = 0
+shader = ExtResource("13_l7jpe")
+shader_parameter/color = Color(0.192722, 0.755208, 0.751452, 1)
+shader_parameter/accent_color = Color(0.373973, 0.0207775, 0.596354, 1)
+shader_parameter/speed = 2.0
+shader_parameter/alpha = 0.0
+shader_parameter/noise = SubResource("NoiseTexture2D_bp3pi")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pue0v"]
+flip_faces = true
+top_radius = 26.168
+bottom_radius = 1.77
+height = 50.0
+radial_segments = 32
+cap_top = false
+cap_bottom = false
+
+[node name="Nebula" type="RigidBody3D" groups=["human", "ship"]]
+freeze_mode = 1
+angular_damp = 1.145
+script = ExtResource("1_2eoki")
+speed = 3000
+
+[node name="spaceships" parent="." instance=ExtResource("1_rdqkb")]
+
+[node name="bay_door" parent="spaceships" index="10"]
+transform = Transform3D(1.01564, 0, 0, 0, 1.01564, 0.000733154, 0, -0.000733154, 1.01564, 0, -1.32048, 17.3956)
+
+[node name="engine_003" parent="spaceships" index="14"]
+visible = false
+
+[node name="hull_cockpit_window" parent="spaceships" index="16"]
+surface_material_override/0 = ExtResource("3_aoo6g")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.40208, 6.68966)
+shape = SubResource("BoxShape3D_1ri7w")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.64708, -0.0287099)
+shape = SubResource("BoxShape3D_d82p0")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.64708, 13.9685)
+shape = SubResource("BoxShape3D_d82p0")
+
+[node name="Radar" parent="." instance=ExtResource("4_m8du2")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_raue2")
+}
+
+[node name="engines" type="Node3D" parent="."]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="engines"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.51186, 2.57819, 15.4136)
+emitting = false
+amount = 300
+lifetime = 0.5
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_ticq1")
+draw_pass_1 = SubResource("QuadMesh_yoiyn")
+
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="engines"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.51547, 2.57819, 15.4136)
+emitting = false
+amount = 300
+lifetime = 0.5
+local_coords = true
+trail_lifetime = 0.55
+process_material = SubResource("ParticleProcessMaterial_ticq1")
+draw_pass_1 = SubResource("QuadMesh_yoiyn")
+
+[node name="GPUParticles3D3" type="GPUParticles3D" parent="engines"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.43267, 0.190483, 15.4136)
+emitting = false
+amount = 300
+lifetime = 0.5
+local_coords = true
+trail_lifetime = 0.55
+process_material = SubResource("ParticleProcessMaterial_ticq1")
+draw_pass_1 = SubResource("QuadMesh_yoiyn")
+
+[node name="GPUParticles3D4" type="GPUParticles3D" parent="engines"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.42273, 0.192777, 15.4136)
+emitting = false
+amount = 300
+lifetime = 0.5
+local_coords = true
+trail_lifetime = 0.55
+process_material = SubResource("ParticleProcessMaterial_ticq1")
+draw_pass_1 = SubResource("QuadMesh_yoiyn")
+
+[node name="EngineSfx" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15.678)
+stream = ExtResource("4_1ssrc")
+volume_db = -50.0
+pitch_scale = 0.23
+autoplay = true
+
+[node name="Thruster" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15.678)
+stream = ExtResource("5_wv2il")
+volume_db = -2.0
+pitch_scale = 2.37
+max_polyphony = 5
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DebugHud" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SpeedLabel" type="Label" parent="CanvasLayer/DebugHud"]
+visible = false
+layout_mode = 0
+offset_left = 38.0
+offset_top = 35.0
+offset_right = 99.0
+offset_bottom = 61.0
+theme_override_font_sizes/font_size = 36
+text = "120 m/s"
+
+[node name="Target" type="Sprite2D" parent="CanvasLayer/DebugHud"]
+texture = ExtResource("8_guc0y")
+
+[node name="Distance" type="Label" parent="CanvasLayer/DebugHud/Target"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -52.0
+offset_top = -29.0
+offset_right = -12.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "100KM"
+horizontal_alignment = 1
+
+[node name="Name" type="Label" parent="CanvasLayer/DebugHud/Target"]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -59.0
+offset_top = -54.0
+offset_right = -6.0
+offset_bottom = -31.0
+grow_horizontal = 2
+text = "Name"
+horizontal_alignment = 1
+
+[node name="Hit" type="Sprite2D" parent="CanvasLayer/DebugHud/Target"]
+visible = false
+texture = ExtResource("12_yiw4s")
+
+[node name="CameraPivot" type="Node3D" parent="."]
+top_level = true
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.969351, 0.24568, 0, -0.24568, 0.969351, 0, 5.00543, 25.0329)
+fov = 70.0
+far = 1e+06
+
+[node name="PilotPosition" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.449, -3.214)
+
+[node name="Player" parent="PilotPosition" instance=ExtResource("6_xsedv")]
+
+[node name="Weapons" type="Node3D" parent="."]
+
+[node name="LaserWeapon" parent="Weapons" instance=ExtResource("8_63itb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.74314, -4.19711)
+
+[node name="HudMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.362205, -3.91063)
+mesh = SubResource("QuadMesh_sf07a")
+surface_material_override/0 = SubResource("StandardMaterial3D_8t7b3")
+
+[node name="HudViewPort" type="SubViewport" parent="HudMesh"]
+disable_3d = true
+transparent_bg = true
+size = Vector2i(1024, 512)
+
+[node name="SpaceshipHud" parent="HudMesh/HudViewPort" instance=ExtResource("9_tghbs")]
+
+[node name="debug" type="MeshInstance3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
+top_level = true
+visible = false
+mesh = SubResource("SphereMesh_vr8fa")
+surface_material_override/0 = SubResource("StandardMaterial3D_uvuwp")
+
+[node name="WarpEffect" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.324897, 0, -9.37895)
+material_override = SubResource("ShaderMaterial_jn61r")
+mesh = SubResource("CylinderMesh_pue0v")
+
+[editable path="spaceships"]

@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://cef2d1ms5tqcu"]
+
+[ext_resource type="Script" path="res://scenes/player.gd" id="1_twqay"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nmful"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_dlyv5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_02wh4"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_quthh"]
+
+[node name="Player" type="CharacterBody3D"]
+motion_mode = 1
+script = ExtResource("1_twqay")
+
+[node name="XROrigin" type="XROrigin3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.705346, 0)
+current = true
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_nmful")
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.786552, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+current = true
+fov = 70.0
+far = 1e+06
+
+[node name="debug" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_dlyv5")
+surface_material_override/0 = SubResource("StandardMaterial3D_02wh4")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="debug"]
+transform = Transform3D(0.467331, 0, 0, 0, 0.150482, 0, 0, 0, 0.619507, 0, 0.591637, -0.224209)
+mesh = SubResource("BoxMesh_quthh")
+skeleton = NodePath("../..")

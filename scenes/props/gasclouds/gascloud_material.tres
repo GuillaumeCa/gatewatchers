@@ -1,0 +1,16 @@
+[gd_resource type="FogMaterial" load_steps=4 format=3 uid="uid://ynab0ip6e1pg"]
+
+[ext_resource type="FastNoiseLite" uid="uid://whcj2xmrh2ho" path="res://scenes/props/gasclouds/gascloud_noise.tres" id="1_p1fkm"]
+
+[sub_resource type="Gradient" id="Gradient_mm8c5"]
+offsets = PackedFloat32Array(0.698603, 0.804391)
+colors = PackedColorArray(0, 0, 0, 1, 0.247396, 0.247396, 0.247396, 1)
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_rahl4"]
+color_ramp = SubResource("Gradient_mm8c5")
+noise = ExtResource("1_p1fkm")
+
+[resource]
+albedo = Color(0.210938, 0.210938, 0.210938, 1)
+edge_fade = 0.156917
+density_texture = SubResource("NoiseTexture3D_rahl4")

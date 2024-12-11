@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PlanetArchetype" load_steps=4 format=3 uid="uid://ofdlvwyfh6ng"]
+
+[ext_resource type="Script" path="res://scenes/planets/planet_archetype.gd" id="1_7tsou"]
+
+[sub_resource type="Gradient" id="Gradient_qy7v8"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.397849, 0.548387, 0.701075)
+colors = PackedColorArray(0.375, 0.375, 0.375, 1, 0.46875, 0.46875, 0.46875, 1, 0.588542, 0.588542, 0.588542, 1, 0.825521, 0.825521, 0.825521, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_q3mh0"]
+gradient = SubResource("Gradient_qy7v8")
+
+[resource]
+script = ExtResource("1_7tsou")
+has_atmo = false
+atmo_intensity = 10.0
+atmo_color = Color(0, 0, 0, 1)
+atmo_height = 80
+terrain_gradient = SubResource("GradientTexture1D_q3mh0")
+terrain_height = 100

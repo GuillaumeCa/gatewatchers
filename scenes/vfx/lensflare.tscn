@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://bt6ainl0tmfmv"]
+
+[ext_resource type="Script" path="res://scenes/vfx/lensflare.gd" id="1_24upr"]
+[ext_resource type="Shader" path="res://scenes/vfx/lensflare.gdshader" id="1_el86y"]
+
+[sub_resource type="Gradient" id="Gradient_y6c6v"]
+offsets = PackedFloat32Array(0.027972, 0.263403, 0.496504, 0.724942, 1)
+colors = PackedColorArray(0.40705, 1, 0.558804, 1, 0.856771, 0.780359, 0.248957, 1, 0.670886, 0.0415326, 0.108405, 1, 0.0541574, 0.223834, 0.490506, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_k8b38"]
+gradient = SubResource("Gradient_y6c6v")
+fill = 1
+fill_from = Vector2(0.481481, 0.492877)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oglkh"]
+shader = ExtResource("1_el86y")
+shader_parameter/Blur = 3.445
+shader_parameter/FlareThreshold = 0.98
+shader_parameter/Flares = 7
+shader_parameter/FlareSpacing = 0.468
+shader_parameter/Intensity = 1.4
+shader_parameter/Saturation_ = 1.895
+shader_parameter/sun_position = Vector2(0, 0)
+shader_parameter/resolution = Vector2(0, 0)
+shader_parameter/FlareMult = SubResource("GradientTexture2D_k8b38")
+
+[node name="Lensflare" type="CanvasLayer"]
+script = ExtResource("1_24upr")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_oglkh")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

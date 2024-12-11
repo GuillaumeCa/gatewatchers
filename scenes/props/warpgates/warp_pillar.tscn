@@ -1,0 +1,42 @@
+[gd_scene load_steps=8 format=3 uid="uid://c217l5420fnou"]
+
+[ext_resource type="ArrayMesh" uid="uid://b0o4hy6tv6unb" path="res://assets/warp_pillar_a.res" id="1_7yj74"]
+[ext_resource type="Script" path="res://scenes/props/warpgates/warp_pillar.gd" id="1_fhe5m"]
+[ext_resource type="ArrayMesh" uid="uid://c2ry2t8ekjpse" path="res://assets/warp_pillar_b.res" id="2_w568f"]
+[ext_resource type="ArrayMesh" uid="uid://dxwa0eip1bjc" path="res://assets/warp_pillar_inner.res" id="3_evbys"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rtb4k"]
+albedo_color = Color(0.377604, 0.373671, 0.373671, 1)
+metallic = 1.0
+roughness = 0.77
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_siy0y"]
+emission_enabled = true
+emission = Color(0.243477, 0.848624, 0.942708, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wmsda"]
+emission_enabled = true
+emission = Color(0.243477, 0.848624, 0.942708, 1)
+emission_energy_multiplier = 3.0
+
+[node name="WarpPillar" type="Node3D"]
+script = ExtResource("1_fhe5m")
+
+[node name="WarpPillarA" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_7yj74")
+surface_material_override/0 = SubResource("StandardMaterial3D_rtb4k")
+surface_material_override/1 = SubResource("StandardMaterial3D_siy0y")
+
+[node name="WarpPillarB" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2_w568f")
+surface_material_override/0 = SubResource("StandardMaterial3D_rtb4k")
+surface_material_override/1 = SubResource("StandardMaterial3D_wmsda")
+
+[node name="WarpPillarInner" type="MeshInstance3D" parent="."]
+mesh = ExtResource("3_evbys")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.037365, 1.25386)
+light_color = Color(0.497052, 0.869071, 1, 1)
+light_energy = 10.0

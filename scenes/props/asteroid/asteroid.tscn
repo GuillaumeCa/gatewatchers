@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://kps80sqc57h0"]
+
+[ext_resource type="PackedScene" uid="uid://b70q88cpsce5u" path="res://assets/asteroid.glb" id="1_gupft"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cdwxp"]
+radius = 5.2
+
+[node name="Asteroid" type="RigidBody3D" groups=["space_objects"]]
+
+[node name="asteroid" parent="." instance=ExtResource("1_gupft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.64431, 0.00696957, 0.0151055)
+
+[node name="asteroid_low_001" parent="asteroid" index="0"]
+lod_bias = 0.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0122986, 0.209085, 5.96046e-08)
+shape = SubResource("SphereShape3D_cdwxp")
+
+[editable path="asteroid"]

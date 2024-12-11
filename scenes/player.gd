@@ -1,0 +1,110 @@
+extends CharacterBody3D
+
+
+const SPEED = 5.0
+const JUMP_VELOCITY = 4.5
+const SENSITIVITY_MOUSE = 0.001
+
+var xr_interface: XRInterface
+
+@export var active = false:
+	set(new_val):
+		active = new_val
+		if new_val:
+			switch_cam()
+
+@onready var camera_pivot: Node3D = $CameraPivot
+@onready var camera_3d: Camera3D = $CameraPivot/Camera3D
+@onready var xr_camera_3d: XRCamera3D = $XROrigin/XRCamera3D
+
+
+# Get the gravity from the project settings to be synced with RigidBody nodes.
+var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
+
+
+func switch_cam():
+	#if xr_interface.is_initialized():
+		#xr_camera_3d.current = true
+	#else:
+	camera_3d.current = true
+		
+
+func _ready() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	$debug.hide()
+	
+	#xr_interface = XRServer.find_interface("OpenXR")
+	#if xr_interface and xr_interface.is_initialized():
+		#print("OpenXR instantiated successfully.")
+		#var vp : Viewport = get_viewport()
+#
+		## Enable XR on our viewport
+		#vp.use_xr = true
+#
+		## Make sure v-sync is off, v-sync is handled by OpenXR
+		#DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+#
+		#
+		## Enable VRS
+		##if RenderingServer.get_rendering_device():
+			##vp.vrs_mode = Viewport.VRS_XR
+		##elif int(ProjectSettings.get_setting("xr/openxr/foveation_level")) == 0:
+			##push_warning("OpenXR: Recommend setting Foveation level to High in Project Settings")
+#
+		## Connect the OpenXR events
+		##xr_interface.session_begun.connect(_on_openxr_session_begun)
+		##xr_interface.session_visible.connect(_on_openxr_visible_state)
+		##xr_interface.session_focussed.connect(_on_openxr_focused_state)
+		##xr_interface.session_stopping.connect(_on_openxr_stopping)
+		##xr_interface.pose_recentered.connect(_on_openxr_pose_recentered)
+	#else:
+		## We couldn't start OpenXR.
+		#print("OpenXR not instantiated!")
+		#get_tree().quit()
+
+
+func _input(event: InputEvent) -> void:
+	if not active:
+		return
+	
+	if event is InputEventKey:
+		if event.keycode == KEY_ESCAPE:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if event is InputEventMouse:
+		if event.is_pressed():
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		camera_pivot.rotate_x(-event.relative.y * SENSITIVITY_MOUSE)
+		rotate_y(-event.relative.x * SENSITIVITY_MOUSE)
+		
+
+
+func _physics_process(delta: float) -> void:
+	$CollisionShape3D.disabled = !active
+	
+	if not active:
+		return
+
+
+	var input_dir := Input.get_vector("left", "right", "forward", "backward")
+	
+	var direction := (camera_3d.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	
+	var parent = get_parent()
+	
+	if input_dir:
+		velocity.x = lerpf(velocity.x, direction.x * SPEED, 0.2)
+		velocity.y = lerpf(velocity.y, direction.y * SPEED, 0.2)
+		velocity.z = lerpf(velocity.z, direction.z * SPEED, 0.2)
+	else:
+#		if is_on_floor():
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.y = move_toward(velocity.y, 0, SPEED)
+		velocity.z = move_toward(velocity.z, 0, SPEED)
+#		else:
+			
+#			if parent is RigidBody3D:
+#				velocity = lerp(velocity, parent.linear_velocity, 0.2)
+
+	move_and_slide()

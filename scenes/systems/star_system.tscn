@@ -1,0 +1,67 @@
+[gd_scene load_steps=16 format=3 uid="uid://p6e3v0roquco"]
+
+[ext_resource type="Script" path="res://scenes/systems/star_system.gd" id="1_i2yho"]
+[ext_resource type="Texture2D" uid="uid://ny2hjxlil1nq" path="res://assets/hdris/starmap_random_2020_4k_gal.exr" id="2_ff4vc"]
+[ext_resource type="PackedScene" uid="uid://w68mqe1d4u52" path="res://scenes/props/star/star.tscn" id="3_xfbaf"]
+[ext_resource type="Shader" path="res://scenes/props/star/star.gdshader" id="4_5c415"]
+[ext_resource type="PackedScene" uid="uid://d2cf6l066gcmq" path="res://scenes/planets/planet.tscn" id="4_a63su"]
+[ext_resource type="Resource" uid="uid://ofdlvwyfh6ng" path="res://scenes/planets/archetypes/desolate_arch.tres" id="4_uvq5x"]
+[ext_resource type="Script" path="res://scenes/planets/planet_archetype.gd" id="5_yi5vc"]
+[ext_resource type="Resource" uid="uid://bnwrlu3utwmrd" path="res://scenes/planets/archetypes/temperate_arch.tres" id="6_fp77i"]
+[ext_resource type="PackedScene" uid="uid://cfv6yls3xh05y" path="res://scenes/props/asteroid/asteroid_spawner.tscn" id="7_tp0ti"]
+[ext_resource type="Resource" uid="uid://bjl4v2v2wkho3" path="res://scenes/planets/archetypes/acidic_arch.tres" id="8_xut0x"]
+[ext_resource type="Resource" uid="uid://ov6wggvcet8a" path="res://scenes/planets/archetypes/rocky_arch.tres" id="11_6mbtp"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_22di7"]
+panorama = ExtResource("2_ff4vc")
+
+[sub_resource type="Sky" id="Sky_ygh2h"]
+sky_material = SubResource("PanoramaSkyMaterial_22di7")
+
+[sub_resource type="Environment" id="Environment_egpqr"]
+background_mode = 2
+background_energy_multiplier = 0.15
+sky = SubResource("Sky_ygh2h")
+ambient_light_source = 3
+ambient_light_color = Color(0.229167, 0.229167, 0.229167, 1)
+ambient_light_sky_contribution = 0.66
+tonemap_mode = 3
+ssr_enabled = true
+ssao_enabled = true
+sdfgi_use_occlusion = true
+glow_enabled = true
+glow_intensity = 0.18
+glow_blend_mode = 0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_length = 500.0
+volumetric_fog_detail_spread = 2.92817
+volumetric_fog_ambient_inject = 0.23
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p5rws"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_5c415")
+shader_parameter/sun_size = 2.28
+shader_parameter/sun_brightness = 30.0
+shader_parameter/sun_color = Color(1, 0.665405, 0.375608, 1)
+shader_parameter/sun_fade = 0.03
+
+[node name="StarSystem" type="Node3D"]
+script = ExtResource("1_i2yho")
+colors = Array[Color]([Color(0.490732, 0.885417, 0.580061, 1), Color(0.997396, 0.988233, 0.691786, 1), Color(0.888021, 0.570049, 0.182438, 1), Color(0.979167, 0.414406, 0.306763, 1), Color(0.199046, 0.379073, 0.973958, 1)])
+planet_archetypes = Array[ExtResource("5_yi5vc")]([ExtResource("8_xut0x"), ExtResource("4_uvq5x"), ExtResource("11_6mbtp"), ExtResource("6_fp77i")])
+planet_scene = ExtResource("4_a63su")
+asteroid_spawner_scene = ExtResource("7_tp0ti")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_egpqr")
+
+[node name="Star" parent="." groups=["space_objects"] instance=ExtResource("3_xfbaf")]
+material_override = SubResource("ShaderMaterial_p5rws")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Star"]
+light_color = Color(1, 0.980482, 0.907855, 1)
+light_energy = 1.5
+omni_range = 1e+06
+omni_attenuation = 0.03

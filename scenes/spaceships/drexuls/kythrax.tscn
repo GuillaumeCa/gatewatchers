@@ -1,0 +1,119 @@
+[gd_scene load_steps=14 format=3 uid="uid://drj4drjrrqhtn"]
+
+[ext_resource type="PackedScene" uid="uid://c2q0i7xg33imp" path="res://assets/kythrax.glb" id="1_8knee"]
+[ext_resource type="Script" path="res://scenes/spaceships/enemy_spaceship.gd" id="1_u8857"]
+[ext_resource type="Material" uid="uid://dyde4vmo0bxp8" path="res://assets/lowpoly.res" id="2_8aq6q"]
+[ext_resource type="Material" uid="uid://bql8geyhugqoi" path="res://assets/window_drexul.material" id="3_pd82x"]
+[ext_resource type="PackedScene" uid="uid://c0s1k0g71mkdu" path="res://scenes/spaceships/weapons/laser_weapon.tscn" id="5_2mc87"]
+[ext_resource type="PackedScene" uid="uid://cixdyu6ia256b" path="res://scenes/spaceships/radar.tscn" id="5_ly7m0"]
+[ext_resource type="Texture2D" uid="uid://csawli8abs1f3" path="res://assets/particle.png" id="7_5qpye"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vtoj5"]
+size = Vector3(14.6216, 3.94507, 9.22241)
+
+[sub_resource type="Curve" id="Curve_2e0mo"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.172808, 0.957295), 0.0, 0.0, 0, 0, Vector2(0.288437, 0.274021), 0.0, 0.0, 0, 0, Vector2(0.400254, 0.615658), 0.0, 0.0, 0, 0, Vector2(0.613723, 0.188612), -0.800204, -0.800204, 0, 0, Vector2(1, 0), 0.299313, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="CurveTexture" id="CurveTexture_ip868"]
+curve = SubResource("Curve_2e0mo")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hqtxj"]
+direction = Vector3(0, 0, 1)
+spread = 5.0
+initial_velocity_min = 11.5
+initial_velocity_max = 22.55
+gravity = Vector3(0, 0, 0)
+scale_min = 1.05
+scale_max = 2.4
+scale_curve = SubResource("CurveTexture_ip868")
+color = Color(1, 0.424516, 0.171547, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mo50y"]
+blend_mode = 1
+shading_mode = 0
+disable_ambient_light = true
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("7_5qpye")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_3c38l"]
+material = SubResource("StandardMaterial3D_mo50y")
+
+[node name="Kythrax" type="RigidBody3D" groups=["drexul", "ship", "space_objects"]]
+script = ExtResource("1_u8857")
+
+[node name="CollisionShapeBody" type="CollisionShape3D" parent="."]
+transform = Transform3D(-3.23806e-08, 2.9363e-08, -1, 0.671746, 0.740781, 0, 0.740781, -0.671746, -4.37114e-08, 0, 2.295, 0)
+shape = SubResource("BoxShape3D_vtoj5")
+
+[node name="kythrax" parent="." instance=ExtResource("1_8knee")]
+
+[node name="body" parent="kythrax" index="0"]
+material_override = ExtResource("2_8aq6q")
+
+[node name="upper_wings" parent="kythrax" index="1"]
+material_override = ExtResource("2_8aq6q")
+
+[node name="lower_wings" parent="kythrax" index="2"]
+material_override = ExtResource("2_8aq6q")
+
+[node name="nose" parent="kythrax" index="3"]
+material_override = ExtResource("2_8aq6q")
+
+[node name="thrusters" parent="kythrax" index="5"]
+material_override = ExtResource("2_8aq6q")
+
+[node name="cockpit_window" parent="kythrax" index="6"]
+material_override = ExtResource("3_pd82x")
+
+[node name="Radar" parent="." instance=ExtResource("5_ly7m0")]
+
+[node name="Debug" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.3113, 0)
+visible = false
+pixel_size = 0.0015
+billboard = 1
+fixed_size = true
+text = "Kythrax"
+
+[node name="Weapons" type="Node3D" parent="."]
+
+[node name="LaserWeapon" parent="Weapons" instance=ExtResource("5_2mc87")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.94447, -10.8567)
+
+[node name="Collision" type="Area3D" parent="."]
+
+[node name="CollisionShapeBody" type="CollisionShape3D" parent="Collision"]
+transform = Transform3D(-3.23806e-08, 2.9363e-08, -1, 0.671746, 0.740781, 0, 0.740781, -0.671746, -4.37114e-08, 0.024928, 2.29455, 0)
+shape = SubResource("BoxShape3D_vtoj5")
+
+[node name="engines" type="Node3D" parent="."]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="engines"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.636224, 5.13046, 4.50653)
+amount = 300
+lifetime = 0.5
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_hqtxj")
+draw_pass_1 = SubResource("QuadMesh_3c38l")
+
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="engines"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.636, 5.13, 4.50642)
+amount = 300
+lifetime = 0.5
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_hqtxj")
+draw_pass_1 = SubResource("QuadMesh_3c38l")
+
+[node name="DeadTimer" type="Timer" parent="."]
+wait_time = 30.0
+
+[connection signal="area_entered" from="Collision" to="." method="_on_collision_area_entered"]
+[connection signal="timeout" from="DeadTimer" to="." method="_on_dead_timer_timeout"]
+
+[editable path="kythrax"]

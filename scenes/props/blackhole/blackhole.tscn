@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://dbpepfkxb1b7y"]
+
+[ext_resource type="Script" path="res://scenes/props/blackhole/blackhole.gd" id="1_2cqf4"]
+[ext_resource type="Shader" path="res://scenes/props/blackhole/blackhole.gdshader" id="1_6ro7t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vwhqh"]
+render_priority = -1
+shader = ExtResource("1_6ro7t")
+shader_parameter/event_horizon_radius = 1.652
+shader_parameter/accretion_color = Color(1, 0.752514, 0.463921, 1)
+shader_parameter/accretion_density = 50.456
+shader_parameter/accretion_thickness = 5.0
+shader_parameter/accretion_radius = 74.088
+shader_parameter/accretion_inner_radius = 6.65
+shader_parameter/opacity = 0.14
+shader_parameter/step_size = 3.074
+shader_parameter/step_size_mult = 105.0
+shader_parameter/step_size_max = 570.0
+shader_parameter/max_steps = 128
+shader_parameter/depth_thickness = 0.0
+shader_parameter/use_depth = false
+shader_parameter/max_radius = 10.0
+shader_parameter/global_radius = 100.0
+shader_parameter/pos = Vector3(5040.97, 725.145, -1295.48)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nmxee"]
+size = Vector3(500, 500, 500)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_nx0jh"]
+radius = 256.388
+
+[node name="Blackhole" type="Node3D"]
+script = ExtResource("1_2cqf4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_vwhqh")
+mesh = SubResource("BoxMesh_nmxee")
+
+[node name="Area3D" type="Area3D" parent="."]
+gravity_space_override = 3
+gravity_point = true
+gravity_point_unit_distance = 200.0
+gravity = 98.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_nx0jh")

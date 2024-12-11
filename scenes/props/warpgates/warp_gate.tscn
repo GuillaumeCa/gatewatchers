@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://dsqm2ewisnox2"]
+
+[ext_resource type="PackedScene" uid="uid://c217l5420fnou" path="res://scenes/props/warpgates/warp_pillar.tscn" id="1_i5xj8"]
+[ext_resource type="Script" path="res://scenes/props/warpgates/warp_gate.gd" id="1_ut8uu"]
+[ext_resource type="PackedScene" uid="uid://dvs7wacaw5fq8" path="res://assets/warp_tunnel.glb" id="2_1247o"]
+[ext_resource type="Material" uid="uid://bq6c4hcru3x0e" path="res://scenes/props/warpgates/warptunnel.material" id="3_ypdiq"]
+
+[node name="WapGate" type="Node3D" groups=["space_objects", "warp"]]
+script = ExtResource("1_ut8uu")
+
+[node name="WarpPillar" parent="." instance=ExtResource("1_i5xj8")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -3.03596, -6, 0)
+
+[node name="WarpPillar3" parent="." instance=ExtResource("1_i5xj8")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -7.03596, 0, 0)
+
+[node name="WarpPillar4" parent="." instance=ExtResource("1_i5xj8")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 6.96404, 0, 0)
+
+[node name="WarpPillar2" parent="." instance=ExtResource("1_i5xj8")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 2.96404, -6, 0)
+
+[node name="WarpPillar5" parent="." instance=ExtResource("1_i5xj8")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -3.03596, 6, 0)
+
+[node name="WarpPillar6" parent="." instance=ExtResource("1_i5xj8")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 2.96404, 6, 0)
+
+[node name="warp_tunnel" parent="." instance=ExtResource("2_1247o")]
+
+[node name="tunnel" parent="warp_tunnel" index="0"]
+material_override = ExtResource("3_ypdiq")
+
+[editable path="warp_tunnel"]

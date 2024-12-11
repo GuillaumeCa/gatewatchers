@@ -1,0 +1,63 @@
+[gd_scene load_steps=4 format=3 uid="uid://brtfcqtwjbgnp"]
+
+[ext_resource type="Script" path="res://scenes/spaceships/spaceship_hud.gd" id="1_if6vx"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1imii"]
+font_size = 33
+
+[sub_resource type="LabelSettings" id="LabelSettings_0vdl0"]
+font_size = 17
+
+[node name="SpaceshipHud" type="Control"]
+custom_minimum_size = Vector2(1024, 512)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1024.0
+offset_bottom = 512.0
+script = ExtResource("1_if6vx")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.619608, 0.831373, 1, 0.0745098)
+
+[node name="Dials" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 45.0
+offset_right = 137.0
+offset_bottom = 152.0
+theme_override_constants/separation = 15
+metadata/_edit_group_ = true
+
+[node name="Speed" type="Label" parent="Dials"]
+layout_mode = 2
+text = "0 m/s"
+label_settings = SubResource("LabelSettings_1imii")
+
+[node name="SpeedLabel" type="Label" parent="Dials/Speed"]
+layout_mode = 1
+offset_left = 1.0
+offset_top = -16.0
+offset_right = 59.0
+offset_bottom = 8.0
+text = "SPEED"
+label_settings = SubResource("LabelSettings_0vdl0")
+
+[node name="Mode" type="Label" parent="Dials"]
+layout_mode = 2
+text = "MODE"
+label_settings = SubResource("LabelSettings_1imii")
+
+[node name="ModeLabel" type="Label" parent="Dials/Mode"]
+layout_mode = 1
+offset_left = 2.0
+offset_top = -12.0
+offset_right = 60.0
+offset_bottom = 12.0
+text = "MODE"
+label_settings = SubResource("LabelSettings_0vdl0")

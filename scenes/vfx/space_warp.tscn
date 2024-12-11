@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://0mbnnrbq2xj1"]
+
+[ext_resource type="Shader" path="res://spacewarp.gdshader" id="1_4j3wh"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_w72je"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bakro"]
+render_priority = 0
+shader = ExtResource("1_4j3wh")
+shader_parameter/scale = -0.395
+shader_parameter/effect = 0.85
+
+[sub_resource type="SphereMesh" id="SphereMesh_xgn6y"]
+
+[node name="SpaceWarp" type="Node3D"]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.9473)
+mesh = SubResource("BoxMesh_w72je")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(3, 0, 0, 0, -3.49691e-07, 2.32, 0, -8, -1.0141e-07, 0, -0.441482, -3.74611)
+material_override = SubResource("ShaderMaterial_bakro")
+mesh = SubResource("SphereMesh_xgn6y")

@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://w68mqe1d4u52"]
+
+[ext_resource type="Shader" path="res://scenes/props/star/star.gdshader" id="1_g382u"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3haub"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_g382u")
+shader_parameter/sun_size = 0.028
+shader_parameter/sun_brightness = 30.0
+shader_parameter/sun_color = Color(1, 0.665405, 0.375608, 1)
+shader_parameter/sun_fade = 0.03
+
+[sub_resource type="QuadMesh" id="QuadMesh_0vx4k"]
+
+[node name="Star" type="MeshInstance3D"]
+material_override = SubResource("ShaderMaterial_3haub")
+extra_cull_margin = 5055.56
+mesh = SubResource("QuadMesh_0vx4k")
