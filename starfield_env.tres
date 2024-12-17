@@ -1,28 +1,26 @@
-[gd_resource type="Environment" load_steps=6 format=3 uid="uid://ymne4iy6o8qe"]
+[gd_resource type="Environment" load_steps=3 format=3 uid="uid://ymne4iy6o8qe"]
 
-[ext_resource type="Shader" path="res://scenes/vfx/starfield.gdshader" id="1_etv3f"]
+[ext_resource type="Material" uid="uid://ded4rt8oc2c4l" path="res://scenes/vfx/starfield_material.tres" id="1_qnb6h"]
 
-[sub_resource type="Gradient" id="Gradient_g4agd"]
-offsets = PackedFloat32Array(0, 0.344311, 0.613772, 0.853293, 1)
-colors = PackedColorArray(0.149857, 0.233403, 0.648438, 1, 1, 1, 1, 1, 1, 0.896162, 0.345136, 1, 1, 0.485138, 0.252246, 1, 1, 0.186965, 0.177017, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_3e3j5"]
-gradient = SubResource("Gradient_g4agd")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0n1we"]
-shader = ExtResource("1_etv3f")
-shader_parameter/base_color = null
-shader_parameter/star_height = 6.82
-shader_parameter/star_blend = 0.0
-shader_parameter/depth_blend = 0.1
-shader_parameter/star_size = 6.585
-shader_parameter/star_layers = 4
-shader_parameter/flare_ratio = 0.3
-shader_parameter/star_gradient = SubResource("GradientTexture1D_3e3j5")
-
-[sub_resource type="Sky" id="Sky_m1dso"]
-sky_material = SubResource("ShaderMaterial_0n1we")
+[sub_resource type="Sky" id="Sky_lqqcx"]
+sky_material = ExtResource("1_qnb6h")
 
 [resource]
 background_mode = 2
-sky = SubResource("Sky_m1dso")
+background_energy_multiplier = 0.15
+sky = SubResource("Sky_lqqcx")
+ambient_light_source = 3
+ambient_light_color = Color(0.229167, 0.229167, 0.229167, 1)
+ambient_light_sky_contribution = 0.66
+tonemap_mode = 3
+ssr_enabled = true
+ssao_enabled = true
+sdfgi_use_occlusion = true
+glow_enabled = true
+glow_intensity = 0.18
+glow_blend_mode = 0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_length = 500.0
+volumetric_fog_detail_spread = 2.92817
+volumetric_fog_ambient_inject = 0.23

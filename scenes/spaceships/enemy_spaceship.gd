@@ -10,6 +10,8 @@ enum EnemyState {
 
 const EXPLOSITION = preload("res://scenes/vfx/explosition.tscn")
 
+@export var sparkle_scene: PackedScene
+
 @onready var radar: Area3D = $Radar
 
 # ai process
@@ -20,6 +22,9 @@ const EXPLOSITION = preload("res://scenes/vfx/explosition.tscn")
 
 var health = 100
 var speed = 3000
+
+## distance after which the ship will start attacking the target
+var attack_distance = 500
 
 var state = EnemyState.SEARCHING
 
@@ -50,7 +55,7 @@ func _process(delta: float) -> void:
 			if current_target:
 				state = EnemyState.APPROACHING
 				
-				if current_target.global_position.distance_to(global_position) < 200:
+				if current_target.global_position.distance_to(global_position) < attack_distance:
 					state = EnemyState.ATTACKING
 			else:
 				state = EnemyState.SEARCHING
@@ -61,7 +66,7 @@ func _physics_process(delta: float) -> void:
 	enable_engine(false)
 	match state:
 		EnemyState.SEARCHING:
-			accelerate_to(30)
+			accelerate_to(200)
 			
 		EnemyState.APPROACHING:
 			var t = global_transform
@@ -70,7 +75,7 @@ func _physics_process(delta: float) -> void:
 			
 			global_transform.basis = global_transform.basis.slerp(t.basis, 0.01)
 			
-			accelerate_to(20)
+			accelerate_to(200)
 			
 		
 		EnemyState.ATTACKING:
@@ -82,24 +87,31 @@ func _physics_process(delta: float) -> void:
 			
 			fire_guns()
 			
+			if global_position.distance_to(current_target.global_position) > 200:
+				accelerate_to(30)
+			
+			# if ship is aligned with target 
+			if -global_basis.z.dot(current_target.global_basis.z) > 0.8:
+				accelerate_to(50, Vector3.LEFT)
+			
 		EnemyState.FLEEING: 
 			var t = global_transform
 			t = t.looking_at(current_target.global_position).inverse()
 			
 			
 			global_transform.basis = global_transform.basis.slerp(t.basis, 0.01)
-			accelerate_to(30)
-
+			accelerate_to(50)
+		
 func fire_guns():
 	$Weapons/LaserWeapon.fire()
 
 
-func accelerate_to(maxspeed: float):
+func accelerate_to(maxspeed: float, dir = Vector3.FORWARD):
 	enable_engine(false)
 	
 	if linear_velocity.length() < maxspeed:
 		enable_engine(true)
-		var force = Vector3(0, 0, -1) * speed * get_physics_process_delta_time()
+		var force = dir * speed * get_physics_process_delta_time()
 		apply_central_force(global_transform.basis * force)
 		
 
@@ -111,14 +123,24 @@ func enable_engine(on: bool):
 
 func _on_collision_area_entered(area: Area3D) -> void:
 	if state == EnemyState.DEAD: return
+	if !is_inside_tree(): return
+	
 	if area.is_in_group("projectile"):
 		health -= 5
+		
+		var sparkle: GPUParticles3D = sparkle_scene.instantiate()
+		sparkle.global_position = area.global_position
+		sparkle.emitting = true
+		add_sibling(sparkle)
+		
 		if health <= 0:
 			var explosion_sfx = EXPLOSITION.instantiate()
-			explosion_sfx.global_position = global_position
-			explosion_sfx.emitting = true
+			explosion_sfx.global_position = area.global_position
+			apply_central_impulse(Vector3(randf() * 20, randf() * 20, randf() * 20))
+			apply_torque_impulse(Vector3(randf() * 30, randf() * 30, randf() * 30))
 			add_sibling(explosion_sfx)
 			
+			remove_from_group("drexul")
 			state = EnemyState.DEAD
 			$DeadTimer.start()
 		

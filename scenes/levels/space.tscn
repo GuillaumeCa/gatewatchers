@@ -1,8 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://cc1n7p87rdvxe"]
+[gd_scene load_steps=13 format=3 uid="uid://cc1n7p87rdvxe"]
 
 [ext_resource type="Script" path="res://scenes/levels/space.gd" id="1_tw8vm"]
 [ext_resource type="PackedScene" uid="uid://d32700hsoxr8b" path="res://scenes/spaceships/humans/nebula.tscn" id="1_xd8lj"]
-[ext_resource type="Material" uid="uid://ded4rt8oc2c4l" path="res://scenes/levels/starfield_material.tres" id="2_8jkqp"]
+[ext_resource type="Environment" uid="uid://ymne4iy6o8qe" path="res://starfield_env.tres" id="2_a755b"]
 [ext_resource type="PackedScene" uid="uid://bt6ainl0tmfmv" path="res://scenes/vfx/lensflare.tscn" id="2_i61lw"]
 [ext_resource type="PackedScene" uid="uid://bvg10su81vhxe" path="res://scenes/ui/settings_panel.tscn" id="2_rvlvr"]
 [ext_resource type="PackedScene" uid="uid://drj4drjrrqhtn" path="res://scenes/spaceships/drexuls/kythrax.tscn" id="6_3b8cd"]
@@ -10,29 +10,6 @@
 [ext_resource type="Material" uid="uid://ynab0ip6e1pg" path="res://scenes/props/gasclouds/gascloud_material.tres" id="8_6o4hr"]
 [ext_resource type="PackedScene" uid="uid://dbpepfkxb1b7y" path="res://scenes/props/blackhole/blackhole.tscn" id="9_lin2b"]
 [ext_resource type="PackedScene" uid="uid://w68mqe1d4u52" path="res://scenes/props/star/star.tscn" id="10_sjr25"]
-
-[sub_resource type="Sky" id="Sky_lqqcx"]
-sky_material = ExtResource("2_8jkqp")
-
-[sub_resource type="Environment" id="Environment_a1d0t"]
-background_mode = 2
-background_energy_multiplier = 0.15
-sky = SubResource("Sky_lqqcx")
-ambient_light_source = 3
-ambient_light_color = Color(0.229167, 0.229167, 0.229167, 1)
-ambient_light_sky_contribution = 0.66
-tonemap_mode = 3
-ssr_enabled = true
-ssao_enabled = true
-sdfgi_use_occlusion = true
-glow_enabled = true
-glow_intensity = 0.18
-glow_blend_mode = 0
-volumetric_fog_enabled = true
-volumetric_fog_density = 0.0
-volumetric_fog_length = 500.0
-volumetric_fog_detail_spread = 2.92817
-volumetric_fog_ambient_inject = 0.23
 
 [sub_resource type="LabelSettings" id="LabelSettings_hnl5v"]
 line_spacing = -1.845
@@ -49,8 +26,8 @@ shader_parameter/sun_fade = 0.03
 [node name="space" type="Node3D"]
 script = ExtResource("1_tw8vm")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_a1d0t")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." groups=["environment"]]
+environment = ExtResource("2_a755b")
 
 [node name="Lensflare" parent="." instance=ExtResource("2_i61lw")]
 

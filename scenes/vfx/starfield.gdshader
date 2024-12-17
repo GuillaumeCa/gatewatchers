@@ -23,6 +23,7 @@ uniform int nebula_layers = 1;
 uniform float nebula_scale: hint_range(0.0, 0.1, 0.001) = 0.1;
 uniform float nebula_blend = 0.5;
 uniform float nebula_power = 1.0;
+uniform float nebula_seed = 1.0;
 group_uniforms;
 
 vec2 random_vec2(vec2 seed) {
@@ -42,10 +43,10 @@ vec2 rotate_uv(vec2 uv, float rotation) {
 }
 
 float star(vec2 uv, float flare) {
-	float s = .01 / length(uv);
+	float s = .005 / length(uv);
 	float rays = max(0, 1. - abs(uv.x * uv.y) * 1000.0) * s;
 	s += rays * flare;
-	return clamp(pow(s, 3.0), 0.0, 1.0);
+	return clamp(pow(s, 1.8), 0.0, 1.);
 }
 
 vec3 star_layer(vec2 uv) {
@@ -108,10 +109,10 @@ void sky() {
 		for (float i = 1.; i <= float(nebula_layers); i++) {
 			vec2 ruv = rotate_uv(uv, EYEDIR.y * .4);
 			vec2 rd = random_vec2(ruv);
-			nebula += vec4(create_nebula(ruv * nebula_scale + i * 0.3) * nebula_primary);
-			float m = texture(nebula_mask, 2.0 + uv * 0.12).r;
+			nebula += vec4(create_nebula(ruv * nebula_scale + i * 0.3 + nebula_seed));
+			float m = texture(nebula_mask, 2.0 + uv * .2).r;
 			vec3 nebula_color = mix(nebula_primary.rgb, nebula_secondary.rgb, m);
-			nebula.rgb *= nebula_color.rgb;
+			nebula.rgb = nebula.r * nebula_color.rgb;
 		}
 		nebula.rgb *= smoothstep(0, nebula_blend, abs(EYEDIR.y));
 		FOG = nebula;

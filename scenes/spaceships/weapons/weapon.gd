@@ -3,7 +3,7 @@ extends Node3D
 const LASER = preload("res://scenes/spaceships/weapons/laser.tscn")
 
 @export var fire_rate = 0.1 # Adjust this value to set the fire rate in seconds
-@export var spread = 1
+@export var spread = 0.0
 var time_since_last_shot = 0.0
 
 func fire():

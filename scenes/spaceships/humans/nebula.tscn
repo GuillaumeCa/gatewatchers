@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://d32700hsoxr8b"]
+[gd_scene load_steps=35 format=3 uid="uid://d32700hsoxr8b"]
 
 [ext_resource type="Script" path="res://scenes/spaceships/Spaceship.gd" id="1_2eoki"]
 [ext_resource type="PackedScene" uid="uid://blk8lyl4qh0ip" path="res://assets/spaceships.glb" id="1_rdqkb"]
@@ -153,11 +153,15 @@ radial_segments = 32
 cap_top = false
 cap_bottom = false
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_wwnxg"]
+size = Vector3(3.342, 2.715, 25.362)
+
 [node name="Nebula" type="RigidBody3D" groups=["human", "ship"]]
 freeze_mode = 1
 angular_damp = 1.145
 script = ExtResource("1_2eoki")
 speed = 3000
+hull_health = 500
 
 [node name="spaceships" parent="." instance=ExtResource("1_rdqkb")]
 
@@ -246,7 +250,7 @@ max_polyphony = 5
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="DebugHud" type="Control" parent="CanvasLayer"]
+[node name="HelmetHud" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -255,7 +259,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="SpeedLabel" type="Label" parent="CanvasLayer/DebugHud"]
+[node name="SpeedLabel" type="Label" parent="CanvasLayer/HelmetHud"]
 visible = false
 layout_mode = 0
 offset_left = 38.0
@@ -265,10 +269,14 @@ offset_bottom = 61.0
 theme_override_font_sizes/font_size = 36
 text = "120 m/s"
 
-[node name="Target" type="Sprite2D" parent="CanvasLayer/DebugHud"]
+[node name="WeaponReticule" type="Sprite2D" parent="CanvasLayer/HelmetHud"]
+scale = Vector2(0.545, 0.545)
+texture = ExtResource("12_yiw4s")
+
+[node name="Target" type="Sprite2D" parent="CanvasLayer/HelmetHud"]
 texture = ExtResource("8_guc0y")
 
-[node name="Distance" type="Label" parent="CanvasLayer/DebugHud/Target"]
+[node name="Distance" type="Label" parent="CanvasLayer/HelmetHud/Target"]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -283,7 +291,7 @@ grow_vertical = 0
 text = "100KM"
 horizontal_alignment = 1
 
-[node name="Name" type="Label" parent="CanvasLayer/DebugHud/Target"]
+[node name="Name" type="Label" parent="CanvasLayer/HelmetHud/Target"]
 visible = false
 anchors_preset = 5
 anchor_left = 0.5
@@ -296,7 +304,7 @@ grow_horizontal = 2
 text = "Name"
 horizontal_alignment = 1
 
-[node name="Hit" type="Sprite2D" parent="CanvasLayer/DebugHud/Target"]
+[node name="Hit" type="Sprite2D" parent="CanvasLayer/HelmetHud/Target"]
 visible = false
 texture = ExtResource("12_yiw4s")
 
@@ -341,5 +349,13 @@ surface_material_override/0 = SubResource("StandardMaterial3D_uvuwp")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.324897, 0, -9.37895)
 material_override = SubResource("ShaderMaterial_jn61r")
 mesh = SubResource("CylinderMesh_pue0v")
+
+[node name="Collision" type="Area3D" parent="."]
+
+[node name="CollisionShapeBody" type="CollisionShape3D" parent="Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.1262)
+shape = SubResource("BoxShape3D_wwnxg")
+
+[connection signal="area_entered" from="Collision" to="." method="_on_collision_area_entered"]
 
 [editable path="spaceships"]

@@ -1,13 +1,20 @@
-[gd_scene load_steps=9 format=3 uid="uid://cxutbn2gmisj7"]
+[gd_scene load_steps=16 format=3 uid="uid://cxutbn2gmisj7"]
 
 [ext_resource type="Script" path="res://scenes/vfx/explosition.gd" id="1_omhb6"]
 
 [sub_resource type="Gradient" id="Gradient_0185r"]
-offsets = PackedFloat32Array(0.174576, 0.240678, 0.322034, 0.449153, 0.550847)
-colors = PackedColorArray(1, 1, 1, 1, 1, 0.535, 0.07, 1, 0.942708, 0.789249, 0.209482, 1, 0.440104, 0.37274, 0.118241, 1, 0.0390625, 0.0390625, 0.0390625, 1)
+offsets = PackedFloat32Array(0.0362812, 0.129252, 0.256236, 0.353741)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0.33689, 0.135966, 1, 0.942708, 0.789249, 0.209482, 1, 0.0390625, 0.0390625, 0.0390625, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_df4pu"]
 gradient = SubResource("Gradient_0185r")
+
+[sub_resource type="Curve" id="Curve_ui46t"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.725572, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_488uw"]
+curve = SubResource("Curve_ui46t")
 
 [sub_resource type="Curve" id="Curve_2gcxq"]
 max_value = 5.0
@@ -28,14 +35,13 @@ scale_min = 3.15
 scale_max = 7.55
 scale_curve = SubResource("CurveTexture_jlpu4")
 color_ramp = SubResource("GradientTexture1D_df4pu")
+emission_curve = SubResource("CurveTexture_488uw")
 anim_speed_min = 1.12
 anim_speed_max = 3.13
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iqpot"]
+shading_mode = 0
 vertex_color_use_as_albedo = true
-emission_enabled = true
-emission = Color(1, 1, 1, 1)
-emission_energy_multiplier = 5.33
 billboard_mode = 3
 billboard_keep_scale = true
 particles_anim_h_frames = 1
@@ -47,6 +53,32 @@ material = SubResource("StandardMaterial3D_iqpot")
 radial_segments = 16
 rings = 8
 
+[sub_resource type="Curve" id="Curve_aghfc"]
+_data = [Vector2(0, 0.0386984), 0.0, 3.96331, 0, 0, Vector2(0.871102, 0.987183), -0.010485, -0.010485, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_1mxb4"]
+curve = SubResource("Curve_aghfc")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tvwfn"]
+direction = Vector3(1, 1, 1)
+spread = 180.0
+initial_velocity_min = 20.0
+initial_velocity_max = 30.0
+scale_curve = SubResource("CurveTexture_1mxb4")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v1qhj"]
+albedo_color = Color(1, 0.930468, 0.340595, 1)
+emission_enabled = true
+emission = Color(1, 0.956046, 0.442319, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6xc5f"]
+material = SubResource("StandardMaterial3D_v1qhj")
+top_radius = 0.08
+bottom_radius = 0.01
+radial_segments = 4
+
 [node name="Explosition" type="GPUParticles3D" groups=["space_objects"]]
 top_level = true
 emitting = false
@@ -55,8 +87,18 @@ lifetime = 3.0
 one_shot = true
 explosiveness = 0.73
 randomness = 0.19
+fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_08rxi")
 draw_pass_1 = SubResource("SphereMesh_lk275")
 script = ExtResource("1_omhb6")
+
+[node name="Sparkle" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 32
+one_shot = true
+explosiveness = 1.0
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_tvwfn")
+draw_pass_1 = SubResource("CylinderMesh_6xc5f")
 
 [connection signal="finished" from="." to="." method="_on_finished"]

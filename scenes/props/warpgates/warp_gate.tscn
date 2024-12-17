@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://dsqm2ewisnox2"]
+[gd_scene load_steps=6 format=3 uid="uid://dsqm2ewisnox2"]
 
 [ext_resource type="PackedScene" uid="uid://c217l5420fnou" path="res://scenes/props/warpgates/warp_pillar.tscn" id="1_i5xj8"]
 [ext_resource type="Script" path="res://scenes/props/warpgates/warp_gate.gd" id="1_ut8uu"]
 [ext_resource type="PackedScene" uid="uid://dvs7wacaw5fq8" path="res://assets/warp_tunnel.glb" id="2_1247o"]
 [ext_resource type="Material" uid="uid://bq6c4hcru3x0e" path="res://scenes/props/warpgates/warptunnel.material" id="3_ypdiq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yl7so"]
+size = Vector3(9, 8, 30)
 
 [node name="WapGate" type="Node3D" groups=["space_objects", "warp"]]
 script = ExtResource("1_ut8uu")
@@ -30,5 +33,13 @@ transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 
 
 [node name="tunnel" parent="warp_tunnel" index="0"]
 material_override = ExtResource("3_ypdiq")
+
+[node name="GateArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GateArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.7743)
+shape = SubResource("BoxShape3D_yl7so")
+
+[connection signal="body_entered" from="GateArea" to="." method="_on_gate_area_body_entered"]
 
 [editable path="warp_tunnel"]

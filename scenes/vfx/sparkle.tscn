@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://hhmdktq0p3nm"]
+
+[ext_resource type="Script" path="res://scenes/vfx/sparkle.gd" id="1_dqfw7"]
+
+[sub_resource type="Curve" id="Curve_33ddu"]
+_data = [Vector2(0, 0.0386984), 0.0, 3.96331, 0, 0, Vector2(0.871102, 0.987183), -0.010485, -0.010485, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_70fqr"]
+curve = SubResource("Curve_33ddu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mgfic"]
+direction = Vector3(1, 1, 1)
+spread = 180.0
+initial_velocity_min = 20.0
+initial_velocity_max = 30.0
+scale_curve = SubResource("CurveTexture_70fqr")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5738"]
+albedo_color = Color(1, 0.930468, 0.340595, 1)
+emission_enabled = true
+emission = Color(1, 0.956046, 0.442319, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lie5r"]
+material = SubResource("StandardMaterial3D_f5738")
+top_radius = 0.08
+bottom_radius = 0.01
+radial_segments = 4
+
+[node name="Sparkle" type="GPUParticles3D"]
+emitting = false
+amount = 32
+one_shot = true
+explosiveness = 1.0
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_mgfic")
+draw_pass_1 = SubResource("CylinderMesh_lie5r")
+script = ExtResource("1_dqfw7")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

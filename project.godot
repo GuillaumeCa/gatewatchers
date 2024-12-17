@@ -15,6 +15,10 @@ run/main_scene="res://scenes/levels/space.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SpaceManager="*res://scenes/space_manager.gd"
+
 [display]
 
 window/size/viewport_width=1920
@@ -38,6 +42,7 @@ ship=""
 space_objects=""
 planet=""
 warp=""
+environment=""
 
 [input]
 

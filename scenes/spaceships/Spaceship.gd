@@ -10,14 +10,15 @@ enum Mode {
 
 @export var speed = 300
 @export var roll_speed = 100
+@export var hull_health = 100
 
 @export var enginesParticles: Array[GPUParticles3D] = []
 
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var engine_sfx: AudioStreamPlayer3D = $EngineSfx
 @onready var thruster: AudioStreamPlayer3D = $Thruster
-@onready var speed_label: Label = $CanvasLayer/DebugHud/SpeedLabel
-@onready var hud_target: Sprite2D = $CanvasLayer/DebugHud/Target
+@onready var speed_label: Label = $CanvasLayer/HelmetHud/SpeedLabel
+@onready var hud_target: Sprite2D = $CanvasLayer/HelmetHud/Target
 
 @onready var warp_effect: MeshInstance3D = $WarpEffect
 @onready var spaceship_hud = $HudMesh/HudViewPort/SpaceshipHud
@@ -33,6 +34,8 @@ var engine_sound_lvl = -40.0
 var current_target: Node3D
 
 var warping_progress = 0.0
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -94,9 +97,6 @@ func _process(delta: float) -> void:
 	
 	var dir = Vector3.ZERO
 	
-	
-	
-	
 	if mode == Mode.TRAVEL and Input.is_action_just_pressed("travel"):
 		mode = Mode.NAVIGATION
 		active = true
@@ -116,7 +116,7 @@ func _process(delta: float) -> void:
 		boost = Input.is_action_pressed("boost")
 		
 		if mode == Mode.COMBAT:
-			var target = radar.get_closest_target("drexul") as Node3D
+			var target = radar.get_closest_target("drexul", -global_basis.z) as Node3D
 			if target != current_target:
 				if current_target != null:
 					current_target.disconnect("hit", on_target_hit)
@@ -203,6 +203,7 @@ func _process(delta: float) -> void:
 	
 	spaceship_hud.mode = Mode.keys()[mode]
 	
+	spaceship_hud.hull_health = hull_health
 	
 	
 	warping_progress = lerp(warping_progress, min(relative_speed * 0.0001 if relative_speed > 500 else 0.0, 1.0), 0.05)
@@ -237,6 +238,10 @@ func _process(delta: float) -> void:
 			var dist_km = round(target_dist / 1000.0)
 			dist.text =  str(dist_km) + "KM"
 			dist.visible = dist_km > 0
+	
+	var weapon_dist_target = $Weapons/LaserWeapon.global_position + -$Weapons/LaserWeapon.global_basis.z * 1000
+	var weapon_target_pos = get_viewport().get_camera_3d().unproject_position(weapon_dist_target)
+	$CanvasLayer/HelmetHud/WeaponReticule.position = weapon_target_pos
 
 # used to recenter the ship for the floating origin
 func relocate(pos: Vector3):
@@ -256,6 +261,16 @@ func enable_engine(on: bool):
 		particles.emitting = on
 
 func on_target_hit():
-	$CanvasLayer/DebugHud/Target/Hit.visible = true
+	$CanvasLayer/HelmetHud/Target/Hit.visible = true
 	await get_tree().create_timer(0.1).timeout
-	$CanvasLayer/DebugHud/Target/Hit.visible = false
+	$CanvasLayer/HelmetHud/Target/Hit.visible = false
+
+
+func _on_collision_area_entered(area: Area3D) -> void:
+	if area.is_in_group("projectile"):
+		hull_health -= 5
+		
+		if hull_health <= 0:
+			hull_health = 0
+			print("DEAD")
+			get_tree().reload_current_scene()

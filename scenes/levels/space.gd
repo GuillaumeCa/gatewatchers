@@ -3,7 +3,7 @@ extends Node3D
 class_name Space
 
 @onready var player = $Nebula
-const STAR_SYSTEM = preload("res://scenes/systems/star_system.tscn")
+
 
 const KYTHRAX = preload("res://scenes/spaceships/drexuls/kythrax.tscn")
 
@@ -13,7 +13,7 @@ var last_offset: Vector3
 const MAX_DISTANCE = 5000.0
 
 func _ready() -> void:
-	load_system()
+	SpaceManager.init_systems()
 	
 	var planet = get_tree().get_nodes_in_group("planet").pick_random()
 	var loc = planet.global_position
@@ -48,11 +48,7 @@ func _physics_process(delta: float) -> void:
 		shift_origin(playerGlobalPos)
 
 
-func load_system():
-	var system = STAR_SYSTEM.instantiate()
-	
-	$Lensflare.sun = system.get_node("Star")
-	add_child(system)
+
 
 func shift_origin(offset: Vector3):
 	prints("shift", offset)
@@ -80,10 +76,11 @@ func update_HUD():
 
 
 func _on_enemy_wave_timeout() -> void:
-	var spawn_pos = player.global_position + Vector3(randf(), randf(), randf()).normalized() * 500
-	
-	prints("enemy spawned at", spawn_pos)
-	var ship = KYTHRAX.instantiate()
-	ship.global_position = spawn_pos
-	add_child(ship)
+	if player.mode != player.Mode.TRAVEL:
+		var spawn_pos = player.global_position + Vector3(randf(), randf(), randf()).normalized() * 500
+		
+		prints("enemy spawned at", spawn_pos)
+		var ship = KYTHRAX.instantiate()
+		ship.global_position = spawn_pos
+		add_child(ship)
 	

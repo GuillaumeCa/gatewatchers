@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://drj4drjrrqhtn"]
+[gd_scene load_steps=15 format=3 uid="uid://drj4drjrrqhtn"]
 
 [ext_resource type="PackedScene" uid="uid://c2q0i7xg33imp" path="res://assets/kythrax.glb" id="1_8knee"]
 [ext_resource type="Script" path="res://scenes/spaceships/enemy_spaceship.gd" id="1_u8857"]
 [ext_resource type="Material" uid="uid://dyde4vmo0bxp8" path="res://assets/lowpoly.res" id="2_8aq6q"]
+[ext_resource type="PackedScene" uid="uid://hhmdktq0p3nm" path="res://scenes/vfx/sparkle.tscn" id="2_uj8fq"]
 [ext_resource type="Material" uid="uid://bql8geyhugqoi" path="res://assets/window_drexul.material" id="3_pd82x"]
 [ext_resource type="PackedScene" uid="uid://c0s1k0g71mkdu" path="res://scenes/spaceships/weapons/laser_weapon.tscn" id="5_2mc87"]
 [ext_resource type="PackedScene" uid="uid://cixdyu6ia256b" path="res://scenes/spaceships/radar.tscn" id="5_ly7m0"]
@@ -46,6 +47,7 @@ material = SubResource("StandardMaterial3D_mo50y")
 
 [node name="Kythrax" type="RigidBody3D" groups=["drexul", "ship", "space_objects"]]
 script = ExtResource("1_u8857")
+sparkle_scene = ExtResource("2_uj8fq")
 
 [node name="CollisionShapeBody" type="CollisionShape3D" parent="."]
 transform = Transform3D(-3.23806e-08, 2.9363e-08, -1, 0.671746, 0.740781, 0, 0.740781, -0.671746, -4.37114e-08, 0, 2.295, 0)
