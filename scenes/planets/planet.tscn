@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://d2cf6l066gcmq"]
+[gd_scene load_steps=19 format=3 uid="uid://d2cf6l066gcmq"]
 
 [ext_resource type="Shader" path="res://scenes/planets/planet.gdshader" id="1_41gr7"]
 [ext_resource type="Script" path="res://scenes/planets/planet.gd" id="1_uabpo"]
@@ -6,22 +6,30 @@
 [ext_resource type="Shader" path="res://scenes/planets/atmosphere.gdshader" id="2_tvhf0"]
 [ext_resource type="ArrayMesh" uid="uid://bf6rt8tqxgn5o" path="res://scenes/planets/planet_mesh.res" id="5_7pdp0"]
 
-[sub_resource type="Gradient" id="Gradient_ffv8f"]
+[sub_resource type="Gradient" id="Gradient_s6ib3"]
 interpolation_mode = 1
 offsets = PackedFloat32Array(0, 0.265734, 0.410256, 0.501166, 0.603618, 0.643092, 0.74359)
 colors = PackedColorArray(0.984129, 1, 0.968381, 1, 0.597141, 0.606771, 0.587585, 1, 0.494627, 0.502604, 0.486712, 1, 0.216816, 0.428955, 0.264899, 1, 0.35251, 0.630208, 0.413004, 1, 0.413204, 0.738715, 0.484113, 1, 0, 0.465015, 0.703125, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_udip7"]
-gradient = SubResource("Gradient_ffv8f")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4o6ai"]
+gradient = SubResource("Gradient_s6ib3")
 
-[sub_resource type="Resource" id="Resource_63wqt"]
+[sub_resource type="Resource" id="Resource_bhpxx"]
 script = ExtResource("2_5de0t")
 has_atmo = true
 atmo_intensity = 10.0
 atmo_color = Color(1, 1, 1, 1)
 atmo_height = 70
-terrain_gradient = SubResource("GradientTexture1D_udip7")
+terrain_gradient = SubResource("GradientTexture1D_4o6ai")
 terrain_height = 125
+
+[sub_resource type="Gradient" id="Gradient_jmbns"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.265734, 0.410256, 0.501166, 0.603618, 0.643092, 0.74359)
+colors = PackedColorArray(0.984129, 1, 0.968381, 1, 0.597141, 0.606771, 0.587585, 1, 0.494627, 0.502604, 0.486712, 1, 0.216816, 0.428955, 0.264899, 1, 0.35251, 0.630208, 0.413004, 1, 0.413204, 0.738715, 0.484113, 1, 0, 0.465015, 0.703125, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jks0y"]
+gradient = SubResource("Gradient_jmbns")
 
 [sub_resource type="Gradient" id="Gradient_ic1pj"]
 interpolation_mode = 2
@@ -60,7 +68,7 @@ shader_parameter/water_lvl = 0.726
 shader_parameter/water_h = 0.755
 shader_parameter/precision_level = 30.4
 shader_parameter/period = 1.45
-shader_parameter/gradient = SubResource("GradientTexture1D_udip7")
+shader_parameter/gradient = SubResource("GradientTexture1D_jks0y")
 shader_parameter/noise = SubResource("NoiseTexture2D_h1fy5")
 shader_parameter/noise_macro = SubResource("NoiseTexture2D_x7kds")
 
@@ -91,9 +99,9 @@ radial_segments = 16
 rings = 8
 
 [node name="Planet" type="Node3D" groups=["planet", "space_objects", "warp"]]
-transform = Transform3D(0.993119, 0, -0.11711, 0, 1, 0, 0.11711, 0, 0.993119, 0, 0, 0)
+transform = Transform3D(0.994357, 0, -0.106081, 0, 1, 0, 0.106081, 0, 0.994357, 0, 0, 0)
 script = ExtResource("1_uabpo")
-archetype = SubResource("Resource_63wqt")
+archetype = SubResource("Resource_bhpxx")
 
 [node name="Surface" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.077, 0, 0, 0, 1.077, 0, 0, 0, 1.077, 0, 0, 0)
@@ -102,6 +110,6 @@ lod_bias = 1.305
 mesh = ExtResource("5_7pdp0")
 
 [node name="Atmosphere" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.993108, 0, 0.117197, 0, 1, 0, -0.117197, 0, 0.993108, 0, 0, 0)
+transform = Transform3D(0.994347, 0, 0.106168, 0, 1, 0, -0.106168, 0, 0.994347, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_7u3nm")
 mesh = SubResource("SphereMesh_h816c")

@@ -1,8 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://cc1n7p87rdvxe"]
+[gd_scene load_steps=15 format=3 uid="uid://cc1n7p87rdvxe"]
 
-[ext_resource type="Texture2D" uid="uid://ny2hjxlil1nq" path="res://assets/hdris/starmap_random_2020_4k_gal.exr" id="1_ar685"]
 [ext_resource type="Script" path="res://scenes/levels/space.gd" id="1_tw8vm"]
 [ext_resource type="PackedScene" uid="uid://d32700hsoxr8b" path="res://scenes/spaceships/humans/nebula.tscn" id="1_xd8lj"]
+[ext_resource type="Material" uid="uid://ded4rt8oc2c4l" path="res://scenes/levels/starfield_material.tres" id="2_8jkqp"]
 [ext_resource type="PackedScene" uid="uid://bt6ainl0tmfmv" path="res://scenes/vfx/lensflare.tscn" id="2_i61lw"]
 [ext_resource type="PackedScene" uid="uid://bvg10su81vhxe" path="res://scenes/ui/settings_panel.tscn" id="2_rvlvr"]
 [ext_resource type="PackedScene" uid="uid://drj4drjrrqhtn" path="res://scenes/spaceships/drexuls/kythrax.tscn" id="6_3b8cd"]
@@ -11,19 +11,13 @@
 [ext_resource type="PackedScene" uid="uid://dbpepfkxb1b7y" path="res://scenes/props/blackhole/blackhole.tscn" id="9_lin2b"]
 [ext_resource type="PackedScene" uid="uid://w68mqe1d4u52" path="res://scenes/props/star/star.tscn" id="10_sjr25"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_hnl5v"]
-line_spacing = -1.845
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_4q6tf"]
-panorama = ExtResource("1_ar685")
-
-[sub_resource type="Sky" id="Sky_ygh2h"]
-sky_material = SubResource("PanoramaSkyMaterial_4q6tf")
+[sub_resource type="Sky" id="Sky_lqqcx"]
+sky_material = ExtResource("2_8jkqp")
 
 [sub_resource type="Environment" id="Environment_a1d0t"]
 background_mode = 2
 background_energy_multiplier = 0.15
-sky = SubResource("Sky_ygh2h")
+sky = SubResource("Sky_lqqcx")
 ambient_light_source = 3
 ambient_light_color = Color(0.229167, 0.229167, 0.229167, 1)
 ambient_light_sky_contribution = 0.66
@@ -40,6 +34,9 @@ volumetric_fog_length = 500.0
 volumetric_fog_detail_spread = 2.92817
 volumetric_fog_ambient_inject = 0.23
 
+[sub_resource type="LabelSettings" id="LabelSettings_hnl5v"]
+line_spacing = -1.845
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rhv24"]
 resource_local_to_scene = true
 render_priority = 0
@@ -51,6 +48,9 @@ shader_parameter/sun_fade = 0.03
 
 [node name="space" type="Node3D"]
 script = ExtResource("1_tw8vm")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_a1d0t")
 
 [node name="Lensflare" parent="." instance=ExtResource("2_i61lw")]
 
@@ -90,9 +90,6 @@ label_settings = SubResource("LabelSettings_hnl5v")
 [node name="SettingsPanel" parent="Hud" instance=ExtResource("2_rvlvr")]
 layout_mode = 1
 offset_left = -334.0
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_a1d0t")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.440157, -0.488776, -0.753233, -0.525231, -0.820531, 0.225524, -0.728282, 0.296356, -0.617883, -7035.21, 1259.62, -8689.99)

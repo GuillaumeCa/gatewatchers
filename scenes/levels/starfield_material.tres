@@ -1,0 +1,64 @@
+[gd_resource type="ShaderMaterial" load_steps=9 format=3 uid="uid://ded4rt8oc2c4l"]
+
+[ext_resource type="Shader" path="res://scenes/vfx/starfield.gdshader" id="1_hnlox"]
+
+[sub_resource type="Gradient" id="Gradient_rehrc"]
+offsets = PackedFloat32Array(0.312644, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kobfe"]
+noise_type = 2
+frequency = 0.005
+fractal_lacunarity = 3.0
+fractal_gain = 0.6
+cellular_return_type = 5
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_o1p44"]
+width = 1024
+height = 1024
+generate_mipmaps = false
+seamless = true
+seamless_blend_skirt = 0.5
+color_ramp = SubResource("Gradient_rehrc")
+noise = SubResource("FastNoiseLite_kobfe")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xcdfi"]
+noise_type = 2
+frequency = 0.0065
+fractal_lacunarity = 3.0
+cellular_distance_function = 1
+cellular_return_type = 5
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5b26x"]
+width = 1024
+height = 1024
+generate_mipmaps = false
+seamless = true
+seamless_blend_skirt = 0.5
+noise = SubResource("FastNoiseLite_xcdfi")
+
+[sub_resource type="Gradient" id="Gradient_hq171"]
+offsets = PackedFloat32Array(0, 0.328736, 0.554023, 0.816092)
+colors = PackedColorArray(0.337906, 0.733556, 1, 1, 1, 1, 1, 1, 1, 0.889907, 0.51742, 1, 1, 0.375273, 0.28549, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ukosq"]
+gradient = SubResource("Gradient_hq171")
+
+[resource]
+shader = ExtResource("1_hnlox")
+shader_parameter/base_color = null
+shader_parameter/luminosity = 1.0
+shader_parameter/star_height = 5.0
+shader_parameter/star_blend = -0.24
+shader_parameter/depth_blend = 0.1
+shader_parameter/star_size = 1.85
+shader_parameter/star_layers = 5
+shader_parameter/flare_ratio = 0.52
+shader_parameter/star_gradient = SubResource("GradientTexture1D_ukosq")
+shader_parameter/nebula_primary = Color(0.616899, 0.793378, 0.997396, 1)
+shader_parameter/nebula_secondary = Color(0.575987, 0.908854, 0.491195, 1)
+shader_parameter/nebula_layers = 5
+shader_parameter/nebula_scale = 0.082
+shader_parameter/nebula_blend = 0.415
+shader_parameter/nebula_power = 1.045
+shader_parameter/nebula_texture = SubResource("NoiseTexture2D_5b26x")
+shader_parameter/nebula_mask = SubResource("NoiseTexture2D_o1p44")
