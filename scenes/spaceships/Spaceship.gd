@@ -24,7 +24,7 @@ enum Mode {
 @onready var spaceship_hud = $HudMesh/HudViewPort/SpaceshipHud
 @onready var radar = $Radar
 
-const SENSITIVITY_MOUSE = 0.05
+const SENSITIVITY_MOUSE = 0.1
 
 var mode = Mode.COMBAT
 
@@ -94,6 +94,8 @@ func _process(delta: float) -> void:
 		elif !$PilotPosition/Player.camera_3d.current:
 			$PilotPosition/Player.switch_cam()
 	
+	if Input.is_action_just_pressed("map"):
+		$MapProjector.visible = !$MapProjector.visible 
 	
 	var dir = Vector3.ZERO
 	
@@ -149,12 +151,12 @@ func _process(delta: float) -> void:
 	
 	if mode == Mode.TRAVEL:
 
-		if current_target:
+		if current_target and is_instance_valid(current_target):
 			var dist = global_position.distance_to(current_target.global_position)
 			# if ship has not yet reached the target + 5000m, continue to go towards it
 			if dist > current_target.get_warp_distance():
 				var dir_target = global_position.direction_to(current_target.global_position)
-				linear_velocity = lerp(linear_velocity, dir_target * clamp(dist * 0.1, 0, 40000), 0.01)
+				linear_velocity = lerp(linear_velocity, dir_target * clamp(dist * 0.1, 0, 40000), 0.008)
 				angular_velocity = Vector3.ZERO
 				active = false
 				

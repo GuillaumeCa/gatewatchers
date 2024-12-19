@@ -18,9 +18,6 @@ func generate():
 	$Star.material_override.set_shader_parameter("sun_color", star_color)
 	$Star.position = Vector3.ZERO
 	
-	for obj in $Objects.get_children():
-		obj.queue_free()
-	
 	generate_env(star_color)
 	generate_planets()
 	generate_gates()

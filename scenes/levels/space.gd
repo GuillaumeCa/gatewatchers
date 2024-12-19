@@ -70,9 +70,9 @@ func shift_origin(offset: Vector3):
 
 
 func update_HUD():
-	$Hud/Label.text = "FPS: " + str(Performance.get_monitor(Performance.TIME_FPS)) + "\n"
-	$Hud/Label.text += "Position:\nx: %.2fm\ny: %.2fm\nz: %.2fm" % [player.global_position.x, player.global_position.y, player.global_position.z]
-	$Hud/Label2.text = "Shifted Position:\nx: %.2fm\ny: %.2fm\nz: %.2fm" % [shifted_origin.x, shifted_origin.y, shifted_origin.z]
+	$Hud/Debug.text = "FPS: " + str(Performance.get_monitor(Performance.TIME_FPS))
+	$Hud/Debug.text += "\nPosition:\nx: %.2fm\ny: %.2fm\nz: %.2fm" % [player.global_position.x, player.global_position.y, player.global_position.z]
+	$Hud/Debug.text += "\nShifted Position:\nx: %.2fm\ny: %.2fm\nz: %.2fm" % [shifted_origin.x, shifted_origin.y, shifted_origin.z]
 
 
 func _on_enemy_wave_timeout() -> void:

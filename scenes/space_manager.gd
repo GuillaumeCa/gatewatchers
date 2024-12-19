@@ -13,7 +13,8 @@ func init_systems() -> void:
 	generate_systems()
 	generate_connections()
 	
-	var system_key = systems.keys().pick_random()
+	var system_key = BASE_SEED + 94
+	prints("init", system_key)
 	load_system(system_key)
 	
 	print(systems)
@@ -48,6 +49,7 @@ func get_close_systems(position: Vector3, exclude, max = 3):
 	return pos.slice(0, max)
 
 func generate_systems():
+	var system_names = generate_star_names()
 	for i in SYSTEM_COUNT:
 		var key = BASE_SEED + i
 		systems[key] = {
@@ -56,7 +58,7 @@ func generate_systems():
 				randf_range(-100, 100),
 				randf_range(-100, 100)
 			),
-			"name": generate_star_name(),
+			"name": system_names[i],
 			"gates": {}
 		}
 
@@ -64,17 +66,27 @@ func generate_systems():
 var star_prefixes = ["Alt", "Bet", "Can", "Del", "Eps", "Gam", "Zet", "Tau", "Rig", "Prox"]
 var star_suffixes = ["ara", "ion", "ius", "ara", "ora", "eus", "ix", "an", "on", "us"]
 
+func generate_star_names():
+	var names = []
+	star_prefixes.shuffle()
+	star_suffixes.shuffle()
+	
+	for pref in star_prefixes:
+		for suf in star_suffixes:
+			names.append(pref + suf)
+	
+	return names
+	
 func generate_star_name():
 	var prefix = star_prefixes.pick_random()
 	var suffix = star_suffixes.pick_random()
 	return prefix + suffix
 
 func load_system(key = 0):
-	if !current_system:
-		var system = STAR_SYSTEM.instantiate()
-		system.system_seed = key
-		current_system = system
-		add_child(system)
-	else:
-		current_system.system_seed = key
-		current_system.generate()
+	if current_system:
+		current_system.queue_free()
+	
+	var system = STAR_SYSTEM.instantiate()
+	system.system_seed = key
+	current_system = system
+	add_child(system)

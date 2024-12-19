@@ -3,39 +3,47 @@ class_name OctasphereMesh extends ArrayMesh
 
 @export_range(0, 8) var subdivisions : int = 2:
 	set(value):
-		if not value == subdivisions:
-			subdivisions = value
-			call_deferred("update_mesh")
+		subdivisions = value
+		if not value == subdivisions and Engine.is_editor_hint():
+			update_async()
 
 @export var radius := 1.0 :
 	set(value):
-		if not radius ==  value:
-			radius = value
-			call_deferred("update_mesh")
+		radius = value
+		if not radius ==  value and Engine.is_editor_hint():
+			update_async()
+
 
 @export var width := 0.0 :
 	set(value):
-		if not width ==  value:
-			width = value
-			call_deferred("update_mesh")
+		width = value
+		if not width ==  value and Engine.is_editor_hint():
+			update_async()
 			
 @export var height := 0.0 :
 	set(value):
-		if not height ==  value:
-			height = value
-			call_deferred("update_mesh")
+		height = value
+		if not height ==  value and Engine.is_editor_hint():
+			update_async()
 			
 @export var depth := 0.0 :
 	set(value):
-		if not depth ==  value:
-			depth = value
-			call_deferred("update_mesh")
-			
+		depth = value
+		if not depth ==  value and Engine.is_editor_hint():
+			update_async()
+
 func _init():
-	if self.get_surface_count() == 0:
-		call_deferred("update_mesh")
+	pass
+	#if self.get_surface_count() == 0:
+		#call_deferred("update_mesh")
+
+var thread = Thread.new()
+
+func update_async():
+	thread.start(update_mesh, Thread.PRIORITY_HIGH)
 
 func update_mesh():
+	print("Update OctasphereMesh")
 	var ans = octasphere(subdivisions, radius, 0, 0, 0)
 	var normals: PackedVector3Array = ans[0]
 	ans = octasphere(subdivisions, radius, width, height, depth)
@@ -54,8 +62,9 @@ func update_mesh():
 	arrays[ArrayMesh.ARRAY_COLOR] = colors
 	## Create the Mesh.
 	clear_surfaces()
-	self.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-	emit_changed()
+	call_deferred("add_surface_from_arrays", Mesh.PRIMITIVE_TRIANGLES, arrays)
+	#self.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	call_deferred("emit_changed")
 
 func octasphere(ndivisions: int, radius: float, width=0, height=0, depth=0) -> Array:
 	var r2 = 2 * radius

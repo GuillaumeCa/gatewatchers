@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://db13ggy5oqcrk"]
+
+[ext_resource type="Script" path="res://scenes/ui/map_projector.gd" id="1_v5ikp"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_5obxj"]
+radius = 0.01
+height = 0.02
+radial_segments = 16
+rings = 8
+
+[node name="MapProjector" type="Node3D"]
+script = ExtResource("1_v5ikp")
+system_mesh = SubResource("SphereMesh_5obxj")

@@ -45,6 +45,7 @@ func update_planet():
 		
 		
 		$Surface.mesh.radius = radius
+		$Surface.mesh.update_async()
 		$Atmosphere.mesh.radius = radius * 1.4
 		$Atmosphere.mesh.height = radius * 1.4 * 2
 
