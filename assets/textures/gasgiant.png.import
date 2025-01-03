@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://csawli8abs1f3"
-path.s3tc="res://.godot/imported/particle.png-5e5e4f76b889a93c8b085c65be799145.s3tc.ctex"
+uid="uid://dp2wi7cxt1yad"
+path.bptc="res://.godot/imported/gasgiant.png-4c32a0792a605094fd926615f1a42594.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,13 +11,13 @@ metadata={
 
 [deps]
 
-source_file="res://assets/particle.png"
-dest_files=["res://.godot/imported/particle.png-5e5e4f76b889a93c8b085c65be799145.s3tc.ctex"]
+source_file="res://assets/textures/gasgiant.png"
+dest_files=["res://.godot/imported/gasgiant.png-4c32a0792a605094fd926615f1a42594.bptc.ctex"]
 
 [params]
 
 compress/mode=2
-compress/high_quality=false
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0

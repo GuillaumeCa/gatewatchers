@@ -31,25 +31,33 @@ func update_planet():
 	atmo_material.set_shader_parameter("light_intensity", light_intensity)
 	if radius:
 		atmo_material.set_shader_parameter("planet_radius", radius)
-		atmo_material.set_shader_parameter("atmo_radius", radius * 1.3)
+		atmo_material.set_shader_parameter("atmo_radius", radius * 1.1)
 		
 		# rad  hray mie
 		# 3000 59 47.2
 		# 4500 70 66.5
 		# 5000 75 60.0
 
-		var hray =  (0.8 * (radius / 1000.0) + 3.5) * 10
+		#var hray =  (0.8 * (radius / 1000.0) + 3.5) * 10
+		var hray =  (0.8 * (radius / 1000.0) + 0.5) * 10
+		
 		atmo_material.set_shader_parameter("height_ray", hray)
 		atmo_material.set_shader_parameter("height_mie", hray * 0.8)
 		
 		
+		var surface_mesh = $Surface.mesh
+		if surface_mesh is OctasphereMesh:
+			surface_mesh.radius = radius
+			surface_mesh.terrain_height = archetype.terrain_height
+			surface_mesh.update_async()
+			#var shape = $Surface.mesh.create_trimesh_shape()
+			#$StaticBody3D/CollisionShape3D.shape = shape
 		
-		$Surface.mesh.radius = radius
-		$Surface.mesh.update_async()
 		$Atmosphere.mesh.radius = radius * 1.4
 		$Atmosphere.mesh.height = radius * 1.4 * 2
 
 	$Surface.material_override.set_shader_parameter("terrain_height", archetype.terrain_height)
+	$Surface.material_override.set_shader_parameter("planet_radius", radius)
 	$Surface.material_override.set_shader_parameter("gradient", archetype.terrain_gradient)
 
 

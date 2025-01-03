@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://cn3h3pyipd0fb"]
+
+[ext_resource type="Shader" path="res://scenes/vfx/outline_vfx.gdshader" id="1_6vk0g"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7b5s7"]
+render_priority = 0
+shader = ExtResource("1_6vk0g")
+shader_parameter/shadow_color = Color(0, 0, 0, 1)
+shader_parameter/shadow_thickness = 2.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_7wvx0"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[node name="OutlineVFX" type="MeshInstance3D"]
+material_override = SubResource("ShaderMaterial_7b5s7")
+mesh = SubResource("QuadMesh_7wvx0")

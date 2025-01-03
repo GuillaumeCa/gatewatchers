@@ -4,35 +4,57 @@ class_name OctasphereMesh extends ArrayMesh
 @export_range(0, 8) var subdivisions : int = 2:
 	set(value):
 		subdivisions = value
-		if not value == subdivisions and Engine.is_editor_hint():
-			update_async()
+		if Engine.is_editor_hint():
+			update_mesh()
 
 @export var radius := 1.0 :
 	set(value):
 		radius = value
-		if not radius ==  value and Engine.is_editor_hint():
-			update_async()
+		if Engine.is_editor_hint():
+			print("update")
+			update_mesh()
 
 
 @export var width := 0.0 :
 	set(value):
 		width = value
-		if not width ==  value and Engine.is_editor_hint():
-			update_async()
+		if Engine.is_editor_hint():
+			update_mesh()
 			
 @export var height := 0.0 :
 	set(value):
 		height = value
-		if not height ==  value and Engine.is_editor_hint():
-			update_async()
+		if Engine.is_editor_hint():
+			update_mesh()
 			
 @export var depth := 0.0 :
 	set(value):
 		depth = value
-		if not depth ==  value and Engine.is_editor_hint():
-			update_async()
+		if Engine.is_editor_hint():
+			update_mesh()
+
+@export var noise: FastNoiseLite:
+	set(value):
+		noise = value
+		if Engine.is_editor_hint():
+			update_mesh()
+
+@export var noise_macro: FastNoiseLite:
+	set(value):
+		noise_macro = value
+		if Engine.is_editor_hint():
+			update_mesh()
+@export var update: bool:
+	set(value):
+		if Engine.is_editor_hint():
+			update_mesh()
+
+@export var water_level = 0.2
+@export var terrain_height = 100.0
 
 func _init():
+	noise = FastNoiseLite.new()
+	noise_macro = FastNoiseLite.new()
 	pass
 	#if self.get_surface_count() == 0:
 		#call_deferred("update_mesh")
@@ -41,6 +63,8 @@ var thread = Thread.new()
 
 func update_async():
 	thread.start(update_mesh, Thread.PRIORITY_HIGH)
+	#thread.wait_to_finish()
+	#return create_trimesh_shape()
 
 func update_mesh():
 	print("Update OctasphereMesh")
@@ -66,6 +90,28 @@ func update_mesh():
 	#self.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	call_deferred("emit_changed")
 
+func normalize_noise(val: float):
+	var v = val * 2.0 * 0.5 + 0.5
+	
+	if v > 1.0:
+		return 1.0
+	if v < 0.0:
+		return 0.0
+		
+	return v
+	
+func get_terrain_displacement(vert: Vector3) -> float:
+	var disp = normalize_noise(noise.get_noise_3dv(vert * 1000))
+	var disp_macro = normalize_noise(noise_macro.get_noise_3dv(vert * 1000))
+	
+	var disp_blend = disp * 0.7 + disp_macro * 0.3
+	
+	var v = disp_blend #(1.0 - (disp_blend * 2.0 - 1.0));
+	#if v < water_level:
+		#v = water_level
+	
+	return v * terrain_height
+
 func octasphere(ndivisions: int, radius: float, width=0, height=0, depth=0) -> Array:
 	var r2 = 2 * radius
 	width = max(width, r2)
@@ -84,7 +130,8 @@ func octasphere(ndivisions: int, radius: float, width=0, height=0, depth=0) -> A
 		j = compute_geodesic(verts, j, point_a, point_b, num_segments)
 	assert(verts.size() == num_verts)
 	for i in range(num_verts):
-		verts[i] *= radius
+		verts[i] *= 1
+		
 
 	var num_faces = (n - 2) * (n - 1) + n - 1
 	var faces : PackedVector3Array = []
@@ -153,6 +200,9 @@ func octasphere(ndivisions: int, radius: float, width=0, height=0, depth=0) -> A
 			for ii in range(num_verts):
 				if i + ii < combined_verts.size():
 					combined_verts[i + ii] += translation_matrix[i / num_verts]
+
+	for i in combined_verts.size():
+		combined_verts[i] *= radius + get_terrain_displacement(combined_verts[i])
 
 	var connectors = add_connectors(ndivisions, radius, width, height, depth)
 	if radius == 0:

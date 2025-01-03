@@ -6,7 +6,7 @@
 [ext_resource type="Material" uid="uid://bq6c4hcru3x0e" path="res://scenes/props/warpgates/warptunnel.material" id="3_ypdiq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yl7so"]
-size = Vector3(9, 8, 30)
+size = Vector3(15.0938, 12.3506, 48.319)
 
 [node name="WapGate" type="Node3D" groups=["space_objects", "warp"]]
 script = ExtResource("1_ut8uu")
@@ -37,7 +37,7 @@ material_override = ExtResource("3_ypdiq")
 [node name="GateArea" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GateArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.7743)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 24.3214)
 shape = SubResource("BoxShape3D_yl7so")
 
 [connection signal="body_entered" from="GateArea" to="." method="_on_gate_area_body_entered"]

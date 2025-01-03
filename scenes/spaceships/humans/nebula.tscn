@@ -1,9 +1,9 @@
-[gd_scene load_steps=36 format=3 uid="uid://d32700hsoxr8b"]
+[gd_scene load_steps=49 format=3 uid="uid://d32700hsoxr8b"]
 
-[ext_resource type="Script" path="res://scenes/spaceships/Spaceship.gd" id="1_2eoki"]
+[ext_resource type="Script" path="res://scenes/spaceships/spaceship.gd" id="1_2eoki"]
 [ext_resource type="PackedScene" uid="uid://blk8lyl4qh0ip" path="res://assets/spaceships.glb" id="1_rdqkb"]
 [ext_resource type="Material" uid="uid://bdxbtqxqicjtk" path="res://assets/window.material" id="3_aoo6g"]
-[ext_resource type="Texture2D" uid="uid://csawli8abs1f3" path="res://assets/particle.png" id="3_sp25l"]
+[ext_resource type="Texture2D" uid="uid://csawli8abs1f3" path="res://assets/textures/particle.png" id="3_sp25l"]
 [ext_resource type="AudioStream" uid="uid://c1ixu6k63r2wl" path="res://assets/sfx/smartsound_TRANSPORTATION_JET_MILITARY_Fighter_Turbine_Steady_03.mp3" id="4_1ssrc"]
 [ext_resource type="PackedScene" uid="uid://cixdyu6ia256b" path="res://scenes/spaceships/radar.tscn" id="4_m8du2"]
 [ext_resource type="AudioStream" uid="uid://2s0arig03ywc" path="res://assets/sfx/thruster.mp3" id="5_wv2il"]
@@ -11,9 +11,12 @@
 [ext_resource type="PackedScene" uid="uid://c0s1k0g71mkdu" path="res://scenes/spaceships/weapons/laser_weapon.tscn" id="8_63itb"]
 [ext_resource type="Texture2D" uid="uid://dwfnosak3dnkv" path="res://assets/textures/crosshair026.png" id="8_guc0y"]
 [ext_resource type="PackedScene" uid="uid://brtfcqtwjbgnp" path="res://scenes/spaceships/spaceship_hud.tscn" id="9_tghbs"]
+[ext_resource type="Material" uid="uid://bhm1u4cxay57t" path="res://scenes/spaceships/weapons/cyan_laser_mat.tres" id="12_0qyij"]
 [ext_resource type="PackedScene" uid="uid://db13ggy5oqcrk" path="res://scenes/ui/map_projector.tscn" id="12_p38vp"]
 [ext_resource type="Texture2D" uid="uid://c76xxrr3w4rb5" path="res://assets/textures/crosshair048.png" id="12_yiw4s"]
 [ext_resource type="Shader" path="res://scenes/vfx/warping.gdshader" id="13_l7jpe"]
+[ext_resource type="AudioStream" uid="uid://dy0sgmn6wupb7" path="res://assets/sfx/warp-loop.ogg" id="15_5ydlr"]
+[ext_resource type="AudioStream" uid="uid://bi1yaye78ljnl" path="res://assets/sfx/warp-start.wav" id="16_lk6iu"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1ri7w"]
 size = Vector3(2.03705, 0.265809, 21.5013)
@@ -128,6 +131,78 @@ emission_texture = SubResource("ViewportTexture_3bhn7")
 shading_mode = 0
 albedo_color = Color(0.639216, 0, 0.223529, 1)
 
+[sub_resource type="Gradient" id="Gradient_ddnpn"]
+offsets = PackedFloat32Array(0, 0.0340136, 0.857143, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_tp5if"]
+gradient = SubResource("Gradient_ddnpn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0x8ax"]
+emission_shape_offset = Vector3(0, 0, -10)
+emission_shape = 3
+emission_box_extents = Vector3(10, 10, 10)
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -2.23517e-06
+radial_accel_max = -2.23517e-06
+tangential_accel_min = -0.100002
+tangential_accel_max = 0.0999978
+color_ramp = SubResource("GradientTexture1D_tp5if")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w4cel"]
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.94, 0.94, 0.94, 1)
+albedo_texture = ExtResource("3_sp25l")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+proximity_fade_distance = 50.0
+distance_fade_mode = 1
+distance_fade_min_distance = 5.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_nmk24"]
+material = SubResource("StandardMaterial3D_w4cel")
+size = Vector2(0.1, 0.1)
+
+[sub_resource type="Gradient" id="Gradient_mta25"]
+offsets = PackedFloat32Array(0, 0.376417, 0.471655, 0.553288, 0.659864, 0.770975)
+colors = PackedColorArray(0.702975, 0.0819, 0.91, 0, 0, 0.179056, 0.695313, 1, 0.0577121, 0.822986, 0.963542, 1, 0.247198, 0.848958, 0.108331, 1, 0.908854, 0.865654, 0.0568034, 1, 0.739583, 0.119412, 0.140084, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_odmpu"]
+gradient = SubResource("Gradient_mta25")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vf5b8"]
+emission_shape_offset = Vector3(0, 0, -30)
+emission_shape = 3
+emission_box_extents = Vector3(10, 10, 10)
+direction = Vector3(0, 0, 1)
+spread = 0.0
+initial_velocity_min = 26.76
+initial_velocity_max = 74.2
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -2.23517e-06
+linear_accel_max = 10.0
+scale_max = 1.6
+color_ramp = SubResource("GradientTexture1D_odmpu")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5g05x"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+distance_fade_mode = 1
+distance_fade_min_distance = 5.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_agka3"]
+material = SubResource("StandardMaterial3D_5g05x")
+top_radius = 0.01
+bottom_radius = 0.01
+radial_segments = 4
+rings = 1
+cap_top = false
+cap_bottom = false
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_uo8ex"]
 frequency = 0.0072
 fractal_type = 2
@@ -157,12 +232,13 @@ cap_bottom = false
 [sub_resource type="BoxShape3D" id="BoxShape3D_wwnxg"]
 size = Vector3(3.342, 2.715, 25.362)
 
-[node name="Nebula" type="RigidBody3D" groups=["human", "ship"]]
+[node name="Nebula" type="RigidBody3D" node_paths=PackedStringArray("enginesParticles") groups=["human", "ship"]]
 freeze_mode = 1
 angular_damp = 2.0
 script = ExtResource("1_2eoki")
 speed = 3000
-hull_health = 500
+hull_health = 50000
+enginesParticles = [NodePath("engines/GPUParticles3D"), NodePath("engines/GPUParticles3D2"), NodePath("engines/GPUParticles3D3"), NodePath("engines/GPUParticles3D4")]
 
 [node name="spaceships" parent="." instance=ExtResource("1_rdqkb")]
 
@@ -274,6 +350,13 @@ text = "120 m/s"
 scale = Vector2(0.545, 0.545)
 texture = ExtResource("12_yiw4s")
 
+[node name="WeaponPipReticule" type="Sprite2D" parent="CanvasLayer/HelmetHud"]
+visible = false
+modulate = Color(1, 0.664675, 0.342346, 1)
+rotation = 0.790441
+scale = Vector2(0.545, 0.545)
+texture = ExtResource("12_yiw4s")
+
 [node name="Target" type="Sprite2D" parent="CanvasLayer/HelmetHud"]
 texture = ExtResource("8_guc0y")
 
@@ -326,6 +409,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.449, -3.214)
 
 [node name="LaserWeapon" parent="Weapons" instance=ExtResource("8_63itb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.74314, -4.19711)
+laser_speed = 1000.0
+laser_material = ExtResource("12_0qyij")
 
 [node name="MapProjector" parent="." instance=ExtResource("12_p38vp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, -5.273)
@@ -349,6 +434,27 @@ visible = false
 mesh = SubResource("SphereMesh_vr8fa")
 surface_material_override/0 = SubResource("StandardMaterial3D_uvuwp")
 
+[node name="SpaceParticles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.324897, 0, -9.37895)
+emitting = false
+amount = 128
+lifetime = 5.0
+preprocess = 1.0
+visibility_aabb = AABB(-16.085, -11.8, -20.34, 32.23, 23.63, 42.74)
+process_material = SubResource("ParticleProcessMaterial_0x8ax")
+draw_pass_1 = SubResource("QuadMesh_nmk24")
+
+[node name="SpaceParticlesFast" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, -1.06581e-14, 0, 1.06581e-14, 1, 0.324897, 0, -9.37895)
+emitting = false
+amount = 300
+lifetime = 2.0
+visibility_aabb = AABB(-16.085, -11.8, -20.34, 32.23, 23.63, 42.74)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_vf5b8")
+draw_pass_1 = SubResource("CylinderMesh_agka3")
+
 [node name="WarpEffect" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.324897, 0, -9.37895)
 material_override = SubResource("ShaderMaterial_jn61r")
@@ -359,6 +465,12 @@ mesh = SubResource("CylinderMesh_pue0v")
 [node name="CollisionShapeBody" type="CollisionShape3D" parent="Collision"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.1262)
 shape = SubResource("BoxShape3D_wwnxg")
+
+[node name="WarpLoop" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("15_5ydlr")
+
+[node name="WarpStart" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("16_lk6iu")
 
 [connection signal="area_entered" from="Collision" to="." method="_on_collision_area_entered"]
 

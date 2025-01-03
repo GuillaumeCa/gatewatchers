@@ -1,15 +1,10 @@
 [gd_scene load_steps=5 format=3 uid="uid://degvgfsrmgw1o"]
 
 [ext_resource type="Script" path="res://scenes/spaceships/weapons/laser.gd" id="1_viiec"]
+[ext_resource type="Material" uid="uid://bhm1u4cxay57t" path="res://scenes/spaceships/weapons/cyan_laser_mat.tres" id="2_g5x6m"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_adfba"]
 size = Vector3(0.5, 0.5, 10)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_77cp7"]
-albedo_color = Color(1, 0.0745098, 0.196078, 1)
-emission_enabled = true
-emission = Color(1, 0.0470588, 0.0509804, 1)
-emission_energy_multiplier = 10.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hr66u"]
 size = Vector3(0.5, 0.5, 10.734)
@@ -19,9 +14,10 @@ script = ExtResource("1_viiec")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_adfba")
-surface_material_override/0 = SubResource("StandardMaterial3D_77cp7")
+surface_material_override/0 = ExtResource("2_g5x6m")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.3417)
 shape = SubResource("BoxShape3D_hr66u")
 
 [node name="Timer" type="Timer" parent="."]

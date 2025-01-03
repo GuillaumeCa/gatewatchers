@@ -18,21 +18,27 @@ var xr_interface: XRInterface
 @onready var xr_camera_3d: XRCamera3D = $XROrigin/XRCamera3D
 
 
+var camera_shake = 0.0
+var camera_offset: Vector3
+
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
+
+var last_pos = Vector3.ZERO
 
 func switch_cam():
 	#if xr_interface.is_initialized():
 		#xr_camera_3d.current = true
 	#else:
 	camera_3d.current = true
-		
+
 
 func _ready() -> void:
+	Input.set_use_accumulated_input(false)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	$debug.hide()
-	
+	camera_offset = camera_pivot.position
 	#xr_interface = XRServer.find_interface("OpenXR")
 	#if xr_interface and xr_interface.is_initialized():
 		#print("OpenXR instantiated successfully.")
@@ -75,17 +81,30 @@ func _input(event: InputEvent) -> void:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		
 		camera_pivot.rotate_x(-event.relative.y * SENSITIVITY_MOUSE)
 		rotate_y(-event.relative.x * SENSITIVITY_MOUSE)
 		
 
+func _process(delta: float) -> void:
+	var time = Time.get_ticks_msec()
+	var offset = Vector3.ZERO
+	offset.x += camera_shake * sin(time * 0.341 + cos(0.112 + time * 0.014)) * 0.01
+	offset.y += camera_shake * sin(time * 0.141 + cos(0.412 + time * 0.214)) * 0.01
+	camera_shake *= 0.95
+	
+	camera_pivot.position = camera_offset + offset
+	
+	$SpaceParticles.emitting = active
+	
+	
 
 func _physics_process(delta: float) -> void:
 	$CollisionShape3D.disabled = !active
 	
 	if not active:
 		return
-
+	
 
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	

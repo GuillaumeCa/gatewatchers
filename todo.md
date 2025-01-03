@@ -5,8 +5,14 @@
 - [x] custom/generated skymap
 - [x] generate warp gates to go to different systems
 - [ ] make space stations
-- [ ] planet side terrain
+- [ ] trading at stations
+- [ ] drexul mothership
+- [ ] generate drexi system
+- [ ] generate prime planet of the lost civilisation
+- [ ] generate gas giants
+- [ ] generate mineable resources
+- [x] planet side terrain
 - [ ] planet side outposts
 - [ ] planet side cities
-- [ ] map of systems
+- [x] map of systems
 - [ ] fix giant render distance

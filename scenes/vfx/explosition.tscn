@@ -1,6 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://cxutbn2gmisj7"]
+[gd_scene load_steps=18 format=3 uid="uid://cxutbn2gmisj7"]
 
 [ext_resource type="Script" path="res://scenes/vfx/explosition.gd" id="1_omhb6"]
+[ext_resource type="AudioStream" uid="uid://bwn357ixy4o8d" path="res://assets/sfx/explosion.ogg" id="2_qs3ly"]
 
 [sub_resource type="Gradient" id="Gradient_0185r"]
 offsets = PackedFloat32Array(0.0362812, 0.129252, 0.256236, 0.353741)
@@ -79,6 +80,9 @@ top_radius = 0.08
 bottom_radius = 0.01
 radial_segments = 4
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_ladel"]
+radius = 3000.0
+
 [node name="Explosition" type="GPUParticles3D" groups=["space_objects"]]
 top_level = true
 emitting = false
@@ -101,4 +105,12 @@ transform_align = 2
 process_material = SubResource("ParticleProcessMaterial_tvwfn")
 draw_pass_1 = SubResource("CylinderMesh_6xc5f")
 
-[connection signal="finished" from="." to="." method="_on_finished"]
+[node name="ExplosionSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_qs3ly")
+unit_size = 80.0
+max_db = 0.0
+
+[node name="BlastRadius" type="Area3D" parent="." groups=["explosion"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BlastRadius"]
+shape = SubResource("SphereShape3D_ladel")

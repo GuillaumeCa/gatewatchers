@@ -1,27 +1,16 @@
-[gd_scene load_steps=11 format=3 uid="uid://cc1n7p87rdvxe"]
+[gd_scene load_steps=8 format=3 uid="uid://cc1n7p87rdvxe"]
 
 [ext_resource type="Script" path="res://scenes/levels/space.gd" id="1_tw8vm"]
 [ext_resource type="PackedScene" uid="uid://d32700hsoxr8b" path="res://scenes/spaceships/humans/nebula.tscn" id="1_xd8lj"]
 [ext_resource type="Environment" uid="uid://ymne4iy6o8qe" path="res://starfield_env.tres" id="2_a755b"]
 [ext_resource type="PackedScene" uid="uid://bt6ainl0tmfmv" path="res://scenes/vfx/lensflare.tscn" id="2_i61lw"]
 [ext_resource type="PackedScene" uid="uid://bvg10su81vhxe" path="res://scenes/ui/settings_panel.tscn" id="2_rvlvr"]
-[ext_resource type="Shader" path="res://scenes/props/star/star.gdshader" id="6_r70mv"]
 [ext_resource type="Material" uid="uid://ynab0ip6e1pg" path="res://scenes/props/gasclouds/gascloud_material.tres" id="8_6o4hr"]
-[ext_resource type="PackedScene" uid="uid://w68mqe1d4u52" path="res://scenes/props/star/star.tscn" id="10_sjr25"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_hnl5v"]
 line_spacing = -1.915
 outline_size = 5
 outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rhv24"]
-resource_local_to_scene = true
-render_priority = 0
-shader = ExtResource("6_r70mv")
-shader_parameter/sun_size = 0.028
-shader_parameter/sun_brightness = 30.0
-shader_parameter/sun_color = Color(1, 0.665405, 0.375608, 1)
-shader_parameter/sun_fade = 0.03
 
 [node name="space" type="Node3D"]
 script = ExtResource("1_tw8vm")
@@ -29,7 +18,9 @@ script = ExtResource("1_tw8vm")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." groups=["environment"]]
 environment = ExtResource("2_a755b")
 
-[node name="Lensflare" parent="." instance=ExtResource("2_i61lw")]
+[node name="ScreenEffects" type="Node" parent="."]
+
+[node name="Lensflare" parent="ScreenEffects" instance=ExtResource("2_i61lw")]
 
 [node name="Hud" type="Control" parent="."]
 layout_mode = 3
@@ -63,18 +54,6 @@ light_color = Color(1, 0.901961, 0.792157, 1)
 light_energy = 1.69
 shadow_enabled = true
 shadow_blur = 1.425
-
-[node name="Star" parent="." groups=["space_objects"] instance=ExtResource("10_sjr25")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9456.39, 0, -221430)
-visible = false
-material_override = SubResource("ShaderMaterial_rhv24")
-metadata/_edit_group_ = true
-
-[node name="OmniLight3D" type="OmniLight3D" parent="Star"]
-light_color = Color(1, 0.980482, 0.907855, 1)
-light_energy = 1.5
-omni_range = 500000.0
-omni_attenuation = 0.03
 
 [node name="Nebula" parent="." groups=["space_objects"] instance=ExtResource("1_xd8lj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.02785, 0, -1.65586)

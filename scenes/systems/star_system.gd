@@ -48,11 +48,11 @@ func generate_planets():
 		
 		var planet: Planet = planet_scene.instantiate()
 		planet.name = pname
-		planet.radius = randf_range(3000, 7000)
+		planet.radius = randf_range(3000, 4500)
+		prints("arch", archetype)
 		planet.archetype = archetype
 		planet.sun = $Star
 		planet.position.z = -randf_range(150, 400) * 1000
-		planet.radius = randf_range(3000, 4500)
 		root.add_child(planet)
 		root.rotation_degrees.y = (i * 360 / planet_count) + randf_range(0, 10)
 		
@@ -78,6 +78,7 @@ func generate_gates():
 		var gate = warp_gate.instantiate()
 		gate.target_system = target_key
 		gate.global_position = Vector3(randf(), randf(), randf()) * randf_range(50_000, 400_000)
+		gate.open = randf() < 0.2
 		$Objects.add_child(gate)
 
 func _ready() -> void:

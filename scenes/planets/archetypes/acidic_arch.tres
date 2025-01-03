@@ -4,8 +4,8 @@
 
 [sub_resource type="Gradient" id="Gradient_ecw5b"]
 interpolation_mode = 1
-offsets = PackedFloat32Array(0, 0.286713, 0.410256, 0.501166, 0.603618, 0.643092, 0.74359)
-colors = PackedColorArray(0.84375, 0.824407, 0.802292, 1, 0.606771, 0.363674, 0.211725, 1, 0.502604, 0.417665, 0.342152, 1, 0.428955, 0.359982, 0.262216, 1, 0.630208, 0.401309, 0.239569, 1, 0.731753, 0.738715, 0.387434, 1, 0.575103, 0.703125, 0.142236, 1)
+offsets = PackedFloat32Array(0, 0.149495, 0.232323, 0.369697, 0.472727, 0.670707, 0.771717)
+colors = PackedColorArray(0.84375, 0.824407, 0.802292, 1, 0.606771, 0.363674, 0.211725, 1, 0.630208, 0.401309, 0.239569, 1, 0.502604, 0.417665, 0.342152, 1, 0.428955, 0.359982, 0.262216, 1, 0.731753, 0.738715, 0.387434, 1, 0.575103, 0.703125, 0.142236, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_dafv3"]
 gradient = SubResource("Gradient_ecw5b")
@@ -17,4 +17,4 @@ atmo_intensity = 10.0
 atmo_color = Color(0.934896, 0.448284, 0.10271, 1)
 atmo_height = 60
 terrain_gradient = SubResource("GradientTexture1D_dafv3")
-terrain_height = 125
+terrain_height = 200

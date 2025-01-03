@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://drj4drjrrqhtn"]
+[gd_scene load_steps=16 format=3 uid="uid://drj4drjrrqhtn"]
 
 [ext_resource type="PackedScene" uid="uid://c2q0i7xg33imp" path="res://assets/kythrax.glb" id="1_8knee"]
 [ext_resource type="Script" path="res://scenes/spaceships/enemy_spaceship.gd" id="1_u8857"]
@@ -7,7 +7,8 @@
 [ext_resource type="Material" uid="uid://bql8geyhugqoi" path="res://assets/window_drexul.material" id="3_pd82x"]
 [ext_resource type="PackedScene" uid="uid://c0s1k0g71mkdu" path="res://scenes/spaceships/weapons/laser_weapon.tscn" id="5_2mc87"]
 [ext_resource type="PackedScene" uid="uid://cixdyu6ia256b" path="res://scenes/spaceships/radar.tscn" id="5_ly7m0"]
-[ext_resource type="Texture2D" uid="uid://csawli8abs1f3" path="res://assets/particle.png" id="7_5qpye"]
+[ext_resource type="Texture2D" uid="uid://csawli8abs1f3" path="res://assets/textures/particle.png" id="7_5qpye"]
+[ext_resource type="Material" uid="uid://c5v1dsg5umq3f" path="res://scenes/spaceships/weapons/red_laser_mat.tres" id="8_xg3ku"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vtoj5"]
 size = Vector3(14.6216, 3.94507, 9.22241)
@@ -87,6 +88,7 @@ text = "Kythrax"
 
 [node name="LaserWeapon" parent="Weapons" instance=ExtResource("5_2mc87")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.94447, -10.8567)
+laser_material = ExtResource("8_xg3ku")
 
 [node name="Collision" type="Area3D" parent="."]
 

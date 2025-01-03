@@ -1,0 +1,85 @@
+[gd_scene load_steps=16 format=3 uid="uid://cbkqmol5pk5ys"]
+
+[ext_resource type="Script" path="res://scenes/planets/planet.gd" id="1_llec6"]
+[ext_resource type="Script" path="res://scenes/planets/planet_archetype.gd" id="2_i6fmc"]
+[ext_resource type="Shader" path="res://scenes/planets/gasgiant.gdshader" id="3_2067y"]
+[ext_resource type="Texture2D" uid="uid://dp2wi7cxt1yad" path="res://assets/textures/gasgiant.png" id="5_88hsh"]
+[ext_resource type="Shader" path="res://scenes/planets/atmosphere.gdshader" id="5_o5glq"]
+[ext_resource type="Texture2D" uid="uid://nl6rb1ynj24w" path="res://assets/textures/gasgiant_flowmap.png" id="6_vwjcn"]
+
+[sub_resource type="Gradient" id="Gradient_82ctx"]
+colors = PackedColorArray(0.580729, 0.546767, 0.289154, 1, 0.361979, 0.144877, 0.0757288, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_u3jlc"]
+gradient = SubResource("Gradient_82ctx")
+
+[sub_resource type="Resource" id="Resource_ybptv"]
+script = ExtResource("2_i6fmc")
+has_atmo = true
+atmo_intensity = 10.0
+atmo_color = Color(1, 0.826906, 0.307625, 1)
+atmo_height = 70
+terrain_gradient = SubResource("GradientTexture1D_u3jlc")
+terrain_height = 125
+
+[sub_resource type="Gradient" id="Gradient_pr5ed"]
+colors = PackedColorArray(0.580729, 0.546767, 0.289154, 1, 0.361979, 0.144877, 0.0757288, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rrtlw"]
+gradient = SubResource("Gradient_pr5ed")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_clu1r"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_2067y")
+shader_parameter/flow_speed = 0.03
+shader_parameter/flow_intensity = 0.056
+shader_parameter/gradient = SubResource("GradientTexture1D_rrtlw")
+shader_parameter/base = ExtResource("5_88hsh")
+shader_parameter/flowmap = ExtResource("6_vwjcn")
+
+[sub_resource type="SphereMesh" id="SphereMesh_mqn3g"]
+radius = 3200.0
+height = 6400.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7u3nm"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("5_o5glq")
+shader_parameter/light_intensity = Vector3(10, 8.26906, 3.07625)
+shader_parameter/planet_radius = 3000.0
+shader_parameter/atmo_radius = 3900.0
+shader_parameter/beta_ray = Vector3(1, 2, 4)
+shader_parameter/beta_mie = Vector3(1, 1, 1)
+shader_parameter/beta_ambient = Vector3(0, 0, 0)
+shader_parameter/beta_e = -0.25
+shader_parameter/g = 0.8
+shader_parameter/height_ray = 59.0
+shader_parameter/height_mie = 47.2
+shader_parameter/density_multiplier = 1.0
+shader_parameter/steps_i = 10
+shader_parameter/steps_l = 2
+
+[sub_resource type="SphereMesh" id="SphereMesh_h816c"]
+resource_local_to_scene = true
+flip_faces = true
+radius = 4200.0
+height = 8400.0
+radial_segments = 16
+rings = 8
+
+[node name="Planet" type="Node3D" groups=["planet", "space_objects", "warp"]]
+transform = Transform3D(0.996964, 0, -0.0778533, 0, 1, 0, 0.0778533, 0, 0.996964, 0, 0, 0)
+script = ExtResource("1_llec6")
+archetype = SubResource("Resource_ybptv")
+
+[node name="Surface" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.077, 0, 0, 0, 1.077, 0, 0, 0, 1.077, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_clu1r")
+lod_bias = 1.305
+mesh = SubResource("SphereMesh_mqn3g")
+
+[node name="Atmosphere" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.996956, 0, 0.0779465, 0, 1, 0, -0.0779465, 0, 0.996956, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_7u3nm")
+mesh = SubResource("SphereMesh_h816c")

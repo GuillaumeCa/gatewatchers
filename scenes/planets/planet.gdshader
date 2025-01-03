@@ -13,14 +13,14 @@ uniform float noise_scale;
 uniform vec3 noise_offset;
 
 
-uniform float terrain_height: hint_range(10.0, 300.0, 5.0) = 10.0;
-uniform float water_lvl = 0.2;
-uniform float water_h = 0.2;
+uniform float terrain_height: hint_range(10.0, 1000.0, 0.1) = 10.0;
+uniform float water_lvl = 0.1;
 
 uniform float precision_level: hint_range(1, 50, 0.1) = 1.0;
 
 uniform float period = 0.1;
 
+uniform float planet_radius = 3000.0;
 
 varying float terrain_h;
 
@@ -107,7 +107,10 @@ void vertex() {
 	//vec3 displacedBitangent = displacedNeighbour2 - displacedPos;
 
 
-	VERTEX = displacedPos;
+	terrain_h = length(VERTEX);
+	//VERTEX = displacedPos;
+	
+	
 	//TANGENT = displacedTangent;
 	//BINORMAL = displacedBitangent;
 	//NORMAL = normalize(cross(displacedTangent, displacedBitangent));
@@ -131,22 +134,29 @@ void vertex() {
 	//BINORMAL = normalize(BINORMAL);
 }
 
+float map(float value, float min1, float max1, float min2, float max2) {
+  return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+}
+
 void fragment() {
 	vec2 uv = UV;
 
 	//float v = texture(noise, uv).r;
-	float n = triplanar_texture(noise, noise_power_normal, noise_triplanar_pos).r;
-	float n_macro = triplanar_texture(noise_macro, noise_power_normal, noise_triplanar_pos).r;
-
-	float h = blend2(n, n_macro);
-
+	//float n = triplanar_texture(noise, noise_power_normal, noise_triplanar_pos).r;
+	//float n_macro = triplanar_texture(noise_macro, noise_power_normal, noise_triplanar_pos).r;
+//
+	float h_min = planet_radius;
+	float h_max = planet_radius + terrain_height;
+	float h = map(terrain_h, h_min, h_max, 0.0, 1.0); //blend2(n, n_macro);
+	
 	h = quantize(h, precision_level);
+	
+	vec3 color = texture(gradient, vec2(-h, 0.0)).rgb;
 
-	vec3 color = texture(gradient, vec2(h, 0.0)).rgb;
 
+	//ROUGHNESS = h < water_h ? 1.0 : 0.0;
 
-	ROUGHNESS = h < water_h ? 1.0 : 0.0;
-
+	
 	ALBEDO.rgb = color;//vec3(water);
 	//vec3 n = triplanar_texture(noise_normal, noise_power_normal, noise_triplanar_pos).xyz;
 	//NORMAL_MAP = n;

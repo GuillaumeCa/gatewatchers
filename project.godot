@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Gate Watchers"
+config/tags=PackedStringArray("game")
 run/main_scene="res://scenes/levels/space.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
@@ -26,6 +27,10 @@ window/size/viewport_height=1080
 window/size/always_on_top=true
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[editor]
+
+movie_writer/movie_file="C:/Users/Guillaume/Documents/games/GateWatchers/gameplay.avi"
 
 [file_customization]
 
@@ -43,6 +48,7 @@ space_objects=""
 planet=""
 warp=""
 environment=""
+explosion=""
 
 [input]
 

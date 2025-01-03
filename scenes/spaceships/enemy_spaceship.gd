@@ -36,12 +36,20 @@ signal hit
 var enginesParticles: Array[GPUParticles3D] = []
 
 func _ready() -> void:
+	#set_physics_process(false)
+	#set_process(false)
+	
 	for particles in $engines.get_children():
 		if particles is GPUParticles3D:
 			enginesParticles.append(particles)
 
+
+var old_speed = 0
+var acceleration = 0
 func _process(delta: float) -> void:
-	$Debug.text = "State: " + EnemyState.keys()[state] + "\nHealth: " + str(health)
+	#$Debug.text = "State: " + EnemyState.keys()[state] + "\nHealth: " + str(health)
+	$Debug.text = "speed:%.1f \nacceleration: %.1f" % [linear_velocity.length(), acceleration]
+	
 	
 	
 	if state != EnemyState.DEAD:
@@ -59,10 +67,11 @@ func _process(delta: float) -> void:
 					state = EnemyState.ATTACKING
 			else:
 				state = EnemyState.SEARCHING
-			
 
 
 func _physics_process(delta: float) -> void:
+	acceleration = linear_velocity.length() - old_speed
+	old_speed = linear_velocity.length()
 	enable_engine(false)
 	match state:
 		EnemyState.SEARCHING:
@@ -101,7 +110,8 @@ func _physics_process(delta: float) -> void:
 			
 			global_transform.basis = global_transform.basis.slerp(t.basis, 0.01)
 			accelerate_to(50)
-		
+
+
 func fire_guns():
 	$Weapons/LaserWeapon.fire()
 
@@ -113,7 +123,6 @@ func accelerate_to(maxspeed: float, dir = Vector3.FORWARD):
 		enable_engine(true)
 		var force = dir * speed * get_physics_process_delta_time()
 		apply_central_force(global_transform.basis * force)
-		
 
 
 func enable_engine(on: bool):

@@ -11,6 +11,3 @@ rings = 8
 [node name="MapProjector" type="Node3D"]
 script = ExtResource("1_v5ikp")
 system_mesh = SubResource("SphereMesh_5obxj")
-
-[node name="Label3D" type="Label3D" parent="."]
-render_priority = 1

@@ -39,8 +39,9 @@ var warping_progress = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Input.set_use_accumulated_input(false)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	
+
 	for particles in $engines.get_children():
 		if particles is GPUParticles3D:
 			enginesParticles.append(particles)
@@ -64,8 +65,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 			
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		apply_torque_impulse(-global_transform.basis.x * event.relative.y * SENSITIVITY_MOUSE)
-		apply_torque_impulse(-global_transform.basis.y * event.relative.x * SENSITIVITY_MOUSE)
+		apply_torque_impulse(-global_transform.basis.x * event.screen_relative.y * SENSITIVITY_MOUSE)
+		apply_torque_impulse(-global_transform.basis.y * event.screen_relative.x * SENSITIVITY_MOUSE)
 	
 	if Input.is_action_just_pressed("forward"):
 		enable_engine(true)
@@ -95,7 +96,8 @@ func _process(delta: float) -> void:
 			$PilotPosition/Player.switch_cam()
 	
 	if Input.is_action_just_pressed("map"):
-		$MapProjector.visible = !$MapProjector.visible 
+		$MapProjector.visible = !$MapProjector.visible
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if $MapProjector.visible else Input.MOUSE_MODE_CAPTURED
 	
 	var dir = Vector3.ZERO
 	
@@ -145,18 +147,28 @@ func _process(delta: float) -> void:
 					target_dot = align
 					if Input.is_action_just_pressed("travel"):
 						mode = Mode.TRAVEL
+
 						# align ship towards current_target
+						$WarpStart.play()
+						$WarpLoop.play()
+						
 						var tw = create_tween()
 						tw.tween_property(self, "quaternion", Quaternion(global_transform.looking_at(current_target.global_position).basis), 2).set_trans(Tween.TRANS_CUBIC)
-	
+						
 	if mode == Mode.TRAVEL:
 
 		if current_target and is_instance_valid(current_target):
 			var dist = global_position.distance_to(current_target.global_position)
+
+			var max_warp_speed = 40000
 			# if ship has not yet reached the target + 5000m, continue to go towards it
-			if dist > current_target.get_warp_distance():
+			
+			var warp_distance = 100.0 if !current_target.has_method("get_warp_distance") else current_target.get_warp_distance()
+			
+			if dist > warp_distance:
 				var dir_target = global_position.direction_to(current_target.global_position)
-				linear_velocity = lerp(linear_velocity, dir_target * clamp(dist * 0.1, 0, 40000), 0.008)
+				
+				linear_velocity = lerp(linear_velocity, dir_target * clamp(dist * 0.1, 0, max_warp_speed), 0.01)
 				angular_velocity = Vector3.ZERO
 				active = false
 				
@@ -166,9 +178,9 @@ func _process(delta: float) -> void:
 				if linear_velocity.length() < 1:
 					active = true
 					mode = Mode.NAVIGATION
+					$WarpLoop.stop()
+					
 	
-	
-
 	
 	var speed_multiplier = 20.0 if boost else 1.0
 	
@@ -207,12 +219,18 @@ func _process(delta: float) -> void:
 	
 	spaceship_hud.hull_health = hull_health
 	
+	var fast_travel_effect_speed = 500
+	$SpaceParticles.emitting = (active and mode != Mode.TRAVEL) and relative_speed < fast_travel_effect_speed
+	$SpaceParticlesFast.emitting = (mode == Mode.TRAVEL or active) and relative_speed > fast_travel_effect_speed
 	
 	warping_progress = lerp(warping_progress, min(relative_speed * 0.0001 if relative_speed > 500 else 0.0, 1.0), 0.05)
+	$WarpLoop.volume_db =  40.0 * (warping_progress - 1.0)
 	var warp_mat: ShaderMaterial = warp_effect.material_override
 	warp_mat.set_shader_parameter("alpha", warping_progress)
 
 	hud_target.visible = false
+	
+	$CanvasLayer/HelmetHud/WeaponPipReticule.hide()
 	if current_target != null:
 		
 		var enemy = current_target.is_in_group("drexul")
@@ -230,6 +248,12 @@ func _process(delta: float) -> void:
 			hud_target.visible = true
 			var dist = hud_target.get_node("Distance")
 			
+			if enemy and target_dist < 3000.0:
+				var pip = $Weapons/LaserWeapon.predicted_impact(current_target.global_position, current_target.linear_velocity)
+				if pip:
+					$CanvasLayer/HelmetHud/WeaponPipReticule.position = get_viewport().get_camera_3d().unproject_position(pip)
+					$CanvasLayer/HelmetHud/WeaponPipReticule.show()
+				
 			var target_name = hud_target.get_node("Name")
 			if not enemy:
 				target_name.show()
@@ -244,6 +268,8 @@ func _process(delta: float) -> void:
 	var weapon_dist_target = $Weapons/LaserWeapon.global_position + -$Weapons/LaserWeapon.global_basis.z * 1000
 	var weapon_target_pos = get_viewport().get_camera_3d().unproject_position(weapon_dist_target)
 	$CanvasLayer/HelmetHud/WeaponReticule.position = weapon_target_pos
+	
+	
 
 # used to recenter the ship for the floating origin
 func relocate(pos: Vector3):
@@ -268,11 +294,20 @@ func on_target_hit():
 	$CanvasLayer/HelmetHud/Target/Hit.visible = false
 
 
+func camera_shake(amount: float):
+	if $PilotPosition/Player.camera_3d.current:
+		$PilotPosition/Player.camera_shake = amount
+
 func _on_collision_area_entered(area: Area3D) -> void:
 	if area.is_in_group("projectile"):
 		hull_health -= 5
+		camera_shake(4)
 		
 		if hull_health <= 0:
 			hull_health = 0
 			print("DEAD")
 			get_tree().reload_current_scene()
+	if area.is_in_group("explosion"):
+		var amount = clamp(area.global_position.distance_to(global_position) / 20, 0.0, 20.0)
+		prints("shake", area, amount)
+		camera_shake(amount)

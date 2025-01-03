@@ -17,4 +17,4 @@ atmo_intensity = 10.0
 atmo_color = Color(1, 1, 1, 1)
 atmo_height = 70
 terrain_gradient = SubResource("GradientTexture1D_of5vt")
-terrain_height = 125
+terrain_height = 200

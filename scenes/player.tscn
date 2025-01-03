@@ -1,6 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cef2d1ms5tqcu"]
+[gd_scene load_steps=13 format=3 uid="uid://cef2d1ms5tqcu"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_twqay"]
+[ext_resource type="Texture2D" uid="uid://csawli8abs1f3" path="res://assets/textures/particle.png" id="2_llgb5"]
+[ext_resource type="PackedScene" uid="uid://cn3h3pyipd0fb" path="res://scenes/vfx/outline_vfx.tscn" id="2_y7lpk"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nmful"]
 
@@ -9,6 +11,41 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_02wh4"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_quthh"]
+
+[sub_resource type="Gradient" id="Gradient_npqva"]
+offsets = PackedFloat32Array(0, 0.0340136, 0.857143, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_18qab"]
+gradient = SubResource("Gradient_npqva")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tbrxg"]
+emission_shape = 1
+emission_sphere_radius = 30.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -2.23517e-06
+radial_accel_max = -2.23517e-06
+tangential_accel_min = -0.100002
+tangential_accel_max = 0.0999978
+color_ramp = SubResource("GradientTexture1D_18qab")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rth2r"]
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.94, 0.94, 0.94, 1)
+albedo_texture = ExtResource("2_llgb5")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+proximity_fade_distance = 50.0
+distance_fade_mode = 1
+distance_fade_min_distance = 5.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_33wcr"]
+material = SubResource("StandardMaterial3D_rth2r")
+size = Vector2(0.1, 0.1)
 
 [node name="Player" type="CharacterBody3D"]
 motion_mode = 1
@@ -31,6 +68,9 @@ current = true
 fov = 70.0
 far = 1e+06
 
+[node name="OutlineVFX" parent="CameraPivot/Camera3D" instance=ExtResource("2_y7lpk")]
+visible = false
+
 [node name="debug" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_dlyv5")
 surface_material_override/0 = SubResource("StandardMaterial3D_02wh4")
@@ -39,3 +79,12 @@ surface_material_override/0 = SubResource("StandardMaterial3D_02wh4")
 transform = Transform3D(0.467331, 0, 0, 0, 0.150482, 0, 0, 0, 0.619507, 0, 0.591637, -0.224209)
 mesh = SubResource("BoxMesh_quthh")
 skeleton = NodePath("../..")
+
+[node name="SpaceParticles" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 512
+lifetime = 5.0
+preprocess = 1.0
+visibility_aabb = AABB(-16.085, -11.8, -20.34, 32.23, 23.63, 42.74)
+process_material = SubResource("ParticleProcessMaterial_tbrxg")
+draw_pass_1 = SubResource("QuadMesh_33wcr")
