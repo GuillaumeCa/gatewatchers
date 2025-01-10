@@ -6,21 +6,21 @@
 [ext_resource type="Script" path="res://scenes/planets/planet_archetype.gd" id="2_w0rr1"]
 [ext_resource type="ArrayMesh" uid="uid://bf6rt8tqxgn5o" path="res://scenes/planets/planet_mesh.res" id="5_7pdp0"]
 
-[sub_resource type="Gradient" id="Gradient_aaodv"]
+[sub_resource type="Gradient" id="Gradient_nx4ly"]
 interpolation_mode = 1
 offsets = PackedFloat32Array(0, 0.149495, 0.232323, 0.369697, 0.472727, 0.670707, 0.771717)
 colors = PackedColorArray(0.84375, 0.824407, 0.802292, 1, 0.606771, 0.363674, 0.211725, 1, 0.630208, 0.401309, 0.239569, 1, 0.502604, 0.417665, 0.342152, 1, 0.428955, 0.359982, 0.262216, 1, 0.731753, 0.738715, 0.387434, 1, 0.575103, 0.703125, 0.142236, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_ej0jp"]
-gradient = SubResource("Gradient_aaodv")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_41166"]
+gradient = SubResource("Gradient_nx4ly")
 
-[sub_resource type="Resource" id="Resource_mbh0x"]
+[sub_resource type="Resource" id="Resource_bvkbw"]
 script = ExtResource("2_w0rr1")
 has_atmo = true
 atmo_intensity = 10.0
 atmo_color = Color(0.934896, 0.448284, 0.10271, 1)
 atmo_height = 60
-terrain_gradient = SubResource("GradientTexture1D_ej0jp")
+terrain_gradient = SubResource("GradientTexture1D_41166")
 terrain_height = 200
 
 [sub_resource type="Gradient" id="Gradient_ic1pj"]
@@ -60,7 +60,7 @@ shader_parameter/water_lvl = 0.0
 shader_parameter/precision_level = 30.4
 shader_parameter/period = 1.45
 shader_parameter/planet_radius = 3000.0
-shader_parameter/gradient = SubResource("GradientTexture1D_ej0jp")
+shader_parameter/gradient = SubResource("GradientTexture1D_41166")
 shader_parameter/noise = SubResource("NoiseTexture2D_h1fy5")
 shader_parameter/noise_macro = SubResource("NoiseTexture2D_x7kds")
 
@@ -93,7 +93,7 @@ rings = 8
 [node name="Planet" type="Node3D" groups=["planet", "space_objects", "warp"]]
 transform = Transform3D(-0.415875, 0, -0.909422, 0, 1, 0, 0.909422, 0, -0.415875, 0, 0, 0)
 script = ExtResource("1_uabpo")
-archetype = SubResource("Resource_mbh0x")
+archetype = SubResource("Resource_bvkbw")
 
 [node name="Surface" type="MeshInstance3D" parent="."]
 material_override = SubResource("ShaderMaterial_clu1r")

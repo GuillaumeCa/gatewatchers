@@ -140,11 +140,16 @@ func _process(delta: float) -> void:
 				var dir_to_planet = global_position.direction_to(p.global_position)
 				if !target_dot:
 					target_dot = dir_to_planet.dot(-global_basis.z)
+					
+				var warp_distance = 100.0 if !p.has_method("get_warp_distance") else p.get_warp_distance()
 				# check if aligned towards planet
 				var align = dir_to_planet.dot(-global_basis.z)
 				if align > 0.95 and align >= target_dot:
 					current_target = p
 					target_dot = align
+					if global_position.distance_to(p.global_position) <= warp_distance:
+						continue
+						
 					if Input.is_action_just_pressed("travel"):
 						mode = Mode.TRAVEL
 
