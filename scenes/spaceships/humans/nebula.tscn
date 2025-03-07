@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://d32700hsoxr8b"]
+[gd_scene load_steps=51 format=3 uid="uid://d32700hsoxr8b"]
 
 [ext_resource type="Script" path="res://scenes/spaceships/spaceship.gd" id="1_2eoki"]
 [ext_resource type="PackedScene" uid="uid://blk8lyl4qh0ip" path="res://assets/spaceships.glb" id="1_rdqkb"]
@@ -110,6 +110,13 @@ particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_yoiyn"]
 material = SubResource("StandardMaterial3D_ejouf")
+
+[sub_resource type="BoxMesh" id="BoxMesh_ocid2"]
+size = Vector3(0.25, 0.495, 3.6)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vxx6a"]
+height = 0.345
+radial_segments = 16
 
 [sub_resource type="QuadMesh" id="QuadMesh_sf07a"]
 size = Vector2(1, 0.5)
@@ -411,6 +418,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.449, -3.214)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.74314, -4.19711)
 laser_speed = 1000.0
 laser_material = ExtResource("12_0qyij")
+
+[node name="Tools" type="Node3D" parent="."]
+
+[node name="MiningHead" type="Node3D" parent="Tools"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.09834, -5.48291)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Tools/MiningHead"]
+transform = Transform3D(1, 0, 0, 0, 0.993688, -0.11218, 0, 0.11218, 0.993688, 0, 0.540842, -0.853353)
+mesh = SubResource("BoxMesh_ocid2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Tools/MiningHead/MeshInstance3D"]
+transform = Transform3D(-4.37114e-08, 0.999226, 0.0393296, -0.999227, 0.00154677, -0.0392992, -0.0393296, -0.0392992, 0.998453, 0.232689, 0.0622383, -1.58125)
+mesh = SubResource("CylinderMesh_vxx6a")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Tools/MiningHead/MeshInstance3D"]
+transform = Transform3D(-4.37114e-08, 0.999226, 0.0393296, -0.999227, 0.00154677, -0.0392992, -0.0393296, -0.0392992, 0.998453, -0.284274, 0.0622383, -1.58125)
+mesh = SubResource("CylinderMesh_vxx6a")
 
 [node name="MapProjector" parent="." instance=ExtResource("12_p38vp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, -5.273)

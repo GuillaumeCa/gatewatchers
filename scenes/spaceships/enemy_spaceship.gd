@@ -145,7 +145,10 @@ func _on_collision_area_entered(area: Area3D) -> void:
 		if health <= 0:
 			var explosion_sfx = EXPLOSITION.instantiate()
 			explosion_sfx.global_position = area.global_position
-			apply_central_impulse(Vector3(randf() * 20, randf() * 20, randf() * 20))
+			
+			var dir = area.global_position.direction_to(global_position)
+			
+			apply_central_impulse(dir * randf() * 20)
 			apply_torque_impulse(Vector3(randf() * 30, randf() * 30, randf() * 30))
 			add_sibling(explosion_sfx)
 			

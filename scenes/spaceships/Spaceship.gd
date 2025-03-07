@@ -36,11 +36,14 @@ var current_target: Node3D
 var warping_progress = 0.0
 
 
+var active_weapon
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Input.set_use_accumulated_input(false)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+	active_weapon = $Weapons/LaserWeapon
 
 	for particles in $engines.get_children():
 		if particles is GPUParticles3D:
@@ -52,6 +55,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if Input.is_action_just_pressed("switch"):
 		active = !active
+		$CanvasLayer/HelmetHud.visible = active
 		
 		$PilotPosition/Player.active = !$PilotPosition/Player.active
 		if active:
@@ -130,7 +134,7 @@ func _process(delta: float) -> void:
 				current_target = target
 			
 			if Input.is_action_pressed("fire"):
-				$Weapons/LaserWeapon.fire()
+				active_weapon.fire()
 		
 		if mode == Mode.NAVIGATION:
 			var warp_points = get_warp_points()
@@ -161,6 +165,7 @@ func _process(delta: float) -> void:
 						tw.tween_property(self, "quaternion", Quaternion(global_transform.looking_at(current_target.global_position).basis), 2).set_trans(Tween.TRANS_CUBIC)
 						
 	if mode == Mode.TRAVEL:
+		camera_shake(.1)
 
 		if current_target and is_instance_valid(current_target):
 			var dist = global_position.distance_to(current_target.global_position)
@@ -254,7 +259,7 @@ func _process(delta: float) -> void:
 			var dist = hud_target.get_node("Distance")
 			
 			if enemy and target_dist < 3000.0:
-				var pip = $Weapons/LaserWeapon.predicted_impact(current_target.global_position, current_target.linear_velocity)
+				var pip = active_weapon.predicted_impact(current_target.global_position, current_target.linear_velocity)
 				if pip:
 					$CanvasLayer/HelmetHud/WeaponPipReticule.position = get_viewport().get_camera_3d().unproject_position(pip)
 					$CanvasLayer/HelmetHud/WeaponPipReticule.show()
@@ -270,7 +275,7 @@ func _process(delta: float) -> void:
 			dist.text =  str(dist_km) + "KM"
 			dist.visible = dist_km > 0
 	
-	var weapon_dist_target = $Weapons/LaserWeapon.global_position + -$Weapons/LaserWeapon.global_basis.z * 1000
+	var weapon_dist_target = active_weapon.global_position + -active_weapon.global_basis.z * 1000
 	var weapon_target_pos = get_viewport().get_camera_3d().unproject_position(weapon_dist_target)
 	$CanvasLayer/HelmetHud/WeaponReticule.position = weapon_target_pos
 	

@@ -66,6 +66,10 @@ func update_async():
 	#thread.wait_to_finish()
 	#return create_trimesh_shape()
 
+func free() -> void:
+	thread.wait_to_finish()
+	super.free()
+
 func update_mesh():
 	print("Update OctasphereMesh")
 	var ans = octasphere(subdivisions, radius, 0, 0, 0)
