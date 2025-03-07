@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cixdyu6ia256b"]
 
-[ext_resource type="Script" path="res://scenes/spaceships/radar.gd" id="1_vfdmv"]
+[ext_resource type="Script" uid="uid://bq3u6iv1x5vpp" path="res://scenes/spaceships/radar.gd" id="1_vfdmv"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_u7dq4"]
 radius = 5000.0

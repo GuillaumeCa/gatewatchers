@@ -109,8 +109,8 @@ void vertex() {
 
 	terrain_h = length(VERTEX);
 	//VERTEX = displacedPos;
-	
-	
+
+
 	//TANGENT = displacedTangent;
 	//BINORMAL = displacedBitangent;
 	//NORMAL = normalize(cross(displacedTangent, displacedBitangent));
@@ -148,15 +148,15 @@ void fragment() {
 	float h_min = planet_radius;
 	float h_max = planet_radius + terrain_height;
 	float h = map(terrain_h, h_min, h_max, 0.0, 1.0); //blend2(n, n_macro);
-	
+
 	h = quantize(h, precision_level);
-	
+
 	vec3 color = texture(gradient, vec2(-h, 0.0)).rgb;
 
 
 	//ROUGHNESS = h < water_h ? 1.0 : 0.0;
 
-	
+
 	ALBEDO.rgb = color;//vec3(water);
 	//vec3 n = triplanar_texture(noise_normal, noise_power_normal, noise_triplanar_pos).xyz;
 	//NORMAL_MAP = n;

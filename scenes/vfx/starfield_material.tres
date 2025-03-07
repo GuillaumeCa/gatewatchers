@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=9 format=3 uid="uid://ded4rt8oc2c4l"]
 
-[ext_resource type="Shader" path="res://scenes/vfx/starfield.gdshader" id="1_x7u6q"]
+[ext_resource type="Shader" uid="uid://dqcwm47opkjif" path="res://scenes/vfx/starfield.gdshader" id="1_x7u6q"]
 
 [sub_resource type="Gradient" id="Gradient_rehrc"]
 offsets = PackedFloat32Array(0.312644, 1)
@@ -45,15 +45,17 @@ gradient = SubResource("Gradient_hq171")
 
 [resource]
 shader = ExtResource("1_x7u6q")
-shader_parameter/base_color = null
+shader_parameter/base_color = Color(0, 0, 0, 1)
 shader_parameter/luminosity = 1.0
+shader_parameter/star_gradient = SubResource("GradientTexture1D_ukosq")
 shader_parameter/star_height = 5.06
 shader_parameter/star_blend = -0.19
 shader_parameter/depth_blend = 0.1
 shader_parameter/star_size = 2.12
 shader_parameter/star_layers = 5
 shader_parameter/flare_ratio = 0.26
-shader_parameter/star_gradient = SubResource("GradientTexture1D_ukosq")
+shader_parameter/nebula_texture = SubResource("NoiseTexture2D_5b26x")
+shader_parameter/nebula_mask = SubResource("NoiseTexture2D_o1p44")
 shader_parameter/nebula_primary = Color(0.749616, 0.95, 0.644148, 1)
 shader_parameter/nebula_secondary = Color(0.453144, 0.953125, 0.896104, 1)
 shader_parameter/nebula_layers = 5
@@ -61,5 +63,3 @@ shader_parameter/nebula_scale = 0.079
 shader_parameter/nebula_blend = 0.315
 shader_parameter/nebula_power = 1.075
 shader_parameter/nebula_seed = 1.0
-shader_parameter/nebula_texture = SubResource("NoiseTexture2D_5b26x")
-shader_parameter/nebula_mask = SubResource("NoiseTexture2D_o1p44")

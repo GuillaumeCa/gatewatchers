@@ -1,6 +1,6 @@
 [gd_scene load_steps=51 format=3 uid="uid://d32700hsoxr8b"]
 
-[ext_resource type="Script" path="res://scenes/spaceships/spaceship.gd" id="1_2eoki"]
+[ext_resource type="Script" uid="uid://f00xdx545a3h" path="res://scenes/spaceships/spaceship.gd" id="1_2eoki"]
 [ext_resource type="PackedScene" uid="uid://blk8lyl4qh0ip" path="res://assets/spaceships.glb" id="1_rdqkb"]
 [ext_resource type="Material" uid="uid://bdxbtqxqicjtk" path="res://assets/window.material" id="3_aoo6g"]
 [ext_resource type="Texture2D" uid="uid://csawli8abs1f3" path="res://assets/textures/particle.png" id="3_sp25l"]
@@ -14,7 +14,7 @@
 [ext_resource type="Material" uid="uid://bhm1u4cxay57t" path="res://scenes/spaceships/weapons/cyan_laser_mat.tres" id="12_0qyij"]
 [ext_resource type="PackedScene" uid="uid://db13ggy5oqcrk" path="res://scenes/ui/map_projector.tscn" id="12_p38vp"]
 [ext_resource type="Texture2D" uid="uid://c76xxrr3w4rb5" path="res://assets/textures/crosshair048.png" id="12_yiw4s"]
-[ext_resource type="Shader" path="res://scenes/vfx/warping.gdshader" id="13_l7jpe"]
+[ext_resource type="Shader" uid="uid://dc0d1ox5w61tr" path="res://scenes/vfx/warping.gdshader" id="13_l7jpe"]
 [ext_resource type="AudioStream" uid="uid://dy0sgmn6wupb7" path="res://assets/sfx/warp-loop.ogg" id="15_5ydlr"]
 [ext_resource type="AudioStream" uid="uid://bi1yaye78ljnl" path="res://assets/sfx/warp-start.wav" id="16_lk6iu"]
 
@@ -73,9 +73,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_raue2"]
 _data = {
-"RESET": SubResource("Animation_c8k6c"),
-"ramp_down": SubResource("Animation_kn04f"),
-"ramp_up": SubResource("Animation_aihav")
+&"RESET": SubResource("Animation_c8k6c"),
+&"ramp_down": SubResource("Animation_kn04f"),
+&"ramp_up": SubResource("Animation_aihav")
 }
 
 [sub_resource type="Curve" id="Curve_v22mg"]
@@ -221,11 +221,11 @@ noise = SubResource("FastNoiseLite_uo8ex")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jn61r"]
 render_priority = 0
 shader = ExtResource("13_l7jpe")
+shader_parameter/noise = SubResource("NoiseTexture2D_bp3pi")
 shader_parameter/color = Color(0.192722, 0.755208, 0.751452, 1)
 shader_parameter/accent_color = Color(0.373973, 0.0207775, 0.596354, 1)
 shader_parameter/speed = 2.0
 shader_parameter/alpha = 0.0
-shader_parameter/noise = SubResource("NoiseTexture2D_bp3pi")
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_pue0v"]
 flip_faces = true
@@ -274,7 +274,7 @@ shape = SubResource("BoxShape3D_d82p0")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_raue2")
+&"": SubResource("AnimationLibrary_raue2")
 }
 
 [node name="engines" type="Node3D" parent="."]

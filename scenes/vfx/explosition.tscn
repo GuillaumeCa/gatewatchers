@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=3 uid="uid://cxutbn2gmisj7"]
 
-[ext_resource type="Script" path="res://scenes/vfx/explosition.gd" id="1_omhb6"]
+[ext_resource type="Script" uid="uid://dp0ktkctrb336" path="res://scenes/vfx/explosition.gd" id="1_omhb6"]
 [ext_resource type="AudioStream" uid="uid://bwn357ixy4o8d" path="res://assets/sfx/explosion.ogg" id="2_qs3ly"]
 
 [sub_resource type="Gradient" id="Gradient_0185r"]
@@ -11,7 +11,7 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 0.33689, 0.135966, 1, 0.942708, 0.78924
 gradient = SubResource("Gradient_0185r")
 
 [sub_resource type="Curve" id="Curve_ui46t"]
-max_value = 10.0
+_limits = [0.0, 10.0, 0.0, 1.0]
 _data = [Vector2(0, 10), 0.0, -39.0138, 0, 0, Vector2(0.725572, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
@@ -19,7 +19,7 @@ point_count = 2
 curve = SubResource("Curve_ui46t")
 
 [sub_resource type="Curve" id="Curve_2gcxq"]
-max_value = 5.0
+_limits = [0.0, 5.0, 0.0, 1.0]
 _data = [Vector2(0.00793651, 0.482216), 0.0, 0.0, 0, 0, Vector2(0.1, 3.30215), 3.46324, 3.46324, 0, 0, Vector2(0.539683, 0.893849), -6.01166, -6.01166, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
 

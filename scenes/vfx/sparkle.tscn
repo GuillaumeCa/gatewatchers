@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://hhmdktq0p3nm"]
 
-[ext_resource type="Script" path="res://scenes/vfx/sparkle.gd" id="1_dqfw7"]
+[ext_resource type="Script" uid="uid://duy3kk74xipr7" path="res://scenes/vfx/sparkle.gd" id="1_dqfw7"]
 
 [sub_resource type="Curve" id="Curve_33ddu"]
 _data = [Vector2(0, 0.0386984), 0.0, 3.96331, 0, 0, Vector2(0.871102, 0.987183), -0.010485, -0.010485, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://degvgfsrmgw1o"]
 
-[ext_resource type="Script" path="res://scenes/spaceships/weapons/laser.gd" id="1_viiec"]
+[ext_resource type="Script" uid="uid://qpioqwn8nv4h" path="res://scenes/spaceships/weapons/laser.gd" id="1_viiec"]
 [ext_resource type="Material" uid="uid://bhm1u4cxay57t" path="res://scenes/spaceships/weapons/cyan_laser_mat.tres" id="2_g5x6m"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_adfba"]

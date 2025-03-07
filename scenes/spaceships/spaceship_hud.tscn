@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://brtfcqtwjbgnp"]
 
-[ext_resource type="Script" path="res://scenes/spaceships/spaceship_hud.gd" id="1_if6vx"]
+[ext_resource type="Script" uid="uid://bj3538upiq6ad" path="res://scenes/spaceships/spaceship_hud.gd" id="1_if6vx"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_1imii"]
 font_size = 33

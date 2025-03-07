@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=3 uid="uid://drj4drjrrqhtn"]
 
 [ext_resource type="PackedScene" uid="uid://c2q0i7xg33imp" path="res://assets/kythrax.glb" id="1_8knee"]
-[ext_resource type="Script" path="res://scenes/spaceships/enemy_spaceship.gd" id="1_u8857"]
+[ext_resource type="Script" uid="uid://cw8ijytemisvv" path="res://scenes/spaceships/enemy_spaceship.gd" id="1_u8857"]
 [ext_resource type="Material" uid="uid://dyde4vmo0bxp8" path="res://assets/lowpoly.res" id="2_8aq6q"]
 [ext_resource type="PackedScene" uid="uid://hhmdktq0p3nm" path="res://scenes/vfx/sparkle.tscn" id="2_uj8fq"]
 [ext_resource type="Material" uid="uid://bql8geyhugqoi" path="res://assets/window_drexul.material" id="3_pd82x"]

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PlanetArchetype" load_steps=4 format=3 uid="uid://ov6wggvcet8a"]
 
-[ext_resource type="Script" path="res://scenes/planets/planet_archetype.gd" id="1_dpbo3"]
+[ext_resource type="Script" uid="uid://cttmewuysuget" path="res://scenes/planets/planet_archetype.gd" id="1_dpbo3"]
 
 [sub_resource type="Gradient" id="Gradient_5j30o"]
 interpolation_mode = 1

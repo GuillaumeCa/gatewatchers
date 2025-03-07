@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c0s1k0g71mkdu"]
 
-[ext_resource type="Script" path="res://scenes/spaceships/weapons/weapon.gd" id="1_08hif"]
+[ext_resource type="Script" uid="uid://d25yki6mvglvt" path="res://scenes/spaceships/weapons/weapon.gd" id="1_08hif"]
 [ext_resource type="AudioStream" uid="uid://cm3qnkhacewju" path="res://assets/sfx/space-laser.ogg" id="2_87atk"]
 
 [node name="LaserWeapon" type="Node3D"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://cc1n7p87rdvxe"]
 
-[ext_resource type="Script" path="res://scenes/levels/space.gd" id="1_tw8vm"]
+[ext_resource type="Script" uid="uid://b8dye3q2p7kwu" path="res://scenes/levels/space.gd" id="1_tw8vm"]
 [ext_resource type="PackedScene" uid="uid://d32700hsoxr8b" path="res://scenes/spaceships/humans/nebula.tscn" id="1_xd8lj"]
 [ext_resource type="Environment" uid="uid://ymne4iy6o8qe" path="res://starfield_env.tres" id="2_a755b"]
 [ext_resource type="PackedScene" uid="uid://bt6ainl0tmfmv" path="res://scenes/vfx/lensflare.tscn" id="2_i61lw"]

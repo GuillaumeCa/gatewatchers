@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dsqm2ewisnox2"]
 
 [ext_resource type="PackedScene" uid="uid://c217l5420fnou" path="res://scenes/props/warpgates/warp_pillar.tscn" id="1_i5xj8"]
-[ext_resource type="Script" path="res://scenes/props/warpgates/warp_gate.gd" id="1_ut8uu"]
+[ext_resource type="Script" uid="uid://cpnscu0h8ojoa" path="res://scenes/props/warpgates/warp_gate.gd" id="1_ut8uu"]
 [ext_resource type="PackedScene" uid="uid://dvs7wacaw5fq8" path="res://assets/warp_tunnel.glb" id="2_1247o"]
 [ext_resource type="Material" uid="uid://bq6c4hcru3x0e" path="res://scenes/props/warpgates/warptunnel.material" id="3_ypdiq"]
 
