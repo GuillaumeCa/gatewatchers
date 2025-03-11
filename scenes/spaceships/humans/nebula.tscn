@@ -240,6 +240,7 @@ cap_bottom = false
 size = Vector3(3.342, 2.715, 25.362)
 
 [node name="Nebula" type="RigidBody3D" node_paths=PackedStringArray("enginesParticles") groups=["human", "ship"]]
+collision_mask = 3
 freeze_mode = 1
 angular_damp = 2.0
 script = ExtResource("1_2eoki")
@@ -497,5 +498,6 @@ stream = ExtResource("15_5ydlr")
 stream = ExtResource("16_lk6iu")
 
 [connection signal="area_entered" from="Collision" to="." method="_on_collision_area_entered"]
+[connection signal="area_exited" from="Collision" to="." method="_on_collision_area_exited"]
 
 [editable path="spaceships"]

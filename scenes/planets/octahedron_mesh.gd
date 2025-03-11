@@ -93,6 +93,7 @@ func update_mesh():
 	call_deferred("add_surface_from_arrays", Mesh.PRIMITIVE_TRIANGLES, arrays)
 	#self.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	call_deferred("emit_changed")
+	print("Finished update OctasphereMesh")
 
 func normalize_noise(val: float):
 	var v = val * 2.0 * 0.5 + 0.5

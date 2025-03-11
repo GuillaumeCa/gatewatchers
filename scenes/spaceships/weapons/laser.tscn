@@ -13,6 +13,7 @@ size = Vector3(0.5, 0.5, 10.734)
 script = ExtResource("1_viiec")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("BoxMesh_adfba")
 surface_material_override/0 = ExtResource("2_g5x6m")
 

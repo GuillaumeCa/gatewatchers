@@ -1,9 +1,9 @@
 extends CharacterBody3D
 
 
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
-const SENSITIVITY_MOUSE = 0.001
+const SPEED := 5.0
+const JUMP_VELOCITY := 4.5
+const SENSITIVITY_MOUSE := 0.001
 
 var xr_interface: XRInterface
 
@@ -18,7 +18,7 @@ var xr_interface: XRInterface
 @onready var xr_camera_3d: XRCamera3D = $XROrigin/XRCamera3D
 
 
-var camera_shake = 0.0
+var camera_shake := 0.0
 var camera_offset: Vector3
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.

@@ -48,6 +48,7 @@ material = SubResource("StandardMaterial3D_rth2r")
 size = Vector2(0.1, 0.1)
 
 [node name="Player" type="CharacterBody3D"]
+collision_layer = 3
 motion_mode = 1
 script = ExtResource("1_twqay")
 

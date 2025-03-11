@@ -47,6 +47,7 @@ particles_anim_loop = false
 material = SubResource("StandardMaterial3D_mo50y")
 
 [node name="Kythrax" type="RigidBody3D" groups=["drexul", "ship", "space_objects"]]
+collision_mask = 3
 script = ExtResource("1_u8857")
 sparkle_scene = ExtResource("2_uj8fq")
 

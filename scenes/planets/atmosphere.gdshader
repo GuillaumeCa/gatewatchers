@@ -174,11 +174,11 @@ void fragment() {
 
 	// calculate the scattering towards the camera
 	vec4 atm = calculate_scattering(cam_position, VIEW, max_distance, light_direction);
-	
+
 	atm.x = min(1.0, atm.x);
 	atm.y = min(1.0, atm.y);
 	atm.z = min(1.0, atm.z);
-	
+
 	// 4.3 got alpha blending!
 	ALBEDO = atm.xyz - FOG.rgb;
 	ALPHA = atm.x;

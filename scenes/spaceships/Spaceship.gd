@@ -35,6 +35,7 @@ var current_target: Node3D
 
 var warping_progress = 0.0
 
+var in_planet_gravity = false
 
 var active_weapon
 
@@ -48,7 +49,6 @@ func _ready() -> void:
 	for particles in $engines.get_children():
 		if particles is GPUParticles3D:
 			enginesParticles.append(particles)
-	
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -230,7 +230,7 @@ func _process(delta: float) -> void:
 	spaceship_hud.hull_health = hull_health
 	
 	var fast_travel_effect_speed = 500
-	$SpaceParticles.emitting = (active and mode != Mode.TRAVEL) and relative_speed < fast_travel_effect_speed
+	$SpaceParticles.emitting = (active and mode != Mode.TRAVEL) and relative_speed < fast_travel_effect_speed and !in_planet_gravity
 	$SpaceParticlesFast.emitting = (mode == Mode.TRAVEL or active) and relative_speed > fast_travel_effect_speed
 	
 	warping_progress = lerp(warping_progress, min(relative_speed * 0.0001 if relative_speed > 500 else 0.0, 1.0), 0.05)
@@ -321,3 +321,13 @@ func _on_collision_area_entered(area: Area3D) -> void:
 		var amount = clamp(area.global_position.distance_to(global_position) / 20, 0.0, 20.0)
 		prints("shake", area, amount)
 		camera_shake(amount)
+	
+	if area.is_in_group("planet_gravity"):
+		in_planet_gravity = true
+		print("enter planet")
+
+
+func _on_collision_area_exited(area: Area3D) -> void:
+	if area.is_in_group("planet_gravity"):
+		in_planet_gravity = false
+		print("exit planet")

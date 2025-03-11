@@ -1,5 +1,6 @@
 @tool
 extends Node3D
+class_name AsteroidSpawner
 
 
 @export var gen_seed = 1:
@@ -59,7 +60,6 @@ func generate():
 		
 		var mesh_inst = asteroid.get_node("asteroid").get_child(0)
 		mesh_inst.scale *= asteroid_scale
-		
 		
 		#if shifted:
 			#asteroid.global_position = Space.shifted_origin + global_position # - Space.shifted_origin

@@ -20,17 +20,16 @@ func _ready() -> void:
 	var warp_locations = get_tree().get_nodes_in_group("warp")
 	warp_locations.shuffle()
 	for warp in warp_locations:
-		if warp.name.ends_with("Gate"):
+		if warp.name.ends_with("Erel"):
 			var loc = warp.global_position
 			
-			var dist = 300.0
+			var dist = warp.get_warp_distance()
 			player.relocate(Vector3(
 				randf_range(loc.x - dist, loc.x + dist),
 				randf_range(loc.y-dist/2.0, loc.y + dist/2.0),
 				randf_range(loc.z-dist, loc.z + dist),
 			))
-			
-	
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey:

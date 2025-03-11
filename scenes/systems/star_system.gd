@@ -15,6 +15,8 @@ func generate():
 	seed(system_seed)
 	var star_color = colors.pick_random()
 	$Star/OmniLight3D.light_color = star_color
+	$Star/DirectionalLight3D.light_color = star_color
+	
 	$Star.material_override.set_shader_parameter("sun_color", star_color)
 	$Star.position = Vector3.ZERO
 	
@@ -39,17 +41,17 @@ func generate_env(star_color: Color):
 
 func generate_planets():
 	var planet_count = randi_range(2, PLANET_MAX)
+	var pnames = generate_planet_names()
 	for i in planet_count:
-		var pname = generate_planet_name()
-		prints("creating planet", pname)
 		var archetype = planet_archetypes.pick_random()
-		
+		var pname = pnames[i]
+		prints(Time.get_ticks_msec(), "creating planet", pname)
 		var root = Node3D.new()
 		
 		var planet: Planet = planet_scene.instantiate()
 		planet.name = pname
 		planet.radius = randf_range(3000, 4500)
-		prints("arch", archetype)
+		prints(Time.get_ticks_msec(), "arch", archetype)
 		planet.archetype = archetype
 		planet.sun = $Star
 		planet.position.z = -randf_range(150, 400) * 1000
@@ -57,20 +59,30 @@ func generate_planets():
 		root.rotation_degrees.y = (i * 360 / planet_count) + randf_range(0, 10)
 		
 		if randf() < 0.2:
-			print("Generating asteroid ring")
-			var asteroids: Node3D = asteroid_spawner_scene.instantiate()
-			asteroids.position = planet.position
-			root.add_child(asteroids)
-		
-		$Objects.add_child(root)
+			prints(Time.get_ticks_msec(), "Generating asteroid ring")
+			var asteroid_spawner: AsteroidSpawner = asteroid_spawner_scene.instantiate()
+			asteroid_spawner.position = planet.position
+			asteroid_spawner.inner_range = planet.radius + 1000
+			asteroid_spawner.range = asteroid_spawner.inner_range + 500
+			root.add_child(asteroid_spawner)
+			prints(Time.get_ticks_msec(), "Added asteroid ring")
 
-var planet_prefixes = ["Ar", "Al", "El", "Er", "Ot", "Pr", "Aj", "Er", "Ev", "An"]
+		prints(Time.get_ticks_msec(), "add objects")	
+		$Objects.add_child(root)
+		prints(Time.get_ticks_msec(), "objects added")	
+		
+
+var planet_prefixes = ["Ar", "Al", "El", "Er", "Ot", "Pr", "Aj", "R", "Ev", "An"]
 var planet_suffixes = ["ia", "us", "el", "isa", "ot", "um", "et", "am", "il", "op"]
 
-func generate_planet_name():
-	var prefix = planet_prefixes.pick_random()
-	var suffix = planet_suffixes.pick_random()
-	return prefix + suffix
+func generate_planet_names():
+	var combinations = []
+	for pref in planet_prefixes:
+		for suf in planet_suffixes:
+			combinations.append(pref + suf)
+	combinations.shuffle()
+	
+	return combinations
 
 
 func generate_gates():
@@ -78,8 +90,14 @@ func generate_gates():
 		var gate = warp_gate.instantiate()
 		gate.target_system = target_key
 		gate.global_position = Vector3(randf(), randf(), randf()) * randf_range(50_000, 400_000)
-		gate.open = randf() < 0.2
+		gate.open = true#randf() < 0.2
 		$Objects.add_child(gate)
+
+
+func _process(delta: float) -> void:
+	var player = get_tree().get_first_node_in_group("human")
+	if player:
+		$Star/DirectionalLight3D.look_at(player.global_position)
 
 func _ready() -> void:
 	generate()

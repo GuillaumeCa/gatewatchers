@@ -38,8 +38,14 @@ material_override = SubResource("ShaderMaterial_p5rws")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Star"]
 light_color = Color(1, 0.980482, 0.907855, 1)
-light_energy = 1.5
+light_cull_mask = 4294967294
 omni_range = 1e+06
 omni_attenuation = 0.03
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Star"]
+shadow_enabled = true
+directional_shadow_split_1 = 0.01
+directional_shadow_split_2 = 0.125
+directional_shadow_max_distance = 6000.0
 
 [node name="Objects" type="Node3D" parent="."]

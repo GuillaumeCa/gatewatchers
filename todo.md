@@ -5,7 +5,8 @@
 - [x] custom/generated skymap
 - [x] generate warp gates to go to different systems
 - [ ] make space stations
-- [ ] trading at stations
+- [ ] sell/buy ressources/components at stations
+- [ ] components crafting
 - [ ] drexul mothership
 - [ ] generate drexi system
 - [ ] generate prime planet of the lost civilisation

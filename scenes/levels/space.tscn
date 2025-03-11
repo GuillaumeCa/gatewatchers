@@ -47,14 +47,6 @@ label_settings = SubResource("LabelSettings_hnl5v")
 layout_mode = 1
 offset_left = -334.0
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.440157, -0.488776, -0.753233, -0.525231, -0.820531, 0.225524, -0.728282, 0.296356, -0.617883, -7035.21, 1259.62, -8689.99)
-visible = false
-light_color = Color(1, 0.901961, 0.792157, 1)
-light_energy = 1.69
-shadow_enabled = true
-shadow_blur = 1.425
-
 [node name="Nebula" parent="." groups=["space_objects"] instance=ExtResource("1_xd8lj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.02785, 0, -1.65586)
 

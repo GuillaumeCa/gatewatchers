@@ -7,16 +7,25 @@ class_name Planet
 
 @export var archetype: PlanetArchetype
 @export var radius = 3000.0
+@export var rotation_speed_degrees = 0.3
 
 @export var update: bool:
 	set(val):
-		if is_inside_tree():
+		if is_inside_tree() and Engine.is_editor_hint():
 			update_planet()
+
+@onready var collider_collision_shape = $Collider/CollisionShape3D
 
 var body_entered = []
 
+var close_to_planet = false
+var collision_generated = false
+
+var collision_creation_thread: Thread
+
 func _enter_tree() -> void:
 	archetype = archetype.duplicate(true)
+	collision_creation_thread = Thread.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -56,12 +65,6 @@ func update_planet():
 			surface_mesh.radius = radius
 			surface_mesh.terrain_height = archetype.terrain_height
 			surface_mesh.update_async()
-			
-			surface_mesh.changed.connect(func():
-				var surface_shape = surface_mesh.create_trimesh_shape() 
-				print("added shape", surface_shape, name)
-				$Collider/CollisionShape3D.shape = surface_shape
-			)
 		
 		$Atmosphere.mesh.radius = radius * 1.4
 		$Atmosphere.mesh.height = radius * 1.4 * 2
@@ -71,6 +74,10 @@ func update_planet():
 	$Surface.material_override.set_shader_parameter("gradient", archetype.terrain_gradient)
 
 
+func _exit_tree() -> void:
+	pass
+	#collision_creation_thread.wait_to_finish()
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
@@ -79,26 +86,48 @@ func _process(delta: float) -> void:
 	if sun:
 		target = global_position - global_position.direction_to(sun.global_position)  * 1000
 	$Atmosphere.look_at(target)
-	rotation_degrees.y += 0.3 * delta
 	
 	var player: Node3D = get_tree().get_first_node_in_group("human")
 	if player:
-		$Collider/CollisionShape3D.disabled = global_position.distance_to(player.global_position) > get_warp_distance()
-		
+		var player_close = global_position.distance_to(player.global_position) < get_warp_distance()
+		if player_close != close_to_planet:
+			close_to_planet = player_close
+			$Collider/CollisionShape3D.disabled = !player_close
+			if player_close:
+				var surface_mesh = $Surface.mesh
+				if !collision_generated and !collision_creation_thread.is_started():
+					collision_creation_thread.start(generate_collision.bind(surface_mesh), Thread.PRIORITY_HIGH)
+
+
+func generate_collision(mesh: OctasphereMesh):
+	#mesh.changed.connect(func():
+	var surface_shape = mesh.create_trimesh_shape() 
+	print("added shape", surface_shape, name)
+	collider_collision_shape.shape = surface_shape
+	#)
 
 func _physics_process(delta: float) -> void:
+	# planet rotation
+	rotation.y += deg_to_rad(rotation_speed_degrees) * delta
+	
 	var dist_planet_influence_exit = $GravityArea/CollisionShape3D.shape.radius + 1000
 	
 	for body: Node3D in body_entered:
+		body.global_position += compute_planet_body_velocity(body)
+
 		if body.global_position.distance_squared_to(global_position) > dist_planet_influence_exit * dist_planet_influence_exit:
 			prints("removing body", body, "from planet", name, "influence")
 			body_entered.erase(body)
-			var parent = get_tree().current_scene
-			body.reparent(parent, true)
+
+
+func compute_planet_body_velocity(body: Node3D):
+	var center_to_body = body.global_position - global_position
+	var angular_vel := basis.y * deg_to_rad(rotation_speed_degrees) * get_physics_process_delta_time()
+	return angular_vel.cross(center_to_body)
 
 func _on_gravity_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("human"):
 		if !body_entered.has(body):
 			prints(body, "entered planet", name, "influence")
 			body_entered.append(body)
-			body.reparent(self, true)
+			
