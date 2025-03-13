@@ -20,10 +20,10 @@ func _ready() -> void:
 	var warp_locations = get_tree().get_nodes_in_group("warp")
 	warp_locations.shuffle()
 	for warp in warp_locations:
-		if warp.name.ends_with("Erel"):
+		if warp.name.ends_with("StationS11"):
 			var loc = warp.global_position
 			
-			var dist = warp.get_warp_distance()
+			var dist = 300 #warp.get_warp_distance()
 			player.relocate(Vector3(
 				randf_range(loc.x - dist, loc.x + dist),
 				randf_range(loc.y-dist/2.0, loc.y + dist/2.0),
@@ -96,4 +96,8 @@ func _on_enemy_wave_timeout() -> void:
 			var ship = KYTHRAX.instantiate()
 			ship.global_position = spawn_pos
 			add_child(ship)
-	
+
+
+func _on_simulation_tick_timeout() -> void:
+	#SimulationManager.debug()
+	SimulationManager.simulate_tick()

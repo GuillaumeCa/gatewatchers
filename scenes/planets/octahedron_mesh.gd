@@ -106,6 +106,9 @@ func normalize_noise(val: float):
 	return v
 	
 func get_terrain_displacement(vert: Vector3) -> float:
+	if !noise or !noise_macro:
+		return 0.0;
+	
 	var disp = normalize_noise(noise.get_noise_3dv(vert * 1000))
 	var disp_macro = normalize_noise(noise_macro.get_noise_3dv(vert * 1000))
 	

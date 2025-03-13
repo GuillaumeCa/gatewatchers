@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://834r48cni6v6"]
+
+[ext_resource type="Script" uid="uid://p2d0udq23few" path="res://scenes/ui/trading/trading_table_row.gd" id="1_fmmwg"]
+
+[node name="Row" type="PanelContainer"]
+custom_minimum_size = Vector2(350, 0)
+size_flags_horizontal = 3
+size_flags_vertical = 0
+script = ExtResource("1_fmmwg")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ItemName" type="Label" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Iron"
+autowrap_mode = 1
+
+[node name="ItemCount" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "10"
+
+[node name="ItemPrice" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "¤ 3"

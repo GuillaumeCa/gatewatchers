@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://p6e3v0roquco"]
+[gd_scene load_steps=15 format=3 uid="uid://p6e3v0roquco"]
 
 [ext_resource type="Script" uid="uid://spyrg7d570xb" path="res://scenes/systems/star_system.gd" id="1_i2yho"]
 [ext_resource type="PackedScene" uid="uid://w68mqe1d4u52" path="res://scenes/props/star/star.tscn" id="3_xfbaf"]
@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://bjl4v2v2wkho3" path="res://scenes/planets/archetypes/acidic_arch.tres" id="8_xut0x"]
 [ext_resource type="PackedScene" uid="uid://dsqm2ewisnox2" path="res://scenes/props/warpgates/warp_gate.tscn" id="9_4hbh4"]
 [ext_resource type="Environment" uid="uid://ymne4iy6o8qe" path="res://starfield_env.tres" id="9_6cafv"]
+[ext_resource type="PackedScene" uid="uid://dtnpmnhtttrif" path="res://scenes/props/station/station.tscn" id="10_cryls"]
 [ext_resource type="Resource" uid="uid://ov6wggvcet8a" path="res://scenes/planets/archetypes/rocky_arch.tres" id="11_6mbtp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p5rws"]
@@ -29,6 +30,7 @@ planet_archetypes = Array[ExtResource("5_yi5vc")]([ExtResource("8_xut0x"), ExtRe
 planet_scene = ExtResource("4_a63su")
 asteroid_spawner_scene = ExtResource("7_tp0ti")
 warp_gate = ExtResource("9_4hbh4")
+station_scene = ExtResource("10_cryls")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("9_6cafv")
@@ -45,7 +47,7 @@ omni_attenuation = 0.03
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Star"]
 shadow_enabled = true
 directional_shadow_split_1 = 0.01
-directional_shadow_split_2 = 0.125
+directional_shadow_split_2 = 0.055
 directional_shadow_max_distance = 6000.0
 
 [node name="Objects" type="Node3D" parent="."]

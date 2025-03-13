@@ -1,0 +1,61 @@
+[gd_scene load_steps=7 format=3 uid="uid://c7sx7a4gnu1pp"]
+
+[ext_resource type="PackedScene" uid="uid://kxljww5rrvss" path="res://scenes/ui/crafting/crafting.tscn" id="1_u4vjf"]
+[ext_resource type="Script" uid="uid://cw5mrwl2811pc" path="res://scenes/interactables/craft_terminal.gd" id="1_vvidr"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u4vjf"]
+albedo_color = Color(0.898438, 0.614166, 0.140381, 1)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_u4vjf"]
+viewport_path = NodePath("UIViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vvidr"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_u4vjf")
+metallic = 1.0
+roughness = 0.18
+emission_enabled = true
+emission_texture = SubResource("ViewportTexture_u4vjf")
+
+[sub_resource type="QuadMesh" id="QuadMesh_vvidr"]
+size = Vector2(0.795, 0.66)
+
+[node name="CraftTerminal" type="StaticBody3D"]
+script = ExtResource("1_vvidr")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.731384, 0.953793, -0.196191)
+size = Vector3(2.46277, 1.9071, 1.02008)
+material = SubResource("StandardMaterial3D_u4vjf")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 0.983888, 0.178785, 0, -0.178785, 0.983888, -0.674626, 0.294317, 0.763845)
+operation = 2
+size = Vector3(1.18555, 1.9071, 0.636841)
+material = SubResource("StandardMaterial3D_u4vjf")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 0.985981, 0.166855, 0, -0.166855, 0.985981, -0.674626, 0.453323, 0.350214)
+size = Vector3(0.847656, 0.720459, 0.215591)
+material = SubResource("StandardMaterial3D_u4vjf")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.674626, -0.0585327, 0.557665)
+size = Vector3(0.933838, 0.124878, 0.29248)
+material = SubResource("StandardMaterial3D_u4vjf")
+
+[node name="Screen" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.987425, 0.158089, 0, -0.158089, 0.987425, 0.0592589, 1.43156, 0.270126)
+material_override = SubResource("StandardMaterial3D_vvidr")
+mesh = SubResource("QuadMesh_vvidr")
+
+[node name="UIViewport" type="SubViewport" parent="."]
+size = Vector2i(945, 810)
+
+[node name="Crafting" parent="UIViewport" instance=ExtResource("1_u4vjf")]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.32987, 0.509107)
+light_color = Color(0.84375, 0.64476, 0.237305, 1)
+light_specular = 0.0
+omni_range = 0.872025

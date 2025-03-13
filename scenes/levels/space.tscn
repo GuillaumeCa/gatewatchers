@@ -85,4 +85,8 @@ omni_attenuation = 0.318
 wait_time = 1000.0
 autostart = true
 
+[node name="SimulationTick" type="Timer" parent="."]
+autostart = true
+
 [connection signal="timeout" from="EnemyWave" to="." method="_on_enemy_wave_timeout"]
+[connection signal="timeout" from="SimulationTick" to="." method="_on_simulation_tick_timeout"]

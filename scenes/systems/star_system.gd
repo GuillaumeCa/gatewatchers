@@ -9,6 +9,7 @@ const PLANET_MAX = 8
 @export var planet_scene: PackedScene
 @export var asteroid_spawner_scene: PackedScene
 @export var warp_gate: PackedScene
+@export var station_scene: PackedScene
 
 
 func generate():
@@ -42,6 +43,8 @@ func generate_env(star_color: Color):
 func generate_planets():
 	var planet_count = randi_range(2, PLANET_MAX)
 	var pnames = generate_planet_names()
+	var hub_ids = SimulationManager.hubs.keys()
+	
 	for i in planet_count:
 		var archetype = planet_archetypes.pick_random()
 		var pname = pnames[i]
@@ -66,10 +69,16 @@ func generate_planets():
 			asteroid_spawner.range = asteroid_spawner.inner_range + 500
 			root.add_child(asteroid_spawner)
 			prints(Time.get_ticks_msec(), "Added asteroid ring")
-
-		prints(Time.get_ticks_msec(), "add objects")	
+		
+		if hub_ids.size() > 0:
+			var hubid = hub_ids.pop_back()
+			var station: Station = station_scene.instantiate()
+			station.position = planet.position + (Vector3.BACK * randf_range(2, 10) * 1000)
+			station.hub_id = hubid
+			station.name = "Station" + hubid
+			root.add_child(station)
+			
 		$Objects.add_child(root)
-		prints(Time.get_ticks_msec(), "objects added")	
 		
 
 var planet_prefixes = ["Ar", "Al", "El", "Er", "Ot", "Pr", "Aj", "R", "Ev", "An"]

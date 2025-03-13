@@ -1,0 +1,61 @@
+[gd_scene load_steps=7 format=3 uid="uid://ckyd6vdprc0wu"]
+
+[ext_resource type="PackedScene" uid="uid://b2yikh2jw4u1y" path="res://scenes/ui/trading/trading.tscn" id="1_dsebe"]
+[ext_resource type="Script" uid="uid://dp75qb5tjddjq" path="res://scenes/interactables/trade_terminal.gd" id="1_xvhfu"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dsebe"]
+albedo_color = Color(0.105808, 0.458919, 0.700521, 1)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_dsebe"]
+viewport_path = NodePath("TradingUIViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xvhfu"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_dsebe")
+metallic = 1.0
+roughness = 0.18
+emission_enabled = true
+emission_texture = SubResource("ViewportTexture_dsebe")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ckl83"]
+size = Vector2(0.795, 0.66)
+
+[node name="TradeTerminal" type="StaticBody3D"]
+script = ExtResource("1_xvhfu")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.953793, -0.0045712)
+size = Vector3(1, 1.9071, 0.636841)
+material = SubResource("StandardMaterial3D_dsebe")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 0.983888, 0.178785, 0, -0.178785, 0.983888, 0, 0.294317, 0.591678)
+operation = 2
+size = Vector3(1.18555, 1.9071, 0.636841)
+material = SubResource("StandardMaterial3D_dsebe")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 0.985981, 0.166855, 0, -0.166855, 0.985981, 0, 0.453323, 0.178047)
+size = Vector3(0.847656, 0.720459, 0.215591)
+material = SubResource("StandardMaterial3D_dsebe")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0585327, 0.385498)
+size = Vector3(0.933838, 0.124878, 0.29248)
+material = SubResource("StandardMaterial3D_dsebe")
+
+[node name="TradingUIScreen" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.987425, 0.158089, 0, -0.158089, 0.987425, 0, 1.42562, 0.286659)
+material_override = SubResource("StandardMaterial3D_xvhfu")
+mesh = SubResource("QuadMesh_ckl83")
+
+[node name="TradingUIViewport" type="SubViewport" parent="."]
+size = Vector2i(945, 810)
+
+[node name="trading" parent="TradingUIViewport" instance=ExtResource("1_dsebe")]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.32987, 0.509107)
+light_color = Color(0.237305, 0.616333, 0.84375, 1)
+light_specular = 0.0
+omni_range = 0.872025
