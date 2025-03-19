@@ -76,6 +76,8 @@ func generate_planets():
 			station.position = planet.position + (Vector3.BACK * randf_range(2, 10) * 1000)
 			station.hub_id = hubid
 			station.name = "Station" + hubid
+			station.rotation_degrees.x += randf_range(-60, 60)
+			station.rotation_degrees.y += randf_range(-60, 60)
 			root.add_child(station)
 			
 		$Objects.add_child(root)

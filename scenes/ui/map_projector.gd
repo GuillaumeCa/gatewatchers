@@ -9,6 +9,9 @@ var mode = Mode.GALAXY
 
 var mouse_pressed = false
 
+@export var current_system: String
+@export var systems: Dictionary
+
 @export var system_mesh: Mesh
 
 func _ready() -> void:

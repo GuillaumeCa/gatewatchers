@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cef2d1ms5tqcu"]
+[gd_scene load_steps=14 format=3 uid="uid://cef2d1ms5tqcu"]
 
 [ext_resource type="Script" uid="uid://78fmj1eq6cbt" path="res://scenes/player.gd" id="1_twqay"]
 [ext_resource type="Texture2D" uid="uid://csawli8abs1f3" path="res://assets/textures/particle.png" id="2_llgb5"]
@@ -47,8 +47,10 @@ distance_fade_min_distance = 5.0
 material = SubResource("StandardMaterial3D_rth2r")
 size = Vector2(0.1, 0.1)
 
-[node name="Player" type="CharacterBody3D"]
-collision_layer = 3
+[sub_resource type="BoxShape3D" id="BoxShape3D_qhqgy"]
+
+[node name="Player" type="CharacterBody3D" groups=["human"]]
+collision_mask = 3
 motion_mode = 1
 script = ExtResource("1_twqay")
 
@@ -68,6 +70,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.786552, 0)
 current = true
 fov = 70.0
 far = 1e+06
+
+[node name="InteractRay" type="RayCast3D" parent="CameraPivot/Camera3D"]
+target_position = Vector3(0, 0, -4)
 
 [node name="OutlineVFX" parent="CameraPivot/Camera3D" instance=ExtResource("2_y7lpk")]
 visible = false
@@ -89,3 +94,9 @@ preprocess = 1.0
 visibility_aabb = AABB(-16.085, -11.8, -20.34, 32.23, 23.63, 42.74)
 process_material = SubResource("ParticleProcessMaterial_tbrxg")
 draw_pass_1 = SubResource("QuadMesh_33wcr")
+
+[node name="Detector" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Detector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.574898, 0)
+shape = SubResource("BoxShape3D_qhqgy")

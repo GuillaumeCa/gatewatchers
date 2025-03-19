@@ -9,6 +9,7 @@ radial_segments = 16
 rings = 8
 
 [node name="MapProjector" type="Node3D"]
+visible = false
 script = ExtResource("1_v5ikp")
 system_mesh = SubResource("SphereMesh_5obxj")
 

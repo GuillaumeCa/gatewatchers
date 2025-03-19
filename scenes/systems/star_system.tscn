@@ -46,6 +46,7 @@ omni_attenuation = 0.03
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Star"]
 shadow_enabled = true
+shadow_bias = 0.04
 directional_shadow_split_1 = 0.01
 directional_shadow_split_2 = 0.055
 directional_shadow_max_distance = 6000.0

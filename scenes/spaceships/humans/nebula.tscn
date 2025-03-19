@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://d32700hsoxr8b"]
+[gd_scene load_steps=53 format=3 uid="uid://d32700hsoxr8b"]
 
 [ext_resource type="Script" uid="uid://f00xdx545a3h" path="res://scenes/spaceships/spaceship.gd" id="1_2eoki"]
 [ext_resource type="PackedScene" uid="uid://blk8lyl4qh0ip" path="res://assets/spaceships.glb" id="1_rdqkb"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cixdyu6ia256b" path="res://scenes/spaceships/radar.tscn" id="4_m8du2"]
 [ext_resource type="AudioStream" uid="uid://2s0arig03ywc" path="res://assets/sfx/thruster.mp3" id="5_wv2il"]
 [ext_resource type="PackedScene" uid="uid://cef2d1ms5tqcu" path="res://scenes/player.tscn" id="6_xsedv"]
+[ext_resource type="Theme" uid="uid://btf7ws7t4kxj" path="res://base.theme" id="8_53qyq"]
 [ext_resource type="PackedScene" uid="uid://c0s1k0g71mkdu" path="res://scenes/spaceships/weapons/laser_weapon.tscn" id="8_63itb"]
 [ext_resource type="Texture2D" uid="uid://dwfnosak3dnkv" path="res://assets/textures/crosshair026.png" id="8_guc0y"]
 [ext_resource type="PackedScene" uid="uid://brtfcqtwjbgnp" path="res://scenes/spaceships/spaceship_hud.tscn" id="9_tghbs"]
@@ -22,7 +23,7 @@
 size = Vector3(2.03705, 0.265809, 21.5013)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d82p0"]
-size = Vector3(1.75534, 1.42393, 3.76611)
+size = Vector3(5.43652, 0.226807, 3.76611)
 
 [sub_resource type="Animation" id="Animation_c8k6c"]
 length = 0.001
@@ -236,6 +237,9 @@ radial_segments = 32
 cap_top = false
 cap_bottom = false
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_aayql"]
+size = Vector3(3.77734, 2.35693, 22.4907)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_wwnxg"]
 size = Vector3(3.342, 2.715, 25.362)
 
@@ -264,11 +268,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.40208, 6.68966)
 shape = SubResource("BoxShape3D_1ri7w")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.64708, -0.0287099)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.39913, -0.0287099)
 shape = SubResource("BoxShape3D_d82p0")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.64708, 13.9685)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.39913, 14.0192)
 shape = SubResource("BoxShape3D_d82p0")
 
 [node name="Radar" parent="." instance=ExtResource("4_m8du2")]
@@ -343,6 +347,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = ExtResource("8_53qyq")
 
 [node name="SpeedLabel" type="Label" parent="CanvasLayer/HelmetHud"]
 visible = false
@@ -380,6 +385,7 @@ offset_right = -12.0
 offset_bottom = -6.0
 grow_horizontal = 2
 grow_vertical = 0
+theme = ExtResource("8_53qyq")
 text = "100KM"
 horizontal_alignment = 1
 
@@ -393,6 +399,7 @@ offset_top = -54.0
 offset_right = -6.0
 offset_bottom = -31.0
 grow_horizontal = 2
+theme = ExtResource("8_53qyq")
 text = "Name"
 horizontal_alignment = 1
 
@@ -484,6 +491,13 @@ draw_pass_1 = SubResource("CylinderMesh_agka3")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.324897, 0, -9.37895)
 material_override = SubResource("ShaderMaterial_jn61r")
 mesh = SubResource("CylinderMesh_pue0v")
+
+[node name="Gravity" type="Area3D" parent="." groups=["gravity"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Gravity"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0446777, 7.16528)
+shape = SubResource("BoxShape3D_aayql")
+debug_color = Color(0.492188, 0, 0.7, 0.42)
 
 [node name="Collision" type="Area3D" parent="."]
 

@@ -49,7 +49,7 @@ planet=""
 warp=""
 environment=""
 explosion=""
-planet_gravity=""
+gravity=""
 
 [input]
 

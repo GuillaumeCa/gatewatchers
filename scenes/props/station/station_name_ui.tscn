@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://butxnm1nlm4ye"]
+
+[ext_resource type="Theme" uid="uid://btf7ws7t4kxj" path="res://base.theme" id="1_vpje3"]
+[ext_resource type="FontFile" uid="uid://5dk2dudb8abo" path="res://assets/fonts/Audiowide-Regular.ttf" id="2_s0gxm"]
+
+[sub_resource type="FontVariation" id="FontVariation_ql80q"]
+base_font = ExtResource("2_s0gxm")
+spacing_glyph = 20
+
+[sub_resource type="LabelSettings" id="LabelSettings_2n85j"]
+font = SubResource("FontVariation_ql80q")
+font_size = 96
+
+[node name="StationNameUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+
+[node name="Name" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -62.0
+offset_right = 625.0
+offset_bottom = 62.0
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource("1_vpje3")
+theme_override_font_sizes/font_size = 96
+text = "Station S00"
+label_settings = SubResource("LabelSettings_2n85j")

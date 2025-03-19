@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://cs2ku0pafdwpt"]
+
+[ext_resource type="Shader" uid="uid://ki1driaae7xm" path="res://scenes/props/galaxy/galaxy.gdshader" id="1_145dl"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_145dl"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_145dl"]
+noise_type = 0
+frequency = 0.7288
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0v0sm"]
+seamless = true
+noise = SubResource("FastNoiseLite_145dl")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0v0sm"]
+render_priority = 0
+shader = ExtResource("1_145dl")
+shader_parameter/noise = SubResource("NoiseTexture2D_0v0sm")
+shader_parameter/color_center = Color(0.2739, 0.83, 0.83, 0.317647)
+shader_parameter/color_edge = Color(0.1, 0.1, 0.2, 0.5)
+shader_parameter/color_edge2 = Color(0.744792, 0.652056, 0.250203, 0.23)
+shader_parameter/color_edge3 = Color(0.395508, 0.785065, 0.9375, 0.25)
+shader_parameter/spin_speed = 1.0
+shader_parameter/scale = 1.0
+shader_parameter/r1 = 0.21
+shader_parameter/r2 = 0.335
+shader_parameter/r3 = 0.045
+
+[sub_resource type="QuadMesh" id="QuadMesh_145dl"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[node name="Galaxy" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.521222, 1.04161, 0.390041)
+mesh = SubResource("SphereMesh_145dl")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000270829, 0.00332394, 0.00169635)
+material_override = SubResource("ShaderMaterial_0v0sm")
+extra_cull_margin = 2721.22
+mesh = SubResource("QuadMesh_145dl")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Mesh"]

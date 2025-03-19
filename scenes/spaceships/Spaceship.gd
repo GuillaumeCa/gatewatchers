@@ -24,11 +24,11 @@ enum Mode {
 @onready var spaceship_hud = $HudMesh/HudViewPort/SpaceshipHud
 @onready var radar = $Radar
 
-const SENSITIVITY_MOUSE = 0.1
+const SENSITIVITY_MOUSE = 0.2
 
 var mode = Mode.COMBAT
 
-var active = true
+var active = false
 var engine_sound_lvl = -40.0
 
 var current_target: Node3D
@@ -39,10 +39,14 @@ var in_planet_gravity = false
 
 var active_weapon
 
+var pilot: CharacterBody3D
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Input.set_use_accumulated_input(false)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+	take_control($PilotPosition/Player)
 
 	active_weapon = $Weapons/LaserWeapon
 
@@ -51,22 +55,26 @@ func _ready() -> void:
 			enginesParticles.append(particles)
 
 
+func take_control(player: CharacterBody3D):
+	pilot = player
+	player.reparent($PilotPosition)
+	$CanvasLayer/HelmetHud.visible = true
+	player.active = false
+	player.transform = Transform3D()
+
+
 func _unhandled_input(event: InputEvent) -> void:
-	
-	if Input.is_action_just_pressed("switch"):
-		active = !active
-		$CanvasLayer/HelmetHud.visible = active
-		
-		$PilotPosition/Player.active = !$PilotPosition/Player.active
-		if active:
-			# when switching to spaceship, snap back the player in the seat
-			$PilotPosition/Player.global_transform = $PilotPosition.global_transform
-			#$CameraPivot/Camera3D.current = true
-		else:
-			$PilotPosition/Player.switch_cam()
-	
 	if not active:
 		return
+	
+	if Input.is_action_just_pressed("switch"):
+		active = false
+		$CanvasLayer/HelmetHud.visible = false
+		pilot.active = true
+		pilot.switch_cam()
+		pilot.reparent(get_tree().current_scene)
+		pilot = null
+
 			
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		apply_torque_impulse(-global_transform.basis.x * event.screen_relative.y * SENSITIVITY_MOUSE)
@@ -80,7 +88,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if Input.is_action_just_pressed("backward") or Input.is_action_just_pressed("left") or \
 		Input.is_action_just_pressed("right") or Input.is_action_just_pressed("down") or \
-		Input.is_action_just_pressed("up"):
+		Input.is_action_just_pressed("up") or Input.is_action_just_pressed("roll_left") or Input.is_action_just_pressed("roll_right"):
 		thruster.play()
 		
 	if Input.is_action_just_pressed("nav_mode"):
@@ -92,22 +100,16 @@ func get_warp_points():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("change_view"):
-		print("swap cam")
-		if !$CameraPivot/Camera3D.current:
-			$CameraPivot/Camera3D.current = true
-		elif !$PilotPosition/Player.camera_3d.current:
-			$PilotPosition/Player.switch_cam()
-	
-	if Input.is_action_just_pressed("map"):
-		$MapProjector.visible = !$MapProjector.visible
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if $MapProjector.visible else Input.MOUSE_MODE_CAPTURED
+	if pilot:
+		active = true
 	
 	var dir = Vector3.ZERO
+	var roll = Vector3.ZERO
 	
 	if mode == Mode.TRAVEL and Input.is_action_just_pressed("travel"):
 		mode = Mode.NAVIGATION
 		active = true
+		enable_engine(false)
 		var tw = create_tween()
 		tw.tween_property(self, "linear_velocity", linear_velocity.normalized() * 0.1, 3).set_trans(Tween.TRANS_CUBIC)
 		return
@@ -115,11 +117,25 @@ func _process(delta: float) -> void:
 	var boost = false
 	
 	if active and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		if Input.is_action_just_pressed("change_view"):
+			print("swap cam")
+			if !$CameraPivot/Camera3D.current:
+				$CameraPivot/Camera3D.current = true
+			elif !$PilotPosition/Player.camera_3d.current:
+				$PilotPosition/Player.switch_cam()
+	
+		if Input.is_action_just_pressed("map"):
+			$MapProjector.visible = !$MapProjector.visible
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if $MapProjector.visible else Input.MOUSE_MODE_CAPTURED
+		
+		
 		dir = Vector3(
 			Input.get_axis("left", "right"),
 			Input.get_axis("down", "up"),
 			Input.get_axis("forward", "backward"),
 		)
+		
+		roll = Vector3(0, 0, -Input.get_axis("roll_left", "roll_right"))
 		
 		boost = Input.is_action_pressed("boost")
 		
@@ -181,7 +197,7 @@ func _process(delta: float) -> void:
 				linear_velocity = lerp(linear_velocity, dir_target * clamp(dist * 0.1, 0, max_warp_speed), 0.01)
 				angular_velocity = Vector3.ZERO
 				active = false
-				
+				enable_engine(true)
 			else:
 				# slow down to 0m/s smoothly
 				linear_velocity = lerp(linear_velocity, Vector3.ZERO, 0.1)
@@ -211,7 +227,7 @@ func _process(delta: float) -> void:
 #	print(global_transform.basis * impulse)
 	apply_central_force(global_transform.basis * force);
 	
-	var roll_force = Vector3(0, 0, -Input.get_axis("roll_left", "roll_right")) * roll_speed * delta
+	var roll_force = roll * roll_speed * delta
 	apply_torque(global_transform.basis * roll_force)
 	
 	if freeze:
@@ -305,8 +321,8 @@ func on_target_hit():
 
 
 func camera_shake(amount: float):
-	if $PilotPosition/Player.camera_3d.current:
-		$PilotPosition/Player.camera_shake = amount
+	if pilot and pilot.camera_3d.current:
+		pilot.camera_shake = amount
 
 func _on_collision_area_entered(area: Area3D) -> void:
 	if area.is_in_group("projectile"):
@@ -322,12 +338,12 @@ func _on_collision_area_entered(area: Area3D) -> void:
 		prints("shake", area, amount)
 		camera_shake(amount)
 	
-	if area.is_in_group("planet_gravity"):
+	if area.is_in_group("gravity"):
 		in_planet_gravity = true
 		print("enter planet")
 
 
 func _on_collision_area_exited(area: Area3D) -> void:
-	if area.is_in_group("planet_gravity"):
+	if area.is_in_group("gravity"):
 		in_planet_gravity = false
 		print("exit planet")

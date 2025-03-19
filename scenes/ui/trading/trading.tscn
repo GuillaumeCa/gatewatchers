@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://b2yikh2jw4u1y"]
+[gd_scene load_steps=7 format=3 uid="uid://b2yikh2jw4u1y"]
 
+[ext_resource type="Theme" uid="uid://btf7ws7t4kxj" path="res://base.theme" id="1_dut2k"]
 [ext_resource type="Script" uid="uid://bdi2rovxw7nnp" path="res://scenes/ui/trading/trading.gd" id="1_epp5q"]
 [ext_resource type="PackedScene" uid="uid://834r48cni6v6" path="res://scenes/ui/trading/trading_table_row.tscn" id="2_dut2k"]
 
@@ -23,6 +24,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_dut2k")
 script = ExtResource("1_epp5q")
 hub_id = "S11"
 

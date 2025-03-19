@@ -7,6 +7,15 @@ const BASE_SEED = 134
 
 var systems = {}
 var current_system: Node3D
+var current_system_data: StarSystem
+
+class StarSystem:
+	var pos: Vector3
+	var name: String
+	var gates: Dictionary[String, bool]
+	var planet_count: int
+	var stations: Array[SimulationManager.Hub]
+
 
 func init_systems() -> void:
 	seed(BASE_SEED)
@@ -89,4 +98,5 @@ func load_system(key = 0):
 	var system = STAR_SYSTEM.instantiate()
 	system.system_seed = key
 	current_system = system
+	current_system_data = systems[key]
 	add_child(system)
