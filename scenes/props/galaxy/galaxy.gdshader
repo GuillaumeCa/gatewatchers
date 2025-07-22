@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, depth_test_disabled;
+render_mode unshaded;
 
 uniform sampler2D depth_texture : source_color, hint_depth_texture;
 
@@ -10,7 +10,7 @@ uniform sampler2D depth_texture : source_color, hint_depth_texture;
 // Sliders from IcePrimitives by Bers (https://www.shadertoy.com/view/MscXzn)
 // License: Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License
 //-------------------------------------------------------------------------------------
-
+#define R(p, a) p=cos(a)*p+sin(a)*vec2(p.y, -p.x)
 #define pi 3.14159265
 
 uniform sampler2D noise;
@@ -28,7 +28,7 @@ uniform float r3 = 0.1;
 
 vec2 min2(vec2 a, vec2 b) {
     return a.x<b.x ? a  : b;
-} 
+}
 
 float hash( const in vec3 p ) {
 	float h = dot(p,vec3(127.1,311.7,758.5453123));	
@@ -72,8 +72,7 @@ vec2 dfGalaxy(in vec3 p, in float thickness, in float blurAmout, in float blurSt
 }
 
 vec2 map(float time, in vec3 p) {
-	float a = spin_speed * 0.008 * pi+time*.3;
-	p.xz = cos(a)*p.xz + sin(a) * vec2(p.y, -p.x);
+	R(p.xz, spin_speed * (.008*pi+time*.3));
     return dfGalaxy(p, clamp(10. * r1,.9,10.), r2, r3);
 }
 
@@ -117,25 +116,23 @@ void vertex() {
 // ---------------------------------------------------
 // Based on "Dusty nebula 4" by Duke (https://www.shadertoy.com/view/MsVXWW) 
 void fragment() {
-	float time = 0.0;//TIME;
-	float depth = texture(depth_texture, SCREEN_UV).x;
+	float time = TIME;
+	float depth = texture(depth_texture, SCREEN_UV, 0.0).r;
     vec3 ndc = vec3(SCREEN_UV * 2.0 - 1.0, depth);
     vec4 camera = INV_VIEW_MATRIX * INV_PROJECTION_MATRIX * vec4(ndc, 1);
 	
     vec4 upos = INV_PROJECTION_MATRIX* vec4(SCREEN_UV * 2.0 - 1.0, depth,1.0);
     vec3 pixel_position = upos.xyz/upos.w;
-    float linear_depth = length(pixel_position);
-
-
-	vec2 uv = SCREEN_UV * 2.0 - 1.0;
 
 	// ray origin
 	vec3 ro = INV_VIEW_MATRIX[3].xyz;
 	
+	// ray direction
 	vec3 rd = normalize(camera.xyz);
 	
-    //vec3 rd = VIEW; //normalize(vec3(p.x*VIEW.x, p.y*VIEW.y, 2.5*VIEW.z));
-      
+	vec3 world_pos = (INV_VIEW_MATRIX * vec4(pixel_position, 1.0)).xyz;
+	float world_depth = length(world_pos - ro);  // Distance in world space
+	
 	// ld, td: local, total density 
 	// w: weighting factor
 	float ld=0., td=0., w=0.;
@@ -151,7 +148,6 @@ void fragment() {
     float min_dist=0.,  max_dist=0.,
           min_dist2=0., max_dist2=0.;
 		
-	float alpha = 1.0;
     
 	vec3 sun_light = vec3(0.0);
 	
@@ -163,17 +159,22 @@ void fragment() {
 			min_dist = max(.1,max(min_dist, min_dist2));
             max_dist = min(max_dist, max_dist2);
             
-            t = min_dist*step(t,min_dist) + .1*hash(rd+time);
+            t = min_dist*step(t,min_dist) + .1;//*hash(rd+time);
 			
             
             // raymarch loop
             vec4 col;        
             for (int i=0; i<100; i++) {
                 vec3 pos = ro + t*rd;
+				
+				
+				if (t > world_depth) discard;
 
 
                 // Loop break conditions.
                 if(td > .9 || sum.a > .99 || t > max_dist) break;
+
+	
 
                 // evaluate distance function
                 vec2 res = map(time, pos);
@@ -216,6 +217,8 @@ void fragment() {
                 //float dt = max(d * 0.25, .005); //pitch);
                 // trying to optimize step size near the camera and near the light source
                 t += max(d * .15 * max(min(length(ldst), length(ro)),1.0), 0.005);
+				
+				
                 td += .1/70.;
                 //t += dt;
             }
@@ -230,79 +233,8 @@ void fragment() {
  
     //Apply slider overlay
 	ALBEDO = sum.rgb;
+	//ALBEDO = vec3(world_depth / 10.0);  // Normalize depth to [0,1]
 	EMISSION = sun_light.rgb * 1.0;
 	
 	ALPHA = sum.a;
 }
-
-
-
-
-//const int MAX_STEPS = 300;
-//const float MAX_DISTANCE = 1000.0;
-//const float MIN_DISTANCE = 0.001;
-//
-//void vertex() {
-	//POSITION = vec4(VERTEX, 1.0);
-//}
-//
-//float sdSphere (vec3 p, vec3 centrum, float radius) {
-    //return length(centrum-p) - radius;
-//}
-//
-//// infinte repetitions
-//// adapted from https://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm
-//vec3 opRep(vec3 p, vec3 c) {
-    //vec3 q = mod(p+0.5*c,c)-0.5*c;
-    //return q;
-//}
-//
-//float get_distance(vec3 p) {
-	////p = opRep(p, vec3(3)); // uncomment for repeating spheres
-	//return sdSphere(p, vec3(0), 1.0);
-//}
-//
-//vec3 get_normal(vec3 p) {
-	//vec2 e = vec2(1e-3, 0);
-	//
-	//vec3 n = get_distance(p) - vec3(
-		//get_distance(p - e.xyy),
-		//get_distance(p - e.yxy),
-		//get_distance(p - e.yyx)
-	//);
-	//
-	//return normalize(n);
-//}
-//
-//vec4 raymarch(vec3 ray_origin, vec3 ray_dir) {
-	//float t = 0.0;
-	//vec3 p = ray_origin;
-	//for (int i = 0; i < MAX_STEPS; i++) {
-		//float d = get_distance(p);
-		//t += d;
-		//if (t > MAX_DISTANCE)
-			//break;
-		//
-		//p += d * ray_dir;
-		//if (abs(d)  < MIN_DISTANCE)
-			//return vec4(get_normal(p), 1);
- 	//}
-	////return vec4(float(i) * 0.01); // uncomment for simple glow effect
-	//return vec4(0.0);
-//}
-//
-//void fragment() {
-	//float depth = texture(depth_texture, SCREEN_UV).x;
-    //vec3 ndc = vec3(SCREEN_UV * 2.0 - 1.0, depth);
-    //vec4 camera = INV_VIEW_MATRIX * INV_PROJECTION_MATRIX * vec4(ndc, 1);
-	//
-	//vec2 uv = SCREEN_UV * 2.0 - 1.0;
-	//
-	//vec3 ray_origin = INV_VIEW_MATRIX[3].xyz;
-	//vec3 ray_dir = normalize(camera.xyz);
-	//
-	//vec4 col = raymarch(ray_origin, ray_dir);
-	//
-	//ALPHA = col.a;
-	//ALBEDO = col.rgb;
-//}

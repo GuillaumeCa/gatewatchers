@@ -9,8 +9,7 @@ var mode = Mode.GALAXY
 
 var mouse_pressed = false
 
-@export var current_system: String
-@export var systems: Dictionary
+@export var current_system: Dictionary
 
 @export var system_mesh: Mesh
 
@@ -28,8 +27,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseButton:
 		mouse_pressed = event.is_pressed()
-	
-	
 
 
 func generate_map():
@@ -54,8 +51,8 @@ func generate_map():
 		var system = SpaceManager.systems[key]
 		var current_system = SpaceManager.current_system.system_seed == key
 		
-		var system_pos: Vector3 = system["pos"] / 100
-		var gates = system["gates"].keys()
+		var system_pos: Vector3 = system.pos / 100
+		var gates = system.gates.keys()
 		var meshinst = MeshInstance3D.new()
 		meshinst.mesh = system_mesh
 		meshinst.position = system_pos
@@ -76,7 +73,7 @@ func generate_map():
 		
 		var label = Label3D.new()
 		label.position = Vector3.UP * 0.03
-		label.text = system["name"]
+		label.text = system.name
 		label.pixel_size = 0.0012
 		label.no_depth_test = true
 		
@@ -88,7 +85,7 @@ func generate_map():
 			if not Vector2i(gate,key) in lines:
 				links.surface_begin(Mesh.PRIMITIVE_LINES, mat)
 				links.surface_add_vertex(system_pos)
-				var target_pos = SpaceManager.systems[gate]["pos"] / 100
+				var target_pos = SpaceManager.systems[gate].pos / 100
 				links.surface_add_vertex(target_pos)
 				links.surface_end()
 				lines[Vector2i(key, gate)] = null

@@ -18,8 +18,7 @@ func generate():
 	$Star/OmniLight3D.light_color = star_color
 	$Star/DirectionalLight3D.light_color = star_color
 	
-	$Star.material_override.set_shader_parameter("sun_color", star_color)
-	$Star.position = Vector3.ZERO
+	$Star.set_color(star_color)
 	
 	generate_env(star_color)
 	generate_planets()

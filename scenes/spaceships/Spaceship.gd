@@ -37,6 +37,8 @@ var warping_progress = 0.0
 
 var in_planet_gravity = false
 
+var gravity_area: Area3D
+
 var active_weapon
 
 var pilot: CharacterBody3D
@@ -57,10 +59,11 @@ func _ready() -> void:
 
 func take_control(player: CharacterBody3D):
 	pilot = player
+	SpaceManager.player = self
 	player.reparent($PilotPosition)
 	$CanvasLayer/HelmetHud.visible = true
+	player.global_transform = $PilotPosition.global_transform
 	player.active = false
-	player.transform = Transform3D()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -246,7 +249,7 @@ func _process(delta: float) -> void:
 	spaceship_hud.hull_health = hull_health
 	
 	var fast_travel_effect_speed = 500
-	$SpaceParticles.emitting = (active and mode != Mode.TRAVEL) and relative_speed < fast_travel_effect_speed and !in_planet_gravity
+	$SpaceParticles.emitting = (active and mode != Mode.TRAVEL) and relative_speed < fast_travel_effect_speed and !gravity_area
 	$SpaceParticlesFast.emitting = (mode == Mode.TRAVEL or active) and relative_speed > fast_travel_effect_speed
 	
 	warping_progress = lerp(warping_progress, min(relative_speed * 0.0001 if relative_speed > 500 else 0.0, 1.0), 0.05)
@@ -339,11 +342,11 @@ func _on_collision_area_entered(area: Area3D) -> void:
 		camera_shake(amount)
 	
 	if area.is_in_group("gravity"):
-		in_planet_gravity = true
+		gravity_area = area
 		print("enter planet")
 
 
 func _on_collision_area_exited(area: Area3D) -> void:
 	if area.is_in_group("gravity"):
-		in_planet_gravity = false
+		gravity_area = null
 		print("exit planet")

@@ -49,7 +49,7 @@ size = Vector2(0.1, 0.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qhqgy"]
 
-[node name="Player" type="CharacterBody3D" groups=["human"]]
+[node name="Player" type="CharacterBody3D" groups=["human", "space_objects"]]
 collision_mask = 3
 motion_mode = 1
 script = ExtResource("1_twqay")
@@ -100,3 +100,6 @@ draw_pass_1 = SubResource("QuadMesh_33wcr")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Detector"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.574898, 0)
 shape = SubResource("BoxShape3D_qhqgy")
+
+[connection signal="area_entered" from="Detector" to="." method="_on_detector_area_entered"]
+[connection signal="area_exited" from="Detector" to="." method="_on_detector_area_exited"]

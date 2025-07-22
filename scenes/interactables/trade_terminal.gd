@@ -2,9 +2,9 @@ extends StaticBody3D
 
 class_name TradingTerminal
 
-@export var hub_id: String
+@export var station: Station
 
 @onready var trading: TradingUI = $TradingUIViewport/trading
 
 func _ready() -> void:
-	trading.hub_id = hub_id
+	trading.hub_id = station.hub_id

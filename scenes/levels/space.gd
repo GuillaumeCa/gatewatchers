@@ -2,8 +2,6 @@ extends Node3D
 
 class_name Space
 
-@onready var player = $Nebula
-
 var settings_open = false
 
 
@@ -24,7 +22,7 @@ func _ready() -> void:
 			var loc = warp.global_position
 			
 			var dist = 300 #warp.get_warp_distance()
-			player.relocate(Vector3(
+			SpaceManager.player.relocate(Vector3(
 				randf_range(loc.x - dist, loc.x + dist),
 				randf_range(loc.y-dist/2.0, loc.y + dist/2.0),
 				randf_range(loc.z-dist, loc.z + dist),
@@ -45,7 +43,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	$Hud/SettingsPanel.visible = settings_open
 	
-	var playerGlobalPos = player.global_position
+	var playerGlobalPos = SpaceManager.player.global_position
 	
 	# Calculate the player's position relative to the shifted origin
 	#var playerRelativePos = playerGlobalPos - last_offset
@@ -68,17 +66,22 @@ func shift_origin(offset: Vector3):
 	
 	# Shift all objects and nodes in the game world to maintain relative positions
 	for node in get_tree().get_nodes_in_group("space_objects"):
-		if node != self:
-			if node.has_method("relocate"):
-				node.relocate(node.global_position - offset)
-			else:
-				node.global_position -= offset
+		#prints("relocate", node.name, offset)
+		if node.name == "Player" and not node.active:
+			continue
+		
+		if node.has_method("relocate"):
+			node.relocate(node.global_position - offset)
+		else:
+			node.global_position -= offset
 	
 	# Update the user interface, minimap, or other HUD elements to reflect the new origin
 
 
 func update_HUD():
+	var player = SpaceManager.player
 	$Hud/Debug.text = "FPS: " + str(Performance.get_monitor(Performance.TIME_FPS))
+	$Hud/Debug.text += "\nDistance from origin: %.2fm" % [player.global_position.length()]
 	$Hud/Debug.text += "\nPosition:\nx: %.2fm\ny: %.2fm\nz: %.2fm" % [player.global_position.x, player.global_position.y, player.global_position.z]
 	$Hud/Debug.text += "\nShifted Position:\nx: %.2fm\ny: %.2fm\nz: %.2fm" % [shifted_origin.x, shifted_origin.y, shifted_origin.z]
 	$Hud/Debug.text += "\nProcess time %.2f" % [Performance.get_monitor(Performance.TIME_PROCESS)]
@@ -88,14 +91,15 @@ func update_HUD():
 	
 
 func _on_enemy_wave_timeout() -> void:
-	if player.mode != player.Mode.TRAVEL:
-		for i in randi_range(3, 5):
-			var spawn_pos = player.global_position + Vector3(randf(), randf(), randf()).normalized() * 500
-			
-			prints("enemy spawned at", spawn_pos)
-			var ship = KYTHRAX.instantiate()
-			ship.global_position = spawn_pos
-			add_child(ship)
+	pass
+	#if player.mode != player.Mode.TRAVEL:
+		#for i in randi_range(3, 5):
+			#var spawn_pos = player.global_position + Vector3(randf(), randf(), randf()).normalized() * 500
+			#
+			#prints("enemy spawned at", spawn_pos)
+			#var ship = KYTHRAX.instantiate()
+			#ship.global_position = spawn_pos
+			#add_child(ship)
 
 
 func _on_simulation_tick_timeout() -> void:

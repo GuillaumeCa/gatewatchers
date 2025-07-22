@@ -208,12 +208,15 @@ mesh = SubResource("ArrayMesh_gw47k")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -2)
 shape = SubResource("ConcavePolygonShape3D_gw47k")
+debug_fill = false
 
-[node name="CraftTerminal" parent="." instance=ExtResource("3_rcca4")]
+[node name="CraftTerminal" parent="." node_paths=PackedStringArray("station") instance=ExtResource("3_rcca4")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.59993, -0.8106, -7.11339)
+station = NodePath("..")
 
-[node name="TradeTerminal" parent="." instance=ExtResource("4_orslx")]
+[node name="TradeTerminal" parent="." node_paths=PackedStringArray("station") instance=ExtResource("4_orslx")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.62194, -0.8106, -6.49332)
+station = NodePath("..")
 
 [node name="Gravity" type="Area3D" parent="." groups=["gravity"]]
 script = ExtResource("4_rcca4")

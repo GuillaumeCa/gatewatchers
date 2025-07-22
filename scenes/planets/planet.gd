@@ -41,9 +41,9 @@ func update_planet():
 	var atmo_material: ShaderMaterial = $Atmosphere.material_override
 	atmo_material.set_shader_parameter("light_intensity", light_intensity)
 	if radius:
-		var shape: SphereShape3D = $GravityArea/CollisionShape3D.shape
+		var shape: SphereShape3D = $PlanetGravity/CollisionShape3D.shape
 		shape.radius = radius * 1.1
-		$GravityArea.gravity_point_unit_distance = radius
+		$PlanetGravity.gravity_point_unit_distance = radius
 		
 		atmo_material.set_shader_parameter("planet_radius", radius)
 		atmo_material.set_shader_parameter("atmo_radius", radius * 1.1)
@@ -87,6 +87,7 @@ func _process(delta: float) -> void:
 		target = global_position - global_position.direction_to(sun.global_position)  * 1000
 	$Atmosphere.look_at(target)
 	
+	# generate collision when player arrives
 	var player: Node3D = get_tree().get_first_node_in_group("human")
 	if player:
 		var player_close = global_position.distance_to(player.global_position) < get_warp_distance()
@@ -110,14 +111,18 @@ func _physics_process(delta: float) -> void:
 	# planet rotation
 	rotation.y += deg_to_rad(rotation_speed_degrees) * delta
 	
-	var dist_planet_influence_exit = $GravityArea/CollisionShape3D.shape.radius + 1000
+	var dist_planet_influence_exit = $PlanetGravity/CollisionShape3D.shape.radius + 1000
 	
 	for body: Node3D in body_entered:
-		body.global_position += compute_planet_body_velocity(body)
-
-		if body.global_position.distance_squared_to(global_position) > dist_planet_influence_exit * dist_planet_influence_exit:
+		var body_leaved_influence = body.global_position.distance_squared_to(global_position) > dist_planet_influence_exit * dist_planet_influence_exit
+		var changed_gravity_area = body_in_other_gravity(body)
+		if body_leaved_influence or changed_gravity_area:
 			prints("removing body", body, "from planet", name, "influence")
 			body_entered.erase(body)
+			continue
+			
+		body.global_position += compute_planet_body_velocity(body)
+		
 
 
 func compute_planet_body_velocity(body: Node3D):
@@ -126,8 +131,21 @@ func compute_planet_body_velocity(body: Node3D):
 	return angular_vel.cross(center_to_body)
 
 func _on_gravity_area_body_entered(body: Node3D) -> void:
-	if body.is_in_group("human"):
-		if !body_entered.has(body):
-			prints(body, "entered planet", name, "influence")
-			body_entered.append(body)
-			
+	# when the body is already part of another gravity area, don't add it
+	if body_in_other_gravity(body):
+		return
+		
+	if !body_entered.has(body):
+		prints(body, "entered planet", name, "influence")
+		body_entered.append(body)
+
+func body_in_other_gravity(body: Node3D) -> bool:
+	var active = body.get("active")
+	#var owner_gravity = body.owner.get("parent_gravity_area")
+	#return owner_gravity and owner_gravity == $PlanetGravity
+	return active == false and body.name == "Player"
+	#var gravity_parent_area = body.get("parent_gravity_area")
+	#if gravity_parent_area:
+		#if gravity_parent_area != $PlanetGravity:
+			#return true
+	#return false

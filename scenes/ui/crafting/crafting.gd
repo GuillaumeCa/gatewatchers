@@ -2,6 +2,8 @@ extends Control
 
 class_name CraftingUI
 
+@export var hub_name: String
+
 @export var recipe_list_container: VBoxContainer
 @export var recipe_item_container: VBoxContainer
 
@@ -9,6 +11,8 @@ var recipe_list_template: Button
 var recipe_item_template: PanelContainer
 
 func _ready() -> void:
+	$Panel/M/VBoxContainer/Title.text = hub_name + " - FabPrinter™"
+	
 	recipe_list_template = recipe_list_container.get_child(0).duplicate()
 	recipe_item_template = recipe_item_container.get_child(0).duplicate()
 	

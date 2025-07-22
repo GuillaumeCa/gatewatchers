@@ -20,7 +20,7 @@ shader_parameter/color_center = Color(0.2739, 0.83, 0.83, 0.317647)
 shader_parameter/color_edge = Color(0.1, 0.1, 0.2, 0.5)
 shader_parameter/color_edge2 = Color(0.744792, 0.652056, 0.250203, 0.23)
 shader_parameter/color_edge3 = Color(0.395508, 0.785065, 0.9375, 0.25)
-shader_parameter/spin_speed = 1.0
+shader_parameter/spin_speed = 0.12
 shader_parameter/scale = 1.0
 shader_parameter/r1 = 0.21
 shader_parameter/r2 = 0.335
@@ -33,7 +33,7 @@ size = Vector2(2, 2)
 [node name="Galaxy" type="Node3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.521222, 1.04161, 0.390041)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.36791, 0.705842, -1.67568)
 mesh = SubResource("SphereMesh_145dl")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
@@ -43,3 +43,5 @@ extra_cull_margin = 2721.22
 mesh = SubResource("QuadMesh_145dl")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Mesh"]
+light_color = Color(1, 0.867839, 0.697917, 1)
+light_energy = 4.0

@@ -1,6 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://w68mqe1d4u52"]
+[gd_scene load_steps=10 format=3 uid="uid://w68mqe1d4u52"]
 
-[ext_resource type="Shader" path="res://scenes/props/star/star.gdshader" id="1_g382u"]
+[ext_resource type="Shader" uid="uid://dpfdyar7jb8s2" path="res://scenes/props/star/star.gdshader" id="1_g382u"]
+[ext_resource type="Shader" uid="uid://em6ee2xenwvw" path="res://scenes/props/star/star_surface.gdshader" id="2_7jski"]
+[ext_resource type="Script" uid="uid://2nmmw0q30npv" path="res://scenes/props/star/star.gd" id="2_goixn"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3haub"]
 resource_local_to_scene = true
@@ -13,7 +15,42 @@ shader_parameter/sun_fade = 0.03
 
 [sub_resource type="QuadMesh" id="QuadMesh_0vx4k"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_7jski"]
+noise_type = 2
+seed = 1
+frequency = 0.042
+fractal_type = 3
+cellular_distance_function = 1
+cellular_return_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_goixn"]
+seamless = true
+seamless_blend_skirt = 0.026
+noise = SubResource("FastNoiseLite_7jski")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_goixn"]
+render_priority = 0
+shader = ExtResource("2_7jski")
+shader_parameter/color = Color(0.934896, 0.850217, 0.160685, 1)
+shader_parameter/surface_noise = SubResource("NoiseTexture2D_goixn")
+shader_parameter/intensity = 10.0
+shader_parameter/dark_spot = 1.785
+shader_parameter/start = 30.445
+shader_parameter/end = 65.87
+
+[sub_resource type="SphereMesh" id="SphereMesh_vjfk0"]
+radius = 6000.0
+height = 12000.0
+
 [node name="Star" type="MeshInstance3D"]
 material_override = SubResource("ShaderMaterial_3haub")
 extra_cull_margin = 5055.56
 mesh = SubResource("QuadMesh_0vx4k")
+script = ExtResource("2_goixn")
+
+[node name="StarSurface" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_goixn")
+visibility_range_end = 70000.0
+visibility_range_end_margin = 5000.0
+visibility_range_fade_mode = 1
+mesh = SubResource("SphereMesh_vjfk0")

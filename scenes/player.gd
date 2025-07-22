@@ -1,8 +1,9 @@
 extends CharacterBody3D
 
-
 const SPEED := 5.0
-const JUMP_VELOCITY := 4.5
+const ACCELERATION := 30.0
+const GRAVITY := 10.0
+const JUMP_VELOCITY := 12.0
 const SENSITIVITY_MOUSE := 0.005
 
 var xr_interface: XRInterface
@@ -11,6 +12,7 @@ var xr_interface: XRInterface
 	set(new_val):
 		active = new_val
 		if new_val and is_inside_tree():
+			SpaceManager.player = self
 			switch_cam()
 
 @onready var camera_pivot: Node3D = $CameraPivot
@@ -20,13 +22,11 @@ var xr_interface: XRInterface
 @onready var detector: Area3D = $Detector
 
 
-var in_space = true
-
+var parent_gravity_area: Area3D
 
 var camera_shake := 0.0
 var camera_offset: Vector3
 
-# Get the gravity from the project settings to be synced with RigidBody nodes.
 
 var last_pos = Vector3.ZERO
 
@@ -98,7 +98,7 @@ func _process(delta: float) -> void:
 	
 	camera_pivot.position = camera_offset + offset
 	
-	$SpaceParticles.emitting = active and in_space
+	$SpaceParticles.emitting = active and !parent_gravity_area
 	
 
 func _physics_process(delta: float) -> void:
@@ -106,6 +106,7 @@ func _physics_process(delta: float) -> void:
 	
 	if not active:
 		return
+		
 	
 	if interact_ray.is_colliding():
 		var collider = interact_ray.get_collider()
@@ -115,12 +116,17 @@ func _physics_process(delta: float) -> void:
 			spaceship.take_control(self)
 
 	
-	in_space = true
 	up_direction = Vector3.UP
-	for area in detector.get_overlapping_areas():
+	var areas = detector.get_overlapping_areas()
+	for area in areas:
 		if area.is_in_group("gravity"):
-			in_space = false
-			up_direction = area.global_basis.y
+			parent_gravity_area = area
+
+	if parent_gravity_area:
+		if parent_gravity_area.gravity_point:
+			up_direction = parent_gravity_area.global_position.direction_to(global_position)
+		else:
+			up_direction = parent_gravity_area.global_basis.y
 	
 
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
@@ -128,56 +134,67 @@ func _physics_process(delta: float) -> void:
 	var direction = Vector3.ZERO
 	
 	
-	if in_space:
+	if !parent_gravity_area:
+		# movement in space
 		direction = (camera_3d.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 		motion_mode = CharacterBody3D.MOTION_MODE_FLOATING
-		velocity += direction * SPEED * delta
+		#velocity += direction * SPEED * delta
+		velocity = velocity.move_toward(direction * SPEED, ACCELERATION * delta)
 		
-		velocity.x = clamp(velocity.x, -10, 10)
-		velocity.y = clamp(velocity.y, -10, 10)
-		velocity.z = clamp(velocity.z, -10, 10)
+		velocity.x = clamp(velocity.x, -SPEED, SPEED)
+		velocity.y = clamp(velocity.y, -SPEED, SPEED)
+		velocity.z = clamp(velocity.z, -SPEED, SPEED)
+		
 		
 		velocity *= 0.99
 	else:
+		# movement in gravity area
 		direction = (global_basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-		# smoothly align to gravity normal
+		
+		# smoothly align player to gravity normal
 		var target_xform := global_transform.looking_at(global_position - global_basis.z, up_direction)
-		global_transform = global_transform.interpolate_with(target_xform, 0.2)
+		global_transform = global_transform.interpolate_with(target_xform, 0.3)
+		
+		# switch to grounded mode
 		motion_mode = CharacterBody3D.MOTION_MODE_GROUNDED
-		
-		velocity -= up_direction * 2
-		
-		if !input_dir:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
-			velocity.y = move_toward(velocity.y, 0, SPEED)
-			velocity.z = move_toward(velocity.z, 0, SPEED)
-	
-		if input_dir:
-			velocity.x = lerpf(velocity.x, direction.x * SPEED, 0.2)
-			velocity.y = lerpf(velocity.y, direction.y * SPEED, 0.2)
-			velocity.z = lerpf(velocity.z, direction.z * SPEED, 0.2)
-	
-	var parent = get_parent()
-	
-#		if is_on_floor():
-		
-#		else:
-			
-#			if parent is RigidBody3D:
-#				velocity = lerp(velocity, parent.linear_velocity, 0.2)
 
+		# apply gravity
+		if not is_on_floor():
+			velocity -= up_direction * GRAVITY * delta
+		
+		if input_dir:
+			velocity = velocity.move_toward(direction * SPEED, ACCELERATION * delta)
+			#velocity.x = lerpf(velocity.x, direction.x * SPEED, 0.2)
+			#velocity.y = lerpf(velocity.y, direction.y * SPEED, 0.2)
+			#velocity.z = lerpf(velocity.z, direction.z * SPEED, 0.2)
+		
+		if !input_dir and is_on_floor():
+			velocity = velocity.move_toward(Vector3.ZERO, ACCELERATION * delta)
+		
+		
+		
+		if Input.is_action_just_pressed("up") and is_on_floor():
+			velocity += up_direction * JUMP_VELOCITY
+		
 	
 
 	move_and_slide()
 
 
 func _on_detector_area_entered(area: Area3D) -> void:
+	#var area_owner = area.owner
+	#if area_owner:
+		#var parent_gravity = area_owner.get("parent_gravity_area")
+		#if parent_gravity_area != null and parent_gravity != parent_gravity_area:
+			#return
+	
 	if area.is_in_group("gravity"):
-		in_space = false
-		up_direction = area.global_basis.y
+		parent_gravity_area = area
+		prints("player entered gravity area", area)
 
 
 func _on_detector_area_exited(area: Area3D) -> void:
 	if area.is_in_group("gravity"):
-		in_space = true
-		up_direction = Vector3.UP
+		if parent_gravity_area and parent_gravity_area == area:
+			prints("player left gravity area", area)
+			parent_gravity_area = null
