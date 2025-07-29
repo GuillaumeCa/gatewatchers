@@ -82,7 +82,7 @@ omni_range = 149.826
 omni_attenuation = 0.318
 
 [node name="EnemyWave" type="Timer" parent="."]
-wait_time = 1000.0
+wait_time = 10.0
 autostart = true
 
 [node name="SimulationTick" type="Timer" parent="."]

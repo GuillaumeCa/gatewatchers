@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dbpepfkxb1b7y"]
 
-[ext_resource type="Script" path="res://scenes/props/blackhole/blackhole.gd" id="1_2cqf4"]
-[ext_resource type="Shader" path="res://scenes/props/blackhole/blackhole.gdshader" id="1_6ro7t"]
+[ext_resource type="Script" uid="uid://corgmxmbylc3c" path="res://scenes/props/blackhole/blackhole.gd" id="1_2cqf4"]
+[ext_resource type="Shader" uid="uid://07klqe1qgpje" path="res://scenes/props/blackhole/blackhole.gdshader" id="1_6ro7t"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vwhqh"]
 render_priority = -1
@@ -21,7 +21,7 @@ shader_parameter/depth_thickness = 0.0
 shader_parameter/use_depth = false
 shader_parameter/max_radius = 10.0
 shader_parameter/global_radius = 100.0
-shader_parameter/pos = Vector3(5040.97, 725.145, -1295.48)
+shader_parameter/pos = Vector3(0, 0, 0)
 
 [sub_resource type="BoxMesh" id="BoxMesh_nmxee"]
 size = Vector3(500, 500, 500)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cef2d1ms5tqcu"]
+[gd_scene load_steps=15 format=3 uid="uid://cef2d1ms5tqcu"]
 
 [ext_resource type="Script" uid="uid://78fmj1eq6cbt" path="res://scenes/player.gd" id="1_twqay"]
 [ext_resource type="Texture2D" uid="uid://csawli8abs1f3" path="res://assets/textures/particle.png" id="2_llgb5"]
@@ -48,6 +48,9 @@ material = SubResource("StandardMaterial3D_rth2r")
 size = Vector2(0.1, 0.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qhqgy"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_qhqgy"]
+font_size = 24
 
 [node name="Player" type="CharacterBody3D" groups=["human", "space_objects"]]
 collision_mask = 3
@@ -100,6 +103,32 @@ draw_pass_1 = SubResource("QuadMesh_33wcr")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Detector"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.574898, 0)
 shape = SubResource("BoxShape3D_qhqgy")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="InteractLabel" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -52.0
+offset_top = -50.44
+offset_right = 52.0
+offset_bottom = -27.44
+grow_horizontal = 2
+grow_vertical = 0
+text = "interact"
+label_settings = SubResource("LabelSettings_qhqgy")
+horizontal_alignment = 1
 
 [connection signal="area_entered" from="Detector" to="." method="_on_detector_area_entered"]
 [connection signal="area_exited" from="Detector" to="." method="_on_detector_area_exited"]

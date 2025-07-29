@@ -26,7 +26,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_dut2k")
 script = ExtResource("1_epp5q")
-hub_id = "S11"
+hub_id = "S10"
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1

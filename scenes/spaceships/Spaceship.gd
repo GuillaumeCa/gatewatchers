@@ -35,8 +35,6 @@ var current_target: Node3D
 
 var warping_progress = 0.0
 
-var in_planet_gravity = false
-
 var gravity_area: Area3D
 
 var active_weapon
@@ -57,6 +55,7 @@ func _ready() -> void:
 			enginesParticles.append(particles)
 
 
+# make the player part of the ship
 func take_control(player: CharacterBody3D):
 	pilot = player
 	SpaceManager.player = self
@@ -96,6 +95,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 	if Input.is_action_just_pressed("nav_mode"):
 		mode = Mode.NAVIGATION if mode != Mode.NAVIGATION else Mode.COMBAT
+	
+	
+	if Input.is_action_just_pressed("map"):
+		$MapProjector.visible = !$MapProjector.visible
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if $MapProjector.visible else Input.MOUSE_MODE_CAPTURED		
 		
 
 func get_warp_points():
@@ -103,6 +107,8 @@ func get_warp_points():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	$CanvasLayer/Control/HintLabel.text = ""
+	
 	if pilot:
 		active = true
 	
@@ -127,9 +133,6 @@ func _process(delta: float) -> void:
 			elif !$PilotPosition/Player.camera_3d.current:
 				$PilotPosition/Player.switch_cam()
 	
-		if Input.is_action_just_pressed("map"):
-			$MapProjector.visible = !$MapProjector.visible
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if $MapProjector.visible else Input.MOUSE_MODE_CAPTURED
 		
 		
 		dir = Vector3(
@@ -172,7 +175,8 @@ func _process(delta: float) -> void:
 					target_dot = align
 					if global_position.distance_to(p.global_position) <= warp_distance:
 						continue
-						
+					
+					$CanvasLayer/Control/HintLabel.text = "Press [LMB] to jump"
 					if Input.is_action_just_pressed("travel"):
 						mode = Mode.TRAVEL
 

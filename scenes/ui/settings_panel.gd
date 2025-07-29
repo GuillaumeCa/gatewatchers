@@ -27,6 +27,11 @@ func _ready() -> void:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if %VSync.button_pressed else DisplayServer.VSYNC_DISABLED) 
 	)
 	
+	%SoundLevelSlider.value = AudioServer.get_bus_volume_linear(0)
+	%SoundLevelSlider.drag_ended.connect(func(value):
+		AudioServer.set_bus_volume_linear(0, %SoundLevelSlider.value)
+	)
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

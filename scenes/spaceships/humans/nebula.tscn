@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://d32700hsoxr8b"]
+[gd_scene load_steps=54 format=3 uid="uid://d32700hsoxr8b"]
 
 [ext_resource type="Script" uid="uid://f00xdx545a3h" path="res://scenes/spaceships/spaceship.gd" id="1_2eoki"]
 [ext_resource type="PackedScene" uid="uid://blk8lyl4qh0ip" path="res://assets/spaceships.glb" id="1_rdqkb"]
@@ -111,6 +111,9 @@ particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_yoiyn"]
 material = SubResource("StandardMaterial3D_ejouf")
+
+[sub_resource type="LabelSettings" id="LabelSettings_53qyq"]
+font_size = 24
 
 [sub_resource type="BoxMesh" id="BoxMesh_ocid2"]
 size = Vector3(0.25, 0.495, 3.6)
@@ -407,6 +410,32 @@ horizontal_alignment = 1
 visible = false
 texture = ExtResource("12_yiw4s")
 
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HintLabel" type="Label" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -52.0
+offset_top = -50.44
+offset_right = 52.0
+offset_bottom = -27.44
+grow_horizontal = 2
+grow_vertical = 0
+text = "hints"
+label_settings = SubResource("LabelSettings_53qyq")
+horizontal_alignment = 1
+
 [node name="CameraPivot" type="Node3D" parent="."]
 top_level = true
 
@@ -431,6 +460,7 @@ laser_material = ExtResource("12_0qyij")
 
 [node name="MiningHead" type="Node3D" parent="Tools"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.09834, -5.48291)
+visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Tools/MiningHead"]
 transform = Transform3D(1, 0, 0, 0, 0.993688, -0.11218, 0, 0.11218, 0.993688, 0, 0.540842, -0.853353)

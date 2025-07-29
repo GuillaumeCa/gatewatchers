@@ -61,3 +61,13 @@ popup/item_3/id = 3
 unique_name_in_owner = true
 layout_mode = 2
 text = "VSync"
+
+[node name="Sound Level" type="Label" parent="M/VB"]
+layout_mode = 2
+text = "Sound Level"
+
+[node name="SoundLevelSlider" type="HSlider" parent="M/VB"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.01

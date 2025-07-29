@@ -103,17 +103,21 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	$CollisionShape3D.disabled = !active
+	$Control/InteractLabel.text = ""
 	
 	if not active:
 		return
-		
+	
 	
 	if interact_ray.is_colliding():
 		var collider = interact_ray.get_collider()
-		if collider is Spaceship and Input.is_action_just_pressed("switch"):
-			var spaceship = collider as Spaceship
-			camera_pivot.rotation.x = 0
-			spaceship.take_control(self)
+		if collider is Spaceship:
+			$Control/InteractLabel.text = "Control ship [X]"
+			if Input.is_action_just_pressed("switch"):
+				var spaceship = collider as Spaceship
+				camera_pivot.rotation.x = 0
+				spaceship.take_control(self)
+	
 
 	
 	up_direction = Vector3.UP

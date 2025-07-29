@@ -2,10 +2,12 @@ extends Node3D
 
 class_name Space
 
-var settings_open = false
-
-
 const KYTHRAX = preload("res://scenes/spaceships/drexuls/kythrax.tscn")
+const MAX_DREXUL_COUNT = 15
+
+@export var drexuls_spawner = false
+
+var settings_open = false
 
 static var shifted_origin: Vector3
 var last_offset: Vector3
@@ -31,13 +33,11 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey:
-		if event.keycode == KEY_ESCAPE:
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-			settings_open = true
-	if settings_open and event is InputEventMouse:
-		if event.is_pressed():
-			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-			settings_open = false
+		if event.keycode == KEY_ESCAPE and event.is_pressed():
+			var mouse_captured = Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if mouse_captured else Input.MOUSE_MODE_CAPTURED
+			settings_open = mouse_captured
+
 
 # Called when the node enters the scene tree for the first time.
 func _physics_process(delta: float) -> void:
@@ -91,15 +91,16 @@ func update_HUD():
 	
 
 func _on_enemy_wave_timeout() -> void:
-	pass
-	#if player.mode != player.Mode.TRAVEL:
-		#for i in randi_range(3, 5):
-			#var spawn_pos = player.global_position + Vector3(randf(), randf(), randf()).normalized() * 500
-			#
-			#prints("enemy spawned at", spawn_pos)
-			#var ship = KYTHRAX.instantiate()
-			#ship.global_position = spawn_pos
-			#add_child(ship)
+	var player = SpaceManager.player
+	var drexul_count = get_tree().get_nodes_in_group("drexul").size()
+	if drexuls_spawner and player is Spaceship and player.mode != player.Mode.TRAVEL and drexul_count < MAX_DREXUL_COUNT:
+		for i in randi_range(3, 5):
+			var spawn_pos = player.global_position + Vector3(randf(), randf(), randf()).normalized() * 500
+			
+			prints("enemy spawned at", spawn_pos)
+			var ship = KYTHRAX.instantiate()
+			ship.global_position = spawn_pos
+			add_child(ship)
 
 
 func _on_simulation_tick_timeout() -> void:

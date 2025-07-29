@@ -1,29 +1,30 @@
 [gd_scene load_steps=16 format=3 uid="uid://cbkqmol5pk5ys"]
 
-[ext_resource type="Script" path="res://scenes/planets/planet.gd" id="1_llec6"]
-[ext_resource type="Script" path="res://scenes/planets/planet_archetype.gd" id="2_i6fmc"]
-[ext_resource type="Shader" path="res://scenes/planets/gasgiant.gdshader" id="3_2067y"]
+[ext_resource type="Script" uid="uid://c6b2ru7k5yde8" path="res://scenes/planets/planet.gd" id="1_llec6"]
+[ext_resource type="Script" uid="uid://cttmewuysuget" path="res://scenes/planets/planet_archetype.gd" id="2_i6fmc"]
+[ext_resource type="Shader" uid="uid://dxd04fccmpdvd" path="res://scenes/planets/gasgiant.gdshader" id="3_2067y"]
 [ext_resource type="Texture2D" uid="uid://dp2wi7cxt1yad" path="res://assets/textures/gasgiant.png" id="5_88hsh"]
-[ext_resource type="Shader" path="res://scenes/planets/atmosphere.gdshader" id="5_o5glq"]
+[ext_resource type="Shader" uid="uid://dr3t58uv4pkvc" path="res://scenes/planets/atmosphere.gdshader" id="5_o5glq"]
 [ext_resource type="Texture2D" uid="uid://nl6rb1ynj24w" path="res://assets/textures/gasgiant_flowmap.png" id="6_vwjcn"]
 
-[sub_resource type="Gradient" id="Gradient_82ctx"]
+[sub_resource type="Gradient" id="Gradient_bbu77"]
 colors = PackedColorArray(0.580729, 0.546767, 0.289154, 1, 0.361979, 0.144877, 0.0757288, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_u3jlc"]
-gradient = SubResource("Gradient_82ctx")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8n5hw"]
+gradient = SubResource("Gradient_bbu77")
 
-[sub_resource type="Resource" id="Resource_ybptv"]
+[sub_resource type="Resource" id="Resource_j1i8j"]
 script = ExtResource("2_i6fmc")
 has_atmo = true
 atmo_intensity = 10.0
 atmo_color = Color(1, 0.826906, 0.307625, 1)
 atmo_height = 70
-terrain_gradient = SubResource("GradientTexture1D_u3jlc")
+terrain_gradient = SubResource("GradientTexture1D_8n5hw")
 terrain_height = 125
 
 [sub_resource type="Gradient" id="Gradient_pr5ed"]
-colors = PackedColorArray(0.580729, 0.546767, 0.289154, 1, 0.361979, 0.144877, 0.0757288, 1)
+offsets = PackedFloat32Array(0, 0.416667, 1)
+colors = PackedColorArray(0.580729, 0.546767, 0.289154, 1, 0.334024, 0.452311, 0.319498, 1, 0.272526, 0.0757288, 0.361979, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_rrtlw"]
 gradient = SubResource("Gradient_pr5ed")
@@ -32,11 +33,11 @@ gradient = SubResource("Gradient_pr5ed")
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("3_2067y")
-shader_parameter/flow_speed = 0.03
-shader_parameter/flow_intensity = 0.056
 shader_parameter/gradient = SubResource("GradientTexture1D_rrtlw")
 shader_parameter/base = ExtResource("5_88hsh")
 shader_parameter/flowmap = ExtResource("6_vwjcn")
+shader_parameter/flow_speed = 0.03
+shader_parameter/flow_intensity = 0.056
 
 [sub_resource type="SphereMesh" id="SphereMesh_mqn3g"]
 radius = 3200.0
@@ -69,9 +70,9 @@ radial_segments = 16
 rings = 8
 
 [node name="Planet" type="Node3D" groups=["planet", "space_objects", "warp"]]
-transform = Transform3D(0.996964, 0, -0.0778533, 0, 1, 0, 0.0778533, 0, 0.996964, 0, 0, 0)
+transform = Transform3D(0.481805, 0, 0.876278, 0, 1, 0, -0.876278, 0, 0.481805, 0, 0, 0)
 script = ExtResource("1_llec6")
-archetype = SubResource("Resource_ybptv")
+archetype = SubResource("Resource_j1i8j")
 
 [node name="Surface" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.077, 0, 0, 0, 1.077, 0, 0, 0, 1.077, 0, 0, 0)
